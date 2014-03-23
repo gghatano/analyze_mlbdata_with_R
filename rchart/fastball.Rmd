@@ -1,0 +1,87 @@
+MLB Scouting Report: Fastball-Count (2013)
+========================================================
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE}
+opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+```
+
+Fastball-count is the pitching-count such that the fastball is often thrown.
+
+Now, visualize the fastball-count of some pitchers by using R and pitch-f/x data.
+
+The code and data can be obtained from github (fastball.Rmd)
+
+https://github.com/gghatano/MLB_data
+
+```{r results='asis'}
+library(dplyr)
+library(data.table)
+library(magrittr)
+library(rCharts)
+library(xtable)
+
+# select the column used for this document
+col_used = c("pitch_type", "type", "count", "pitcher_name", "sv_id")
+# dat = fread(paste(getwd(), "/pitch_fx/2013.csv", sep=""), 
+#             select = col_used, showProgress=FALSE) 
+dat = fread("pitchfx_data_for_plot.csv")
+
+# remove the row includes "NA
+# remove the row of Pre-Season Game
+data = dat %>% filter(pitch_type!="NA") %>% 
+  mutate(month = substr(sv_id, 4,4)) %>% 
+  filter(month >= 4)
+
+fastball = c("FF", "FT", "FC", "FS")
+
+# check the fastball-ratio on each Ball/Strike count
+data_fast = data %>% 
+  mutate(FAST_FL = ifelse(pitch_type %in% fastball, "T", "F")) 
+
+# check the data-table
+data_fast %>% head %>% xtable %>% print(type="html")
+```
+
+
+### ------------------------------------------------------------------
+Function "fast_rate" calculates the pitcher's fastball-ratio of each Ball/Strike count and visualizes them
+```{r results='asis'}
+# output the fastball-ratio barplot of "pitcher"
+# default : "Hiroki Kuroda"
+fast_rate = function(pitcher = "Hiroki Kuroda"){
+  # calculate fastball/non-fastball ratio 
+  data_count = data_fast %>% 
+    filter(pitcher_name == pitcher) %>% 
+    group_by(count) %>% 
+    dplyr::summarise(fast = sum(FAST_FL == "T"), 
+                     non_fast = sum(FAST_FL == "F")) %>% 
+    mutate(FAST = fast / (fast+non_fast), 
+           non_FAST = non_fast / (fast+non_fast)) %>% 
+    dplyr::select(count, FAST, non_FAST) %>% 
+    melt(id.var = "count") %>% 
+    setnames(c("count", "pitch", "freq"))
+  
+  # visualize by using rPlot
+  rp = rPlot(data = data_count, freq ~ count, color = "pitch", type = "bar")
+  return(rp)
+}
+  
+```
+
+### Fastball-ratio of Hiroki Kuroda (NYY).
+```{r results='asis'}
+rp = fast_rate("Hiroki Kuroda")
+rp$show("iframesrc", cdn = TRUE)
+```
+
+### Fastball-ratio of Yu Darvish (TEX).
+```{r results='asis'}
+rp = fast_rate("Yu Darvish")
+rp$show("iframesrc", cdn = TRUE)
+```
+
+### Fastball ratio of Clayton Kershaw (LAD).
+```{r results='asis'}
+rp = fast_rate("Clayton Kershaw")
+rp$show("iframesrc", cdn = TRUE)
+```
+

@@ -1,0 +1,10402 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>rChartsでレジェンドプレーヤーの成績を可視化したい</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h1>rChartsでレジェンドプレーヤーの成績を可視化したい</h1>
+
+<p>Lahmanのデータベースを使って, 歴代の打者成績推移をrChartsで可視化します.</p>
+
+<p>データは
+<a href="http://seanlahman.com/files/database/lahman-csv_2014-02-14.zip">http://seanlahman.com/files/database/lahman-csv_2014-02-14.zip</a>
+でダウンロードできます. </p>
+
+<p>解凍したら, Batting.csvとMaster.csvを使います.</p>
+
+<pre><code class="r">library(rCharts)
+library(RPostgreSQL)
+library(dplyr)
+library(magrittr)
+library(xtable)
+# 各打者のシーズン記録のまとめデータ: Batting.csv
+dat = fread(&quot;Batting.csv&quot;)
+</code></pre>
+
+<p>データの中身はこんな感じです.</p>
+
+<pre><code class="r">head(dat) %&gt;% xtable() %&gt;% print(type=&quot;html&quot;)
+</code></pre>
+
+<!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
+
+<!-- Sat Mar 22 22:40:49 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> playerID </TH> <TH> yearID </TH> <TH> stint </TH> <TH> teamID </TH> <TH> lgID </TH> <TH> G </TH> <TH> G_batting </TH> <TH> AB </TH> <TH> R </TH> <TH> H </TH> <TH> X2B </TH> <TH> X3B </TH> <TH> HR </TH> <TH> RBI </TH> <TH> SB </TH> <TH> CS </TH> <TH> BB </TH> <TH> SO </TH> <TH> IBB </TH> <TH> HBP </TH> <TH> SH </TH> <TH> SF </TH> <TH> GIDP </TH> <TH> G_old </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> aardsda01 </TD> <TD align="right"> 2004 </TD> <TD align="right">   1 </TD> <TD> SFN </TD> <TD> NL </TD> <TD align="right">  11 </TD> <TD align="right">  11 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">  11 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> aardsda01 </TD> <TD align="right"> 2006 </TD> <TD align="right">   1 </TD> <TD> CHN </TD> <TD> NL </TD> <TD align="right">  45 </TD> <TD align="right">  43 </TD> <TD align="right">   2 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   1 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">  45 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> aardsda01 </TD> <TD align="right"> 2007 </TD> <TD align="right">   1 </TD> <TD> CHA </TD> <TD> AL </TD> <TD align="right">  25 </TD> <TD align="right">   2 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   2 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> aardsda01 </TD> <TD align="right"> 2008 </TD> <TD align="right">   1 </TD> <TD> BOS </TD> <TD> AL </TD> <TD align="right">  47 </TD> <TD align="right">   5 </TD> <TD align="right">   1 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   1 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   5 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> aardsda01 </TD> <TD align="right"> 2009 </TD> <TD align="right">   1 </TD> <TD> SEA </TD> <TD> AL </TD> <TD align="right">  73 </TD> <TD align="right">   3 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">  </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> aardsda01 </TD> <TD align="right"> 2010 </TD> <TD align="right">   1 </TD> <TD> SEA </TD> <TD> AL </TD> <TD align="right">  53 </TD> <TD align="right">   4 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">   0 </TD> <TD align="right">  </TD> </TR>
+   </TABLE>
+
+<pre><code class="r">
+# 選手をidで扱うのは淋しいので, フルネームを調べます
+# フルネームはMaster.csvから作ります.
+fullname_and_id = 
+  fread(&quot;Master.csv&quot;) %&gt;% 
+  mutate(fullname = paste(nameFirst, nameLast, sep=&quot; &quot;)) %&gt;% 
+  dplyr::select(lahman40ID, fullname) %&gt;% 
+  setnames(c(&quot;playerID&quot;, &quot;fullname&quot;))
+
+# 2012年までに3000本安打を超えている選手で遊びます
+bat_over_3000 = 
+  dat %&gt;% group_by(playerID) %&gt;% 
+  dplyr::summarise(HIT = sum(H)) %&gt;% 
+  filter(HIT &gt;= 3000) %&gt;% 
+  select(playerID)
+
+# フルネームとIDを統合
+batters = bat_over_3000 %&gt;% inner_join(fullname_and_id, by=&quot;playerID&quot;)
+
+# 3000本打った選手の成績まとめ
+batters_data = batters %&gt;% inner_join(dat, by = &quot;playerID&quot;)
+
+# シーズン中に移籍すると, データが別の行になります. 
+# 欲しいのは年度別の成績なので, 年度が同じなら成績はマージします
+# 移籍はなかったことにします.
+batters_data_hit = 
+  batters_data %&gt;%
+  dplyr::select(fullname, yearID, G, AB, H, HR, SO) %&gt;% 
+  group_by(fullname, yearID) %&gt;%
+  dplyr::summarise(game = sum(G), atbat = sum(AB), hit = sum(H), homerun = sum(HR), so = sum(SO))
+
+# デビューの年をチェックします
+start = batters_data_hit %&gt;% 
+  group_by(fullname) %&gt;% 
+  dplyr::summarise(start = min(yearID)) 
+
+# 最近の選手かどうか. 1975以降かどうかで場合分け
+batters_data_hit = 
+  batters_data_hit %&gt;% inner_join(start, by=&quot;fullname&quot;) %&gt;% 
+  mutate(recent = ifelse(start &gt; 1970, &quot;recent&quot;, &quot;old&quot;)) 
+
+# できたデータ
+head(batters_data_hit) %&gt;% xtable() %&gt;% print(type=&quot;html&quot;)
+</code></pre>
+
+<!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
+
+<!-- Sat Mar 22 22:40:50 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> fullname </TH> <TH> yearID </TH> <TH> game </TH> <TH> atbat </TH> <TH> hit </TH> <TH> homerun </TH> <TH> so </TH> <TH> start </TH> <TH> recent </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> Al Kaline </TD> <TD align="right"> 1953 </TD> <TD align="right">  30 </TD> <TD align="right">  28 </TD> <TD align="right">   7 </TD> <TD align="right">   1 </TD> <TD align="right">   5 </TD> <TD align="right"> 1953 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> Al Kaline </TD> <TD align="right"> 1954 </TD> <TD align="right"> 138 </TD> <TD align="right"> 504 </TD> <TD align="right"> 139 </TD> <TD align="right">   4 </TD> <TD align="right">  45 </TD> <TD align="right"> 1953 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> Al Kaline </TD> <TD align="right"> 1955 </TD> <TD align="right"> 152 </TD> <TD align="right"> 588 </TD> <TD align="right"> 200 </TD> <TD align="right">  27 </TD> <TD align="right">  57 </TD> <TD align="right"> 1953 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> Al Kaline </TD> <TD align="right"> 1956 </TD> <TD align="right"> 153 </TD> <TD align="right"> 617 </TD> <TD align="right"> 194 </TD> <TD align="right">  27 </TD> <TD align="right">  55 </TD> <TD align="right"> 1953 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> Al Kaline </TD> <TD align="right"> 1957 </TD> <TD align="right"> 149 </TD> <TD align="right"> 577 </TD> <TD align="right"> 170 </TD> <TD align="right">  23 </TD> <TD align="right">  38 </TD> <TD align="right"> 1953 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> Al Kaline </TD> <TD align="right"> 1958 </TD> <TD align="right"> 146 </TD> <TD align="right"> 543 </TD> <TD align="right"> 170 </TD> <TD align="right">  16 </TD> <TD align="right">  47 </TD> <TD align="right"> 1953 </TD> <TD> old </TD> </TR>
+   </TABLE>
+
+<p>通算成績の積み上げの様子を見てみます.</p>
+
+<pre><code class="r"># ひたすらcumsumします
+career_data =
+  batters_data_hit %&gt;% group_by(fullname) %&gt;%
+  dplyr::summarise(yearID = yearID, 
+                   careerHIT= cumsum(hit),
+                   careerHR = cumsum(homerun), 
+                   careerSO = cumsum(so), 
+                   careerGAME=cumsum(game), 
+                   recent = recent
+                   )
+# できたデータ
+head(career_data) %&gt;% xtable() %&gt;% print(type=&quot;html&quot;)
+</code></pre>
+
+<!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
+
+<!-- Sat Mar 22 22:40:50 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> fullname </TH> <TH> yearID </TH> <TH> careerHIT </TH> <TH> careerHR </TH> <TH> careerSO </TH> <TH> careerGAME </TH> <TH> recent </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> Al Kaline </TD> <TD align="right"> 1953 </TD> <TD align="right">   7 </TD> <TD align="right">   1 </TD> <TD align="right">   5 </TD> <TD align="right">  30 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> Al Kaline </TD> <TD align="right"> 1954 </TD> <TD align="right"> 146 </TD> <TD align="right">   5 </TD> <TD align="right">  50 </TD> <TD align="right"> 168 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> Al Kaline </TD> <TD align="right"> 1955 </TD> <TD align="right"> 346 </TD> <TD align="right">  32 </TD> <TD align="right"> 107 </TD> <TD align="right"> 320 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> Al Kaline </TD> <TD align="right"> 1956 </TD> <TD align="right"> 540 </TD> <TD align="right">  59 </TD> <TD align="right"> 162 </TD> <TD align="right"> 473 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> Al Kaline </TD> <TD align="right"> 1957 </TD> <TD align="right"> 710 </TD> <TD align="right">  82 </TD> <TD align="right"> 200 </TD> <TD align="right"> 622 </TD> <TD> old </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> Al Kaline </TD> <TD align="right"> 1958 </TD> <TD align="right"> 880 </TD> <TD align="right">  98 </TD> <TD align="right"> 247 </TD> <TD align="right"> 768 </TD> <TD> old </TD> </TR>
+   </TABLE>
+
+<pre><code class="r">
+# hPlotで可視化してみる
+hp2 = hPlot(data = career_data, x=&quot;yearID&quot;, y=&quot;careerHIT&quot;, group = &quot;fullname&quot;, type=&quot;line&quot;)                  
+hp2$chart(forceY = &quot;#![0]!#&quot;)
+hp2$show(&quot;iframesrc&quot;, cdn = TRUE)
+</code></pre>
+
+<iframe srcdoc='
+&lt;!doctype HTML&gt;
+&lt;meta charset = &#039;utf-8&#039;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    
+    &lt;script src=&#039;http://code.jquery.com/jquery-1.9.1.min.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts-more.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/modules/exporting.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    
+    &lt;style&gt;
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    &lt;/style&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#039;chart8a6b4094a100&#039; class=&#039;rChart highcharts&#039;&gt;&lt;/div&gt;  
+    
+    &lt;script type=&#039;text/javascript&#039;&gt;
+    (function($){
+        $(function () {
+            var chart = new Highcharts.Chart({
+ &quot;dom&quot;: &quot;chart8a6b4094a100&quot;,
+&quot;width&quot;:            800,
+&quot;height&quot;:            400,
+&quot;credits&quot;: {
+ &quot;href&quot;: null,
+&quot;text&quot;: null 
+},
+&quot;exporting&quot;: {
+ &quot;enabled&quot;: false 
+},
+&quot;title&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;yAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;careerHIT&quot; 
+} 
+} 
+],
+&quot;series&quot;: [
+ {
+ &quot;data&quot;: [
+ [
+ 1953,
+7 
+],
+[
+ 1954,
+146 
+],
+[
+ 1955,
+346 
+],
+[
+ 1956,
+540 
+],
+[
+ 1957,
+710 
+],
+[
+ 1958,
+880 
+],
+[
+ 1959,
+1047 
+],
+[
+ 1960,
+1200 
+],
+[
+ 1961,
+1390 
+],
+[
+ 1962,
+1511 
+],
+[
+ 1963,
+1683 
+],
+[
+ 1964,
+1837 
+],
+[
+ 1965,
+1949 
+],
+[
+ 1966,
+2087 
+],
+[
+ 1967,
+2228 
+],
+[
+ 1968,
+2322 
+],
+[
+ 1969,
+2446 
+],
+[
+ 1970,
+2576 
+],
+[
+ 1971,
+2695 
+],
+[
+ 1972,
+2782 
+],
+[
+ 1973,
+2861 
+],
+[
+ 1974,
+3007 
+] 
+],
+&quot;name&quot;: &quot;Al Kaline&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1981,
+5 
+],
+[
+ 1982,
+163 
+],
+[
+ 1983,
+374 
+],
+[
+ 1984,
+569 
+],
+[
+ 1985,
+750 
+],
+[
+ 1986,
+927 
+],
+[
+ 1987,
+1084 
+],
+[
+ 1988,
+1236 
+],
+[
+ 1989,
+1402 
+],
+[
+ 1990,
+1552 
+],
+[
+ 1991,
+1762 
+],
+[
+ 1992,
+1922 
+],
+[
+ 1993,
+2087 
+],
+[
+ 1994,
+2227 
+],
+[
+ 1995,
+2371 
+],
+[
+ 1996,
+2549 
+],
+[
+ 1997,
+2715 
+],
+[
+ 1998,
+2878 
+],
+[
+ 1999,
+2991 
+],
+[
+ 2000,
+3070 
+],
+[
+ 2001,
+3184 
+] 
+],
+&quot;name&quot;: &quot;Cal Ripken&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1871,
+39 
+],
+[
+ 1872,
+129 
+],
+[
+ 1873,
+230 
+],
+[
+ 1874,
+317 
+],
+[
+ 1875,
+423 
+],
+[
+ 1876,
+533 
+],
+[
+ 1877,
+619 
+],
+[
+ 1878,
+708 
+],
+[
+ 1879,
+780 
+],
+[
+ 1880,
+900 
+],
+[
+ 1881,
+1037 
+],
+[
+ 1882,
+1163 
+],
+[
+ 1883,
+1290 
+],
+[
+ 1884,
+1449 
+],
+[
+ 1885,
+1593 
+],
+[
+ 1886,
+1780 
+],
+[
+ 1887,
+1944 
+],
+[
+ 1888,
+2121 
+],
+[
+ 1889,
+2282 
+],
+[
+ 1890,
+2439 
+],
+[
+ 1891,
+2596 
+],
+[
+ 1892,
+2748 
+],
+[
+ 1893,
+2873 
+],
+[
+ 1894,
+3005 
+],
+[
+ 1895,
+3164 
+],
+[
+ 1896,
+3297 
+],
+[
+ 1897,
+3418 
+] 
+],
+&quot;name&quot;: &quot;Cap Anson&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1961,
+155 
+],
+[
+ 1962,
+346 
+],
+[
+ 1963,
+529 
+],
+[
+ 1964,
+693 
+],
+[
+ 1965,
+847 
+],
+[
+ 1966,
+1012 
+],
+[
+ 1967,
+1201 
+],
+[
+ 1968,
+1363 
+],
+[
+ 1969,
+1517 
+],
+[
+ 1970,
+1703 
+],
+[
+ 1971,
+1832 
+],
+[
+ 1972,
+1952 
+],
+[
+ 1973,
+2112 
+],
+[
+ 1974,
+2267 
+],
+[
+ 1975,
+2413 
+],
+[
+ 1976,
+2559 
+],
+[
+ 1977,
+2724 
+],
+[
+ 1978,
+2869 
+],
+[
+ 1979,
+3009 
+],
+[
+ 1980,
+3109 
+],
+[
+ 1981,
+3192 
+],
+[
+ 1982,
+3318 
+],
+[
+ 1983,
+3419 
+] 
+],
+&quot;name&quot;: &quot;Carl Yastrzemski&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1988,
+26 
+],
+[
+ 1989,
+140 
+],
+[
+ 1990,
+293 
+],
+[
+ 1991,
+454 
+],
+[
+ 1992,
+624 
+],
+[
+ 1993,
+799 
+],
+[
+ 1994,
+938 
+],
+[
+ 1995,
+1105 
+],
+[
+ 1996,
+1279 
+],
+[
+ 1997,
+1470 
+],
+[
+ 1998,
+1680 
+],
+[
+ 1999,
+1868 
+],
+[
+ 2000,
+1969 
+],
+[
+ 2001,
+2149 
+],
+[
+ 2002,
+2295 
+],
+[
+ 2003,
+2461 
+],
+[
+ 2004,
+2639 
+],
+[
+ 2005,
+2795 
+],
+[
+ 2006,
+2930 
+],
+[
+ 2007,
+3060 
+] 
+],
+&quot;name&quot;: &quot;Craig Biggio&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+39 
+],
+[
+ 1974,
+171 
+],
+[
+ 1975,
+307 
+],
+[
+ 1976,
+446 
+],
+[
+ 1977,
+615 
+],
+[
+ 1978,
+796 
+],
+[
+ 1979,
+980 
+],
+[
+ 1980,
+1134 
+],
+[
+ 1981,
+1248 
+],
+[
+ 1982,
+1399 
+],
+[
+ 1983,
+1568 
+],
+[
+ 1984,
+1761 
+],
+[
+ 1985,
+1935 
+],
+[
+ 1986,
+2083 
+],
+[
+ 1987,
+2241 
+],
+[
+ 1988,
+2421 
+],
+[
+ 1990,
+2548 
+],
+[
+ 1991,
+2697 
+],
+[
+ 1992,
+2866 
+],
+[
+ 1993,
+3014 
+],
+[
+ 1994,
+3088 
+],
+[
+ 1995,
+3110 
+] 
+],
+&quot;name&quot;: &quot;Dave Winfield&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1995,
+12 
+],
+[
+ 1996,
+195 
+],
+[
+ 1997,
+385 
+],
+[
+ 1998,
+588 
+],
+[
+ 1999,
+807 
+],
+[
+ 2000,
+1008 
+],
+[
+ 2001,
+1199 
+],
+[
+ 2002,
+1390 
+],
+[
+ 2003,
+1546 
+],
+[
+ 2004,
+1734 
+],
+[
+ 2005,
+1936 
+],
+[
+ 2006,
+2150 
+],
+[
+ 2007,
+2356 
+],
+[
+ 2008,
+2535 
+],
+[
+ 2009,
+2747 
+],
+[
+ 2010,
+2926 
+],
+[
+ 2011,
+3088 
+] 
+],
+&quot;name&quot;: &quot;Derek Jeter&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1906,
+3 
+],
+[
+ 1907,
+11 
+],
+[
+ 1908,
+101 
+],
+[
+ 1909,
+299 
+],
+[
+ 1910,
+487 
+],
+[
+ 1911,
+667 
+],
+[
+ 1912,
+856 
+],
+[
+ 1913,
+1040 
+],
+[
+ 1914,
+1221 
+],
+[
+ 1915,
+1394 
+],
+[
+ 1916,
+1562 
+],
+[
+ 1917,
+1725 
+],
+[
+ 1918,
+1816 
+],
+[
+ 1919,
+1981 
+],
+[
+ 1920,
+2205 
+],
+[
+ 1921,
+2382 
+],
+[
+ 1922,
+2576 
+],
+[
+ 1923,
+2758 
+],
+[
+ 1924,
+2952 
+],
+[
+ 1925,
+3099 
+],
+[
+ 1926,
+3228 
+],
+[
+ 1927,
+3304 
+],
+[
+ 1928,
+3314 
+],
+[
+ 1929,
+3314 
+],
+[
+ 1930,
+3315 
+] 
+],
+&quot;name&quot;: &quot;Eddie Collins&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1977,
+173 
+],
+[
+ 1978,
+347 
+],
+[
+ 1979,
+526 
+],
+[
+ 1980,
+712 
+],
+[
+ 1981,
+823 
+],
+[
+ 1982,
+997 
+],
+[
+ 1983,
+1175 
+],
+[
+ 1984,
+1355 
+],
+[
+ 1985,
+1528 
+],
+[
+ 1986,
+1679 
+],
+[
+ 1987,
+1850 
+],
+[
+ 1988,
+2021 
+],
+[
+ 1989,
+2168 
+],
+[
+ 1990,
+2352 
+],
+[
+ 1991,
+2502 
+],
+[
+ 1992,
+2646 
+],
+[
+ 1993,
+2820 
+],
+[
+ 1994,
+2930 
+],
+[
+ 1995,
+3071 
+],
+[
+ 1996,
+3218 
+],
+[
+ 1997,
+3255 
+] 
+],
+&quot;name&quot;: &quot;Eddie Murray&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+5 
+],
+[
+ 1974,
+134 
+],
+[
+ 1975,
+329 
+],
+[
+ 1976,
+544 
+],
+[
+ 1977,
+720 
+],
+[
+ 1978,
+870 
+],
+[
+ 1979,
+1082 
+],
+[
+ 1980,
+1257 
+],
+[
+ 1981,
+1366 
+],
+[
+ 1982,
+1532 
+],
+[
+ 1983,
+1676 
+],
+[
+ 1984,
+1783 
+],
+[
+ 1985,
+1967 
+],
+[
+ 1986,
+2095 
+],
+[
+ 1987,
+2219 
+],
+[
+ 1988,
+2399 
+],
+[
+ 1989,
+2528 
+],
+[
+ 1990,
+2707 
+],
+[
+ 1991,
+2836 
+],
+[
+ 1992,
+3005 
+],
+[
+ 1993,
+3154 
+] 
+],
+&quot;name&quot;: &quot;George Brett&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1954,
+131 
+],
+[
+ 1955,
+320 
+],
+[
+ 1956,
+520 
+],
+[
+ 1957,
+718 
+],
+[
+ 1958,
+914 
+],
+[
+ 1959,
+1137 
+],
+[
+ 1960,
+1309 
+],
+[
+ 1961,
+1506 
+],
+[
+ 1962,
+1697 
+],
+[
+ 1963,
+1898 
+],
+[
+ 1964,
+2085 
+],
+[
+ 1965,
+2266 
+],
+[
+ 1966,
+2434 
+],
+[
+ 1967,
+2618 
+],
+[
+ 1968,
+2792 
+],
+[
+ 1969,
+2956 
+],
+[
+ 1970,
+3110 
+],
+[
+ 1971,
+3272 
+],
+[
+ 1972,
+3391 
+],
+[
+ 1973,
+3509 
+],
+[
+ 1974,
+3600 
+],
+[
+ 1975,
+3709 
+],
+[
+ 1976,
+3771 
+] 
+],
+&quot;name&quot;: &quot;Hank Aaron&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1897,
+80 
+],
+[
+ 1898,
+256 
+],
+[
+ 1899,
+448 
+],
+[
+ 1900,
+649 
+],
+[
+ 1901,
+843 
+],
+[
+ 1902,
+1019 
+],
+[
+ 1903,
+1201 
+],
+[
+ 1904,
+1372 
+],
+[
+ 1905,
+1571 
+],
+[
+ 1906,
+1746 
+],
+[
+ 1907,
+1926 
+],
+[
+ 1908,
+2127 
+],
+[
+ 1909,
+2295 
+],
+[
+ 1910,
+2473 
+],
+[
+ 1911,
+2631 
+],
+[
+ 1912,
+2812 
+],
+[
+ 1913,
+2936 
+],
+[
+ 1914,
+3075 
+],
+[
+ 1915,
+3230 
+],
+[
+ 1916,
+3354 
+],
+[
+ 1917,
+3415 
+] 
+],
+&quot;name&quot;: &quot;Honus Wagner&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1961,
+1 
+],
+[
+ 1962,
+115 
+],
+[
+ 1963,
+256 
+],
+[
+ 1964,
+456 
+],
+[
+ 1965,
+638 
+],
+[
+ 1966,
+821 
+],
+[
+ 1967,
+1027 
+],
+[
+ 1968,
+1211 
+],
+[
+ 1969,
+1406 
+],
+[
+ 1970,
+1608 
+],
+[
+ 1971,
+1808 
+],
+[
+ 1972,
+2001 
+],
+[
+ 1973,
+2194 
+],
+[
+ 1974,
+2388 
+],
+[
+ 1975,
+2551 
+],
+[
+ 1976,
+2701 
+],
+[
+ 1977,
+2834 
+],
+[
+ 1978,
+2900 
+],
+[
+ 1979,
+3023 
+] 
+],
+&quot;name&quot;: &quot;Lou Brock&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1896,
+57 
+],
+[
+ 1897,
+254 
+],
+[
+ 1898,
+451 
+],
+[
+ 1899,
+569 
+],
+[
+ 1900,
+721 
+],
+[
+ 1901,
+953 
+],
+[
+ 1902,
+1086 
+],
+[
+ 1903,
+1253 
+],
+[
+ 1904,
+1461 
+],
+[
+ 1905,
+1543 
+],
+[
+ 1906,
+1757 
+],
+[
+ 1907,
+1909 
+],
+[
+ 1908,
+2077 
+],
+[
+ 1909,
+2229 
+],
+[
+ 1910,
+2456 
+],
+[
+ 1911,
+2571 
+],
+[
+ 1912,
+2736 
+],
+[
+ 1913,
+2892 
+],
+[
+ 1914,
+3000 
+],
+[
+ 1915,
+3137 
+],
+[
+ 1916,
+3242 
+] 
+],
+&quot;name&quot;: &quot;Nap Lajoie&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1978,
+142 
+],
+[
+ 1979,
+330 
+],
+[
+ 1980,
+467 
+],
+[
+ 1981,
+534 
+],
+[
+ 1982,
+735 
+],
+[
+ 1983,
+899 
+],
+[
+ 1984,
+909 
+],
+[
+ 1985,
+1080 
+],
+[
+ 1986,
+1203 
+],
+[
+ 1987,
+1367 
+],
+[
+ 1988,
+1557 
+],
+[
+ 1989,
+1751 
+],
+[
+ 1990,
+1870 
+],
+[
+ 1991,
+2086 
+],
+[
+ 1992,
+2281 
+],
+[
+ 1993,
+2492 
+],
+[
+ 1994,
+2647 
+],
+[
+ 1995,
+2789 
+],
+[
+ 1996,
+3014 
+],
+[
+ 1997,
+3178 
+],
+[
+ 1998,
+3319 
+] 
+],
+&quot;name&quot;: &quot;Paul Molitor&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1926,
+180 
+],
+[
+ 1927,
+417 
+],
+[
+ 1928,
+640 
+],
+[
+ 1929,
+840 
+],
+[
+ 1930,
+1057 
+],
+[
+ 1931,
+1237 
+],
+[
+ 1932,
+1452 
+],
+[
+ 1933,
+1643 
+],
+[
+ 1934,
+1860 
+],
+[
+ 1935,
+2036 
+],
+[
+ 1936,
+2254 
+],
+[
+ 1937,
+2473 
+],
+[
+ 1938,
+2648 
+],
+[
+ 1939,
+2799 
+],
+[
+ 1940,
+2868 
+],
+[
+ 1941,
+2956 
+],
+[
+ 1942,
+3042 
+],
+[
+ 1943,
+3112 
+],
+[
+ 1944,
+3152 
+],
+[
+ 1945,
+3152 
+] 
+],
+&quot;name&quot;: &quot;Paul Waner&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1963,
+170 
+],
+[
+ 1964,
+309 
+],
+[
+ 1965,
+518 
+],
+[
+ 1966,
+723 
+],
+[
+ 1967,
+899 
+],
+[
+ 1968,
+1109 
+],
+[
+ 1969,
+1327 
+],
+[
+ 1970,
+1532 
+],
+[
+ 1971,
+1724 
+],
+[
+ 1972,
+1922 
+],
+[
+ 1973,
+2152 
+],
+[
+ 1974,
+2337 
+],
+[
+ 1975,
+2547 
+],
+[
+ 1976,
+2762 
+],
+[
+ 1977,
+2966 
+],
+[
+ 1978,
+3164 
+],
+[
+ 1979,
+3372 
+],
+[
+ 1980,
+3557 
+],
+[
+ 1981,
+3697 
+],
+[
+ 1982,
+3869 
+],
+[
+ 1983,
+3990 
+],
+[
+ 1984,
+4097 
+],
+[
+ 1985,
+4204 
+],
+[
+ 1986,
+4256 
+] 
+],
+&quot;name&quot;: &quot;Pete Rose&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1986,
+18 
+],
+[
+ 1987,
+79 
+],
+[
+ 1988,
+257 
+],
+[
+ 1989,
+411 
+],
+[
+ 1990,
+602 
+],
+[
+ 1991,
+805 
+],
+[
+ 1992,
+968 
+],
+[
+ 1993,
+1144 
+],
+[
+ 1994,
+1283 
+],
+[
+ 1995,
+1455 
+],
+[
+ 1996,
+1636 
+],
+[
+ 1997,
+1792 
+],
+[
+ 1998,
+1975 
+],
+[
+ 1999,
+2158 
+],
+[
+ 2000,
+2321 
+],
+[
+ 2001,
+2485 
+],
+[
+ 2002,
+2634 
+],
+[
+ 2003,
+2780 
+],
+[
+ 2004,
+2922 
+],
+[
+ 2005,
+3020 
+] 
+],
+&quot;name&quot;: &quot;Rafael Palmeiro&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1979,
+96 
+],
+[
+ 1980,
+275 
+],
+[
+ 1981,
+410 
+],
+[
+ 1982,
+553 
+],
+[
+ 1983,
+703 
+],
+[
+ 1984,
+850 
+],
+[
+ 1985,
+1022 
+],
+[
+ 1986,
+1182 
+],
+[
+ 1987,
+1286 
+],
+[
+ 1988,
+1455 
+],
+[
+ 1989,
+1603 
+],
+[
+ 1990,
+1762 
+],
+[
+ 1991,
+1888 
+],
+[
+ 1992,
+2000 
+],
+[
+ 1993,
+2139 
+],
+[
+ 1994,
+2216 
+],
+[
+ 1995,
+2338 
+],
+[
+ 1996,
+2450 
+],
+[
+ 1997,
+2550 
+],
+[
+ 1998,
+2678 
+],
+[
+ 1999,
+2816 
+],
+[
+ 2000,
+2914 
+],
+[
+ 2001,
+3000 
+],
+[
+ 2002,
+3040 
+],
+[
+ 2003,
+3055 
+] 
+],
+&quot;name&quot;: &quot;Rickey Henderson&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1955,
+121 
+],
+[
+ 1956,
+290 
+],
+[
+ 1957,
+404 
+],
+[
+ 1958,
+554 
+],
+[
+ 1959,
+682 
+],
+[
+ 1960,
+861 
+],
+[
+ 1961,
+1062 
+],
+[
+ 1962,
+1230 
+],
+[
+ 1963,
+1422 
+],
+[
+ 1964,
+1633 
+],
+[
+ 1965,
+1827 
+],
+[
+ 1966,
+2029 
+],
+[
+ 1967,
+2238 
+],
+[
+ 1968,
+2384 
+],
+[
+ 1969,
+2559 
+],
+[
+ 1970,
+2704 
+],
+[
+ 1971,
+2882 
+],
+[
+ 1972,
+3000 
+] 
+],
+&quot;name&quot;: &quot;Roberto Clemente&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1974,
+86 
+],
+[
+ 1975,
+235 
+],
+[
+ 1976,
+396 
+],
+[
+ 1977,
+570 
+],
+[
+ 1978,
+717 
+],
+[
+ 1979,
+871 
+],
+[
+ 1980,
+1050 
+],
+[
+ 1981,
+1153 
+],
+[
+ 1982,
+1363 
+],
+[
+ 1983,
+1541 
+],
+[
+ 1984,
+1727 
+],
+[
+ 1985,
+1856 
+],
+[
+ 1986,
+2019 
+],
+[
+ 1987,
+2217 
+],
+[
+ 1988,
+2407 
+],
+[
+ 1989,
+2602 
+],
+[
+ 1990,
+2747 
+],
+[
+ 1991,
+2878 
+],
+[
+ 1992,
+3025 
+],
+[
+ 1993,
+3142 
+] 
+],
+&quot;name&quot;: &quot;Robin Yount&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1967,
+150 
+],
+[
+ 1968,
+276 
+],
+[
+ 1969,
+428 
+],
+[
+ 1970,
+498 
+],
+[
+ 1971,
+675 
+],
+[
+ 1972,
+845 
+],
+[
+ 1973,
+1048 
+],
+[
+ 1974,
+1266 
+],
+[
+ 1975,
+1458 
+],
+[
+ 1976,
+1658 
+],
+[
+ 1977,
+1897 
+],
+[
+ 1978,
+2085 
+],
+[
+ 1979,
+2215 
+],
+[
+ 1980,
+2394 
+],
+[
+ 1981,
+2505 
+],
+[
+ 1982,
+2672 
+],
+[
+ 1983,
+2832 
+],
+[
+ 1984,
+2929 
+],
+[
+ 1985,
+3053 
+] 
+],
+&quot;name&quot;: &quot;Rod Carew&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1941,
+20 
+],
+[
+ 1942,
+167 
+],
+[
+ 1943,
+387 
+],
+[
+ 1944,
+584 
+],
+[
+ 1946,
+812 
+],
+[
+ 1947,
+995 
+],
+[
+ 1948,
+1225 
+],
+[
+ 1949,
+1432 
+],
+[
+ 1950,
+1624 
+],
+[
+ 1951,
+1829 
+],
+[
+ 1952,
+2023 
+],
+[
+ 1953,
+2223 
+],
+[
+ 1954,
+2418 
+],
+[
+ 1955,
+2597 
+],
+[
+ 1956,
+2781 
+],
+[
+ 1957,
+2957 
+],
+[
+ 1958,
+3116 
+],
+[
+ 1959,
+3203 
+],
+[
+ 1960,
+3294 
+],
+[
+ 1961,
+3401 
+],
+[
+ 1962,
+3544 
+],
+[
+ 1963,
+3630 
+] 
+],
+&quot;name&quot;: &quot;Stan Musial&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+55 
+],
+[
+ 1983,
+149 
+],
+[
+ 1984,
+362 
+],
+[
+ 1985,
+559 
+],
+[
+ 1986,
+770 
+],
+[
+ 1987,
+988 
+],
+[
+ 1988,
+1151 
+],
+[
+ 1989,
+1354 
+],
+[
+ 1990,
+1531 
+],
+[
+ 1991,
+1699 
+],
+[
+ 1992,
+1864 
+],
+[
+ 1993,
+2039 
+],
+[
+ 1994,
+2204 
+],
+[
+ 1995,
+2401 
+],
+[
+ 1996,
+2560 
+],
+[
+ 1997,
+2780 
+],
+[
+ 1998,
+2928 
+],
+[
+ 1999,
+3067 
+],
+[
+ 2000,
+3108 
+],
+[
+ 2001,
+3141 
+] 
+],
+&quot;name&quot;: &quot;Tony Gwynn&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1907,
+3 
+],
+[
+ 1908,
+29 
+],
+[
+ 1909,
+197 
+],
+[
+ 1910,
+380 
+],
+[
+ 1911,
+547 
+],
+[
+ 1912,
+769 
+],
+[
+ 1913,
+958 
+],
+[
+ 1914,
+1151 
+],
+[
+ 1915,
+1327 
+],
+[
+ 1916,
+1538 
+],
+[
+ 1917,
+1722 
+],
+[
+ 1918,
+1872 
+],
+[
+ 1919,
+2018 
+],
+[
+ 1920,
+2232 
+],
+[
+ 1921,
+2415 
+],
+[
+ 1922,
+2576 
+],
+[
+ 1923,
+2794 
+],
+[
+ 1924,
+2961 
+],
+[
+ 1925,
+3128 
+],
+[
+ 1926,
+3292 
+],
+[
+ 1927,
+3463 
+],
+[
+ 1928,
+3514 
+] 
+],
+&quot;name&quot;: &quot;Tris Speaker&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1905,
+36 
+],
+[
+ 1906,
+149 
+],
+[
+ 1907,
+361 
+],
+[
+ 1908,
+549 
+],
+[
+ 1909,
+765 
+],
+[
+ 1910,
+959 
+],
+[
+ 1911,
+1207 
+],
+[
+ 1912,
+1433 
+],
+[
+ 1913,
+1600 
+],
+[
+ 1914,
+1727 
+],
+[
+ 1915,
+1935 
+],
+[
+ 1916,
+2136 
+],
+[
+ 1917,
+2361 
+],
+[
+ 1918,
+2522 
+],
+[
+ 1919,
+2713 
+],
+[
+ 1920,
+2856 
+],
+[
+ 1921,
+3053 
+],
+[
+ 1922,
+3264 
+],
+[
+ 1923,
+3453 
+],
+[
+ 1924,
+3664 
+],
+[
+ 1925,
+3821 
+],
+[
+ 1926,
+3900 
+],
+[
+ 1927,
+4075 
+],
+[
+ 1928,
+4189 
+] 
+],
+&quot;name&quot;: &quot;Ty Cobb&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+118 
+],
+[
+ 1983,
+328 
+],
+[
+ 1984,
+531 
+],
+[
+ 1985,
+771 
+],
+[
+ 1986,
+978 
+],
+[
+ 1987,
+1178 
+],
+[
+ 1988,
+1392 
+],
+[
+ 1989,
+1597 
+],
+[
+ 1990,
+1784 
+],
+[
+ 1991,
+1965 
+],
+[
+ 1992,
+2098 
+],
+[
+ 1993,
+2267 
+],
+[
+ 1994,
+2392 
+],
+[
+ 1995,
+2541 
+],
+[
+ 1996,
+2697 
+],
+[
+ 1997,
+2800 
+],
+[
+ 1998,
+2922 
+],
+[
+ 1999,
+3010 
+] 
+],
+&quot;name&quot;: &quot;Wade Boggs&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1951,
+127 
+],
+[
+ 1952,
+157 
+],
+[
+ 1954,
+352 
+],
+[
+ 1955,
+537 
+],
+[
+ 1956,
+708 
+],
+[
+ 1957,
+903 
+],
+[
+ 1958,
+1111 
+],
+[
+ 1959,
+1291 
+],
+[
+ 1960,
+1481 
+],
+[
+ 1961,
+1657 
+],
+[
+ 1962,
+1846 
+],
+[
+ 1963,
+2033 
+],
+[
+ 1964,
+2204 
+],
+[
+ 1965,
+2381 
+],
+[
+ 1966,
+2540 
+],
+[
+ 1967,
+2668 
+],
+[
+ 1968,
+2812 
+],
+[
+ 1969,
+2926 
+],
+[
+ 1970,
+3065 
+],
+[
+ 1971,
+3178 
+],
+[
+ 1972,
+3239 
+],
+[
+ 1973,
+3283 
+] 
+],
+&quot;name&quot;: &quot;Willie Mays&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+} 
+],
+&quot;xAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;yearID&quot; 
+} 
+} 
+],
+&quot;subtitle&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;chart&quot;: {
+ &quot;forceY&quot;: [0],
+&quot;renderTo&quot;: &quot;chart8a6b4094a100&quot; 
+},
+&quot;id&quot;: &quot;chart8a6b4094a100&quot; 
+});
+        });
+    })(jQuery);
+&lt;/script&gt;
+    
+  &lt;/body&gt;
+&lt;/html&gt;
+' scrolling='no' seamless class='rChart 
+highcharts
+ '
+id=iframe-
+chart8a6b4094a100
+></iframe>
+
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+<p>これは通算ヒット数の積み上げの様子です.
+1970年代以降に, レジェンドプレーヤーが固まっているように見えますね.</p>
+
+<p>割と最近の選手の成績だけ見てみると, </p>
+
+<pre><code class="r">data_recent = career_data %&gt;% filter(recent == &quot;recent&quot;) 
+hp = hPlot(data = data_recent, x=&quot;yearID&quot;, y=&quot;careerHIT&quot;, group=&quot;fullname&quot;, type=&quot;line&quot;) 
+hp$show(&quot;iframesrc&quot;, cdn = TRUE)
+</code></pre>
+
+<iframe srcdoc='
+&lt;!doctype HTML&gt;
+&lt;meta charset = &#039;utf-8&#039;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    
+    &lt;script src=&#039;http://code.jquery.com/jquery-1.9.1.min.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts-more.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/modules/exporting.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    
+    &lt;style&gt;
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    &lt;/style&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#039;chart8a6b16e43b5a&#039; class=&#039;rChart highcharts&#039;&gt;&lt;/div&gt;  
+    
+    &lt;script type=&#039;text/javascript&#039;&gt;
+    (function($){
+        $(function () {
+            var chart = new Highcharts.Chart({
+ &quot;dom&quot;: &quot;chart8a6b16e43b5a&quot;,
+&quot;width&quot;:            800,
+&quot;height&quot;:            400,
+&quot;credits&quot;: {
+ &quot;href&quot;: null,
+&quot;text&quot;: null 
+},
+&quot;exporting&quot;: {
+ &quot;enabled&quot;: false 
+},
+&quot;title&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;yAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;careerHIT&quot; 
+} 
+} 
+],
+&quot;series&quot;: [
+ {
+ &quot;data&quot;: [
+ [
+ 1981,
+5 
+],
+[
+ 1982,
+163 
+],
+[
+ 1983,
+374 
+],
+[
+ 1984,
+569 
+],
+[
+ 1985,
+750 
+],
+[
+ 1986,
+927 
+],
+[
+ 1987,
+1084 
+],
+[
+ 1988,
+1236 
+],
+[
+ 1989,
+1402 
+],
+[
+ 1990,
+1552 
+],
+[
+ 1991,
+1762 
+],
+[
+ 1992,
+1922 
+],
+[
+ 1993,
+2087 
+],
+[
+ 1994,
+2227 
+],
+[
+ 1995,
+2371 
+],
+[
+ 1996,
+2549 
+],
+[
+ 1997,
+2715 
+],
+[
+ 1998,
+2878 
+],
+[
+ 1999,
+2991 
+],
+[
+ 2000,
+3070 
+],
+[
+ 2001,
+3184 
+] 
+],
+&quot;name&quot;: &quot;Cal Ripken&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1988,
+26 
+],
+[
+ 1989,
+140 
+],
+[
+ 1990,
+293 
+],
+[
+ 1991,
+454 
+],
+[
+ 1992,
+624 
+],
+[
+ 1993,
+799 
+],
+[
+ 1994,
+938 
+],
+[
+ 1995,
+1105 
+],
+[
+ 1996,
+1279 
+],
+[
+ 1997,
+1470 
+],
+[
+ 1998,
+1680 
+],
+[
+ 1999,
+1868 
+],
+[
+ 2000,
+1969 
+],
+[
+ 2001,
+2149 
+],
+[
+ 2002,
+2295 
+],
+[
+ 2003,
+2461 
+],
+[
+ 2004,
+2639 
+],
+[
+ 2005,
+2795 
+],
+[
+ 2006,
+2930 
+],
+[
+ 2007,
+3060 
+] 
+],
+&quot;name&quot;: &quot;Craig Biggio&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+39 
+],
+[
+ 1974,
+171 
+],
+[
+ 1975,
+307 
+],
+[
+ 1976,
+446 
+],
+[
+ 1977,
+615 
+],
+[
+ 1978,
+796 
+],
+[
+ 1979,
+980 
+],
+[
+ 1980,
+1134 
+],
+[
+ 1981,
+1248 
+],
+[
+ 1982,
+1399 
+],
+[
+ 1983,
+1568 
+],
+[
+ 1984,
+1761 
+],
+[
+ 1985,
+1935 
+],
+[
+ 1986,
+2083 
+],
+[
+ 1987,
+2241 
+],
+[
+ 1988,
+2421 
+],
+[
+ 1990,
+2548 
+],
+[
+ 1991,
+2697 
+],
+[
+ 1992,
+2866 
+],
+[
+ 1993,
+3014 
+],
+[
+ 1994,
+3088 
+],
+[
+ 1995,
+3110 
+] 
+],
+&quot;name&quot;: &quot;Dave Winfield&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1995,
+12 
+],
+[
+ 1996,
+195 
+],
+[
+ 1997,
+385 
+],
+[
+ 1998,
+588 
+],
+[
+ 1999,
+807 
+],
+[
+ 2000,
+1008 
+],
+[
+ 2001,
+1199 
+],
+[
+ 2002,
+1390 
+],
+[
+ 2003,
+1546 
+],
+[
+ 2004,
+1734 
+],
+[
+ 2005,
+1936 
+],
+[
+ 2006,
+2150 
+],
+[
+ 2007,
+2356 
+],
+[
+ 2008,
+2535 
+],
+[
+ 2009,
+2747 
+],
+[
+ 2010,
+2926 
+],
+[
+ 2011,
+3088 
+] 
+],
+&quot;name&quot;: &quot;Derek Jeter&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1977,
+173 
+],
+[
+ 1978,
+347 
+],
+[
+ 1979,
+526 
+],
+[
+ 1980,
+712 
+],
+[
+ 1981,
+823 
+],
+[
+ 1982,
+997 
+],
+[
+ 1983,
+1175 
+],
+[
+ 1984,
+1355 
+],
+[
+ 1985,
+1528 
+],
+[
+ 1986,
+1679 
+],
+[
+ 1987,
+1850 
+],
+[
+ 1988,
+2021 
+],
+[
+ 1989,
+2168 
+],
+[
+ 1990,
+2352 
+],
+[
+ 1991,
+2502 
+],
+[
+ 1992,
+2646 
+],
+[
+ 1993,
+2820 
+],
+[
+ 1994,
+2930 
+],
+[
+ 1995,
+3071 
+],
+[
+ 1996,
+3218 
+],
+[
+ 1997,
+3255 
+] 
+],
+&quot;name&quot;: &quot;Eddie Murray&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+5 
+],
+[
+ 1974,
+134 
+],
+[
+ 1975,
+329 
+],
+[
+ 1976,
+544 
+],
+[
+ 1977,
+720 
+],
+[
+ 1978,
+870 
+],
+[
+ 1979,
+1082 
+],
+[
+ 1980,
+1257 
+],
+[
+ 1981,
+1366 
+],
+[
+ 1982,
+1532 
+],
+[
+ 1983,
+1676 
+],
+[
+ 1984,
+1783 
+],
+[
+ 1985,
+1967 
+],
+[
+ 1986,
+2095 
+],
+[
+ 1987,
+2219 
+],
+[
+ 1988,
+2399 
+],
+[
+ 1989,
+2528 
+],
+[
+ 1990,
+2707 
+],
+[
+ 1991,
+2836 
+],
+[
+ 1992,
+3005 
+],
+[
+ 1993,
+3154 
+] 
+],
+&quot;name&quot;: &quot;George Brett&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1978,
+142 
+],
+[
+ 1979,
+330 
+],
+[
+ 1980,
+467 
+],
+[
+ 1981,
+534 
+],
+[
+ 1982,
+735 
+],
+[
+ 1983,
+899 
+],
+[
+ 1984,
+909 
+],
+[
+ 1985,
+1080 
+],
+[
+ 1986,
+1203 
+],
+[
+ 1987,
+1367 
+],
+[
+ 1988,
+1557 
+],
+[
+ 1989,
+1751 
+],
+[
+ 1990,
+1870 
+],
+[
+ 1991,
+2086 
+],
+[
+ 1992,
+2281 
+],
+[
+ 1993,
+2492 
+],
+[
+ 1994,
+2647 
+],
+[
+ 1995,
+2789 
+],
+[
+ 1996,
+3014 
+],
+[
+ 1997,
+3178 
+],
+[
+ 1998,
+3319 
+] 
+],
+&quot;name&quot;: &quot;Paul Molitor&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1986,
+18 
+],
+[
+ 1987,
+79 
+],
+[
+ 1988,
+257 
+],
+[
+ 1989,
+411 
+],
+[
+ 1990,
+602 
+],
+[
+ 1991,
+805 
+],
+[
+ 1992,
+968 
+],
+[
+ 1993,
+1144 
+],
+[
+ 1994,
+1283 
+],
+[
+ 1995,
+1455 
+],
+[
+ 1996,
+1636 
+],
+[
+ 1997,
+1792 
+],
+[
+ 1998,
+1975 
+],
+[
+ 1999,
+2158 
+],
+[
+ 2000,
+2321 
+],
+[
+ 2001,
+2485 
+],
+[
+ 2002,
+2634 
+],
+[
+ 2003,
+2780 
+],
+[
+ 2004,
+2922 
+],
+[
+ 2005,
+3020 
+] 
+],
+&quot;name&quot;: &quot;Rafael Palmeiro&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1979,
+96 
+],
+[
+ 1980,
+275 
+],
+[
+ 1981,
+410 
+],
+[
+ 1982,
+553 
+],
+[
+ 1983,
+703 
+],
+[
+ 1984,
+850 
+],
+[
+ 1985,
+1022 
+],
+[
+ 1986,
+1182 
+],
+[
+ 1987,
+1286 
+],
+[
+ 1988,
+1455 
+],
+[
+ 1989,
+1603 
+],
+[
+ 1990,
+1762 
+],
+[
+ 1991,
+1888 
+],
+[
+ 1992,
+2000 
+],
+[
+ 1993,
+2139 
+],
+[
+ 1994,
+2216 
+],
+[
+ 1995,
+2338 
+],
+[
+ 1996,
+2450 
+],
+[
+ 1997,
+2550 
+],
+[
+ 1998,
+2678 
+],
+[
+ 1999,
+2816 
+],
+[
+ 2000,
+2914 
+],
+[
+ 2001,
+3000 
+],
+[
+ 2002,
+3040 
+],
+[
+ 2003,
+3055 
+] 
+],
+&quot;name&quot;: &quot;Rickey Henderson&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1974,
+86 
+],
+[
+ 1975,
+235 
+],
+[
+ 1976,
+396 
+],
+[
+ 1977,
+570 
+],
+[
+ 1978,
+717 
+],
+[
+ 1979,
+871 
+],
+[
+ 1980,
+1050 
+],
+[
+ 1981,
+1153 
+],
+[
+ 1982,
+1363 
+],
+[
+ 1983,
+1541 
+],
+[
+ 1984,
+1727 
+],
+[
+ 1985,
+1856 
+],
+[
+ 1986,
+2019 
+],
+[
+ 1987,
+2217 
+],
+[
+ 1988,
+2407 
+],
+[
+ 1989,
+2602 
+],
+[
+ 1990,
+2747 
+],
+[
+ 1991,
+2878 
+],
+[
+ 1992,
+3025 
+],
+[
+ 1993,
+3142 
+] 
+],
+&quot;name&quot;: &quot;Robin Yount&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+55 
+],
+[
+ 1983,
+149 
+],
+[
+ 1984,
+362 
+],
+[
+ 1985,
+559 
+],
+[
+ 1986,
+770 
+],
+[
+ 1987,
+988 
+],
+[
+ 1988,
+1151 
+],
+[
+ 1989,
+1354 
+],
+[
+ 1990,
+1531 
+],
+[
+ 1991,
+1699 
+],
+[
+ 1992,
+1864 
+],
+[
+ 1993,
+2039 
+],
+[
+ 1994,
+2204 
+],
+[
+ 1995,
+2401 
+],
+[
+ 1996,
+2560 
+],
+[
+ 1997,
+2780 
+],
+[
+ 1998,
+2928 
+],
+[
+ 1999,
+3067 
+],
+[
+ 2000,
+3108 
+],
+[
+ 2001,
+3141 
+] 
+],
+&quot;name&quot;: &quot;Tony Gwynn&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+118 
+],
+[
+ 1983,
+328 
+],
+[
+ 1984,
+531 
+],
+[
+ 1985,
+771 
+],
+[
+ 1986,
+978 
+],
+[
+ 1987,
+1178 
+],
+[
+ 1988,
+1392 
+],
+[
+ 1989,
+1597 
+],
+[
+ 1990,
+1784 
+],
+[
+ 1991,
+1965 
+],
+[
+ 1992,
+2098 
+],
+[
+ 1993,
+2267 
+],
+[
+ 1994,
+2392 
+],
+[
+ 1995,
+2541 
+],
+[
+ 1996,
+2697 
+],
+[
+ 1997,
+2800 
+],
+[
+ 1998,
+2922 
+],
+[
+ 1999,
+3010 
+] 
+],
+&quot;name&quot;: &quot;Wade Boggs&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+} 
+],
+&quot;xAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;yearID&quot; 
+} 
+} 
+],
+&quot;subtitle&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;id&quot;: &quot;chart8a6b16e43b5a&quot;,
+&quot;chart&quot;: {
+ &quot;renderTo&quot;: &quot;chart8a6b16e43b5a&quot; 
+} 
+});
+        });
+    })(jQuery);
+&lt;/script&gt;
+    
+  &lt;/body&gt;
+&lt;/html&gt;
+' scrolling='no' seamless class='rChart 
+highcharts
+ '
+id=iframe-
+chart8a6b16e43b5a
+></iframe>
+
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+<p>こんな感じです. </p>
+
+<p>ホームラン数も見たいです.</p>
+
+<pre><code class="r">hp2 = hPlot(data = career_data, x=&quot;yearID&quot;, y=&quot;careerHR&quot;, group = &quot;fullname&quot;, type=&quot;line&quot;)                  
+hp2$chart(forceY = &quot;#![0]!#&quot;)
+hp2$show(&quot;iframesrc&quot;, cdn = TRUE)
+</code></pre>
+
+<iframe srcdoc='
+&lt;!doctype HTML&gt;
+&lt;meta charset = &#039;utf-8&#039;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    
+    &lt;script src=&#039;http://code.jquery.com/jquery-1.9.1.min.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts-more.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/modules/exporting.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    
+    &lt;style&gt;
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    &lt;/style&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#039;chart8a6b28d1b43&#039; class=&#039;rChart highcharts&#039;&gt;&lt;/div&gt;  
+    
+    &lt;script type=&#039;text/javascript&#039;&gt;
+    (function($){
+        $(function () {
+            var chart = new Highcharts.Chart({
+ &quot;dom&quot;: &quot;chart8a6b28d1b43&quot;,
+&quot;width&quot;:            800,
+&quot;height&quot;:            400,
+&quot;credits&quot;: {
+ &quot;href&quot;: null,
+&quot;text&quot;: null 
+},
+&quot;exporting&quot;: {
+ &quot;enabled&quot;: false 
+},
+&quot;title&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;yAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;careerHR&quot; 
+} 
+} 
+],
+&quot;series&quot;: [
+ {
+ &quot;data&quot;: [
+ [
+ 1953,
+1 
+],
+[
+ 1954,
+5 
+],
+[
+ 1955,
+32 
+],
+[
+ 1956,
+59 
+],
+[
+ 1957,
+82 
+],
+[
+ 1958,
+98 
+],
+[
+ 1959,
+125 
+],
+[
+ 1960,
+140 
+],
+[
+ 1961,
+159 
+],
+[
+ 1962,
+188 
+],
+[
+ 1963,
+215 
+],
+[
+ 1964,
+232 
+],
+[
+ 1965,
+250 
+],
+[
+ 1966,
+279 
+],
+[
+ 1967,
+304 
+],
+[
+ 1968,
+314 
+],
+[
+ 1969,
+335 
+],
+[
+ 1970,
+351 
+],
+[
+ 1971,
+366 
+],
+[
+ 1972,
+376 
+],
+[
+ 1973,
+386 
+],
+[
+ 1974,
+399 
+] 
+],
+&quot;name&quot;: &quot;Al Kaline&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1981,
+0 
+],
+[
+ 1982,
+28 
+],
+[
+ 1983,
+55 
+],
+[
+ 1984,
+82 
+],
+[
+ 1985,
+108 
+],
+[
+ 1986,
+133 
+],
+[
+ 1987,
+160 
+],
+[
+ 1988,
+183 
+],
+[
+ 1989,
+204 
+],
+[
+ 1990,
+225 
+],
+[
+ 1991,
+259 
+],
+[
+ 1992,
+273 
+],
+[
+ 1993,
+297 
+],
+[
+ 1994,
+310 
+],
+[
+ 1995,
+327 
+],
+[
+ 1996,
+353 
+],
+[
+ 1997,
+370 
+],
+[
+ 1998,
+384 
+],
+[
+ 1999,
+402 
+],
+[
+ 2000,
+417 
+],
+[
+ 2001,
+431 
+] 
+],
+&quot;name&quot;: &quot;Cal Ripken&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1871,
+0 
+],
+[
+ 1872,
+0 
+],
+[
+ 1873,
+0 
+],
+[
+ 1874,
+0 
+],
+[
+ 1875,
+0 
+],
+[
+ 1876,
+2 
+],
+[
+ 1877,
+2 
+],
+[
+ 1878,
+2 
+],
+[
+ 1879,
+2 
+],
+[
+ 1880,
+3 
+],
+[
+ 1881,
+4 
+],
+[
+ 1882,
+5 
+],
+[
+ 1883,
+5 
+],
+[
+ 1884,
+26 
+],
+[
+ 1885,
+33 
+],
+[
+ 1886,
+43 
+],
+[
+ 1887,
+50 
+],
+[
+ 1888,
+62 
+],
+[
+ 1889,
+69 
+],
+[
+ 1890,
+76 
+],
+[
+ 1891,
+84 
+],
+[
+ 1892,
+85 
+],
+[
+ 1893,
+85 
+],
+[
+ 1894,
+90 
+],
+[
+ 1895,
+92 
+],
+[
+ 1896,
+94 
+],
+[
+ 1897,
+97 
+] 
+],
+&quot;name&quot;: &quot;Cap Anson&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1961,
+11 
+],
+[
+ 1962,
+30 
+],
+[
+ 1963,
+44 
+],
+[
+ 1964,
+59 
+],
+[
+ 1965,
+79 
+],
+[
+ 1966,
+95 
+],
+[
+ 1967,
+139 
+],
+[
+ 1968,
+162 
+],
+[
+ 1969,
+202 
+],
+[
+ 1970,
+242 
+],
+[
+ 1971,
+257 
+],
+[
+ 1972,
+269 
+],
+[
+ 1973,
+288 
+],
+[
+ 1974,
+303 
+],
+[
+ 1975,
+317 
+],
+[
+ 1976,
+338 
+],
+[
+ 1977,
+366 
+],
+[
+ 1978,
+383 
+],
+[
+ 1979,
+404 
+],
+[
+ 1980,
+419 
+],
+[
+ 1981,
+426 
+],
+[
+ 1982,
+442 
+],
+[
+ 1983,
+452 
+] 
+],
+&quot;name&quot;: &quot;Carl Yastrzemski&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1988,
+3 
+],
+[
+ 1989,
+16 
+],
+[
+ 1990,
+20 
+],
+[
+ 1991,
+24 
+],
+[
+ 1992,
+30 
+],
+[
+ 1993,
+51 
+],
+[
+ 1994,
+57 
+],
+[
+ 1995,
+79 
+],
+[
+ 1996,
+94 
+],
+[
+ 1997,
+116 
+],
+[
+ 1998,
+136 
+],
+[
+ 1999,
+152 
+],
+[
+ 2000,
+160 
+],
+[
+ 2001,
+180 
+],
+[
+ 2002,
+195 
+],
+[
+ 2003,
+210 
+],
+[
+ 2004,
+234 
+],
+[
+ 2005,
+260 
+],
+[
+ 2006,
+281 
+],
+[
+ 2007,
+291 
+] 
+],
+&quot;name&quot;: &quot;Craig Biggio&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+3 
+],
+[
+ 1974,
+23 
+],
+[
+ 1975,
+38 
+],
+[
+ 1976,
+51 
+],
+[
+ 1977,
+76 
+],
+[
+ 1978,
+100 
+],
+[
+ 1979,
+134 
+],
+[
+ 1980,
+154 
+],
+[
+ 1981,
+167 
+],
+[
+ 1982,
+204 
+],
+[
+ 1983,
+236 
+],
+[
+ 1984,
+255 
+],
+[
+ 1985,
+281 
+],
+[
+ 1986,
+305 
+],
+[
+ 1987,
+332 
+],
+[
+ 1988,
+357 
+],
+[
+ 1990,
+378 
+],
+[
+ 1991,
+406 
+],
+[
+ 1992,
+432 
+],
+[
+ 1993,
+453 
+],
+[
+ 1994,
+463 
+],
+[
+ 1995,
+465 
+] 
+],
+&quot;name&quot;: &quot;Dave Winfield&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1995,
+0 
+],
+[
+ 1996,
+10 
+],
+[
+ 1997,
+20 
+],
+[
+ 1998,
+39 
+],
+[
+ 1999,
+63 
+],
+[
+ 2000,
+78 
+],
+[
+ 2001,
+99 
+],
+[
+ 2002,
+117 
+],
+[
+ 2003,
+127 
+],
+[
+ 2004,
+150 
+],
+[
+ 2005,
+169 
+],
+[
+ 2006,
+183 
+],
+[
+ 2007,
+195 
+],
+[
+ 2008,
+206 
+],
+[
+ 2009,
+224 
+],
+[
+ 2010,
+234 
+],
+[
+ 2011,
+240 
+] 
+],
+&quot;name&quot;: &quot;Derek Jeter&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1906,
+0 
+],
+[
+ 1907,
+0 
+],
+[
+ 1908,
+1 
+],
+[
+ 1909,
+4 
+],
+[
+ 1910,
+7 
+],
+[
+ 1911,
+10 
+],
+[
+ 1912,
+10 
+],
+[
+ 1913,
+13 
+],
+[
+ 1914,
+15 
+],
+[
+ 1915,
+19 
+],
+[
+ 1916,
+19 
+],
+[
+ 1917,
+19 
+],
+[
+ 1918,
+21 
+],
+[
+ 1919,
+25 
+],
+[
+ 1920,
+28 
+],
+[
+ 1921,
+30 
+],
+[
+ 1922,
+31 
+],
+[
+ 1923,
+36 
+],
+[
+ 1924,
+42 
+],
+[
+ 1925,
+45 
+],
+[
+ 1926,
+46 
+],
+[
+ 1927,
+47 
+],
+[
+ 1928,
+47 
+],
+[
+ 1929,
+47 
+],
+[
+ 1930,
+47 
+] 
+],
+&quot;name&quot;: &quot;Eddie Collins&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1977,
+27 
+],
+[
+ 1978,
+54 
+],
+[
+ 1979,
+79 
+],
+[
+ 1980,
+111 
+],
+[
+ 1981,
+133 
+],
+[
+ 1982,
+165 
+],
+[
+ 1983,
+198 
+],
+[
+ 1984,
+227 
+],
+[
+ 1985,
+258 
+],
+[
+ 1986,
+275 
+],
+[
+ 1987,
+305 
+],
+[
+ 1988,
+333 
+],
+[
+ 1989,
+353 
+],
+[
+ 1990,
+379 
+],
+[
+ 1991,
+398 
+],
+[
+ 1992,
+414 
+],
+[
+ 1993,
+441 
+],
+[
+ 1994,
+458 
+],
+[
+ 1995,
+479 
+],
+[
+ 1996,
+501 
+],
+[
+ 1997,
+504 
+] 
+],
+&quot;name&quot;: &quot;Eddie Murray&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+0 
+],
+[
+ 1974,
+2 
+],
+[
+ 1975,
+13 
+],
+[
+ 1976,
+20 
+],
+[
+ 1977,
+42 
+],
+[
+ 1978,
+51 
+],
+[
+ 1979,
+74 
+],
+[
+ 1980,
+98 
+],
+[
+ 1981,
+104 
+],
+[
+ 1982,
+125 
+],
+[
+ 1983,
+150 
+],
+[
+ 1984,
+163 
+],
+[
+ 1985,
+193 
+],
+[
+ 1986,
+209 
+],
+[
+ 1987,
+231 
+],
+[
+ 1988,
+255 
+],
+[
+ 1989,
+267 
+],
+[
+ 1990,
+281 
+],
+[
+ 1991,
+291 
+],
+[
+ 1992,
+298 
+],
+[
+ 1993,
+317 
+] 
+],
+&quot;name&quot;: &quot;George Brett&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1954,
+13 
+],
+[
+ 1955,
+40 
+],
+[
+ 1956,
+66 
+],
+[
+ 1957,
+110 
+],
+[
+ 1958,
+140 
+],
+[
+ 1959,
+179 
+],
+[
+ 1960,
+219 
+],
+[
+ 1961,
+253 
+],
+[
+ 1962,
+298 
+],
+[
+ 1963,
+342 
+],
+[
+ 1964,
+366 
+],
+[
+ 1965,
+398 
+],
+[
+ 1966,
+442 
+],
+[
+ 1967,
+481 
+],
+[
+ 1968,
+510 
+],
+[
+ 1969,
+554 
+],
+[
+ 1970,
+592 
+],
+[
+ 1971,
+639 
+],
+[
+ 1972,
+673 
+],
+[
+ 1973,
+713 
+],
+[
+ 1974,
+733 
+],
+[
+ 1975,
+745 
+],
+[
+ 1976,
+755 
+] 
+],
+&quot;name&quot;: &quot;Hank Aaron&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1897,
+2 
+],
+[
+ 1898,
+12 
+],
+[
+ 1899,
+19 
+],
+[
+ 1900,
+23 
+],
+[
+ 1901,
+29 
+],
+[
+ 1902,
+32 
+],
+[
+ 1903,
+37 
+],
+[
+ 1904,
+41 
+],
+[
+ 1905,
+47 
+],
+[
+ 1906,
+49 
+],
+[
+ 1907,
+55 
+],
+[
+ 1908,
+65 
+],
+[
+ 1909,
+70 
+],
+[
+ 1910,
+74 
+],
+[
+ 1911,
+83 
+],
+[
+ 1912,
+90 
+],
+[
+ 1913,
+93 
+],
+[
+ 1914,
+94 
+],
+[
+ 1915,
+100 
+],
+[
+ 1916,
+101 
+],
+[
+ 1917,
+101 
+] 
+],
+&quot;name&quot;: &quot;Honus Wagner&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1961,
+0 
+],
+[
+ 1962,
+9 
+],
+[
+ 1963,
+18 
+],
+[
+ 1964,
+32 
+],
+[
+ 1965,
+48 
+],
+[
+ 1966,
+63 
+],
+[
+ 1967,
+84 
+],
+[
+ 1968,
+90 
+],
+[
+ 1969,
+102 
+],
+[
+ 1970,
+115 
+],
+[
+ 1971,
+122 
+],
+[
+ 1972,
+125 
+],
+[
+ 1973,
+132 
+],
+[
+ 1974,
+135 
+],
+[
+ 1975,
+138 
+],
+[
+ 1976,
+142 
+],
+[
+ 1977,
+144 
+],
+[
+ 1978,
+144 
+],
+[
+ 1979,
+149 
+] 
+],
+&quot;name&quot;: &quot;Lou Brock&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1896,
+4 
+],
+[
+ 1897,
+13 
+],
+[
+ 1898,
+19 
+],
+[
+ 1899,
+25 
+],
+[
+ 1900,
+32 
+],
+[
+ 1901,
+46 
+],
+[
+ 1902,
+53 
+],
+[
+ 1903,
+60 
+],
+[
+ 1904,
+66 
+],
+[
+ 1905,
+68 
+],
+[
+ 1906,
+68 
+],
+[
+ 1907,
+70 
+],
+[
+ 1908,
+72 
+],
+[
+ 1909,
+73 
+],
+[
+ 1910,
+77 
+],
+[
+ 1911,
+79 
+],
+[
+ 1912,
+79 
+],
+[
+ 1913,
+80 
+],
+[
+ 1914,
+80 
+],
+[
+ 1915,
+81 
+],
+[
+ 1916,
+83 
+] 
+],
+&quot;name&quot;: &quot;Nap Lajoie&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1978,
+6 
+],
+[
+ 1979,
+15 
+],
+[
+ 1980,
+24 
+],
+[
+ 1981,
+26 
+],
+[
+ 1982,
+45 
+],
+[
+ 1983,
+60 
+],
+[
+ 1984,
+60 
+],
+[
+ 1985,
+70 
+],
+[
+ 1986,
+79 
+],
+[
+ 1987,
+95 
+],
+[
+ 1988,
+108 
+],
+[
+ 1989,
+119 
+],
+[
+ 1990,
+131 
+],
+[
+ 1991,
+148 
+],
+[
+ 1992,
+160 
+],
+[
+ 1993,
+182 
+],
+[
+ 1994,
+196 
+],
+[
+ 1995,
+211 
+],
+[
+ 1996,
+220 
+],
+[
+ 1997,
+230 
+],
+[
+ 1998,
+234 
+] 
+],
+&quot;name&quot;: &quot;Paul Molitor&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1926,
+8 
+],
+[
+ 1927,
+17 
+],
+[
+ 1928,
+23 
+],
+[
+ 1929,
+38 
+],
+[
+ 1930,
+46 
+],
+[
+ 1931,
+52 
+],
+[
+ 1932,
+60 
+],
+[
+ 1933,
+67 
+],
+[
+ 1934,
+81 
+],
+[
+ 1935,
+92 
+],
+[
+ 1936,
+97 
+],
+[
+ 1937,
+99 
+],
+[
+ 1938,
+105 
+],
+[
+ 1939,
+108 
+],
+[
+ 1940,
+109 
+],
+[
+ 1941,
+111 
+],
+[
+ 1942,
+112 
+],
+[
+ 1943,
+113 
+],
+[
+ 1944,
+113 
+],
+[
+ 1945,
+113 
+] 
+],
+&quot;name&quot;: &quot;Paul Waner&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1963,
+6 
+],
+[
+ 1964,
+10 
+],
+[
+ 1965,
+21 
+],
+[
+ 1966,
+37 
+],
+[
+ 1967,
+49 
+],
+[
+ 1968,
+59 
+],
+[
+ 1969,
+75 
+],
+[
+ 1970,
+90 
+],
+[
+ 1971,
+103 
+],
+[
+ 1972,
+109 
+],
+[
+ 1973,
+114 
+],
+[
+ 1974,
+117 
+],
+[
+ 1975,
+124 
+],
+[
+ 1976,
+134 
+],
+[
+ 1977,
+143 
+],
+[
+ 1978,
+150 
+],
+[
+ 1979,
+154 
+],
+[
+ 1980,
+155 
+],
+[
+ 1981,
+155 
+],
+[
+ 1982,
+158 
+],
+[
+ 1983,
+158 
+],
+[
+ 1984,
+158 
+],
+[
+ 1985,
+160 
+],
+[
+ 1986,
+160 
+] 
+],
+&quot;name&quot;: &quot;Pete Rose&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1986,
+3 
+],
+[
+ 1987,
+17 
+],
+[
+ 1988,
+25 
+],
+[
+ 1989,
+33 
+],
+[
+ 1990,
+47 
+],
+[
+ 1991,
+73 
+],
+[
+ 1992,
+95 
+],
+[
+ 1993,
+132 
+],
+[
+ 1994,
+155 
+],
+[
+ 1995,
+194 
+],
+[
+ 1996,
+233 
+],
+[
+ 1997,
+271 
+],
+[
+ 1998,
+314 
+],
+[
+ 1999,
+361 
+],
+[
+ 2000,
+400 
+],
+[
+ 2001,
+447 
+],
+[
+ 2002,
+490 
+],
+[
+ 2003,
+528 
+],
+[
+ 2004,
+551 
+],
+[
+ 2005,
+569 
+] 
+],
+&quot;name&quot;: &quot;Rafael Palmeiro&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1979,
+1 
+],
+[
+ 1980,
+10 
+],
+[
+ 1981,
+16 
+],
+[
+ 1982,
+26 
+],
+[
+ 1983,
+35 
+],
+[
+ 1984,
+51 
+],
+[
+ 1985,
+75 
+],
+[
+ 1986,
+103 
+],
+[
+ 1987,
+120 
+],
+[
+ 1988,
+126 
+],
+[
+ 1989,
+138 
+],
+[
+ 1990,
+166 
+],
+[
+ 1991,
+184 
+],
+[
+ 1992,
+199 
+],
+[
+ 1993,
+220 
+],
+[
+ 1994,
+226 
+],
+[
+ 1995,
+235 
+],
+[
+ 1996,
+244 
+],
+[
+ 1997,
+252 
+],
+[
+ 1998,
+266 
+],
+[
+ 1999,
+278 
+],
+[
+ 2000,
+282 
+],
+[
+ 2001,
+290 
+],
+[
+ 2002,
+295 
+],
+[
+ 2003,
+297 
+] 
+],
+&quot;name&quot;: &quot;Rickey Henderson&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1955,
+5 
+],
+[
+ 1956,
+12 
+],
+[
+ 1957,
+16 
+],
+[
+ 1958,
+22 
+],
+[
+ 1959,
+26 
+],
+[
+ 1960,
+42 
+],
+[
+ 1961,
+65 
+],
+[
+ 1962,
+75 
+],
+[
+ 1963,
+92 
+],
+[
+ 1964,
+104 
+],
+[
+ 1965,
+114 
+],
+[
+ 1966,
+143 
+],
+[
+ 1967,
+166 
+],
+[
+ 1968,
+184 
+],
+[
+ 1969,
+203 
+],
+[
+ 1970,
+217 
+],
+[
+ 1971,
+230 
+],
+[
+ 1972,
+240 
+] 
+],
+&quot;name&quot;: &quot;Roberto Clemente&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1974,
+3 
+],
+[
+ 1975,
+11 
+],
+[
+ 1976,
+13 
+],
+[
+ 1977,
+17 
+],
+[
+ 1978,
+26 
+],
+[
+ 1979,
+34 
+],
+[
+ 1980,
+57 
+],
+[
+ 1981,
+67 
+],
+[
+ 1982,
+96 
+],
+[
+ 1983,
+113 
+],
+[
+ 1984,
+129 
+],
+[
+ 1985,
+144 
+],
+[
+ 1986,
+153 
+],
+[
+ 1987,
+174 
+],
+[
+ 1988,
+187 
+],
+[
+ 1989,
+208 
+],
+[
+ 1990,
+225 
+],
+[
+ 1991,
+235 
+],
+[
+ 1992,
+243 
+],
+[
+ 1993,
+251 
+] 
+],
+&quot;name&quot;: &quot;Robin Yount&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1967,
+8 
+],
+[
+ 1968,
+9 
+],
+[
+ 1969,
+17 
+],
+[
+ 1970,
+21 
+],
+[
+ 1971,
+23 
+],
+[
+ 1972,
+23 
+],
+[
+ 1973,
+29 
+],
+[
+ 1974,
+32 
+],
+[
+ 1975,
+46 
+],
+[
+ 1976,
+55 
+],
+[
+ 1977,
+69 
+],
+[
+ 1978,
+74 
+],
+[
+ 1979,
+77 
+],
+[
+ 1980,
+80 
+],
+[
+ 1981,
+82 
+],
+[
+ 1982,
+85 
+],
+[
+ 1983,
+87 
+],
+[
+ 1984,
+90 
+],
+[
+ 1985,
+92 
+] 
+],
+&quot;name&quot;: &quot;Rod Carew&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1941,
+1 
+],
+[
+ 1942,
+11 
+],
+[
+ 1943,
+24 
+],
+[
+ 1944,
+36 
+],
+[
+ 1946,
+52 
+],
+[
+ 1947,
+71 
+],
+[
+ 1948,
+110 
+],
+[
+ 1949,
+146 
+],
+[
+ 1950,
+174 
+],
+[
+ 1951,
+206 
+],
+[
+ 1952,
+227 
+],
+[
+ 1953,
+257 
+],
+[
+ 1954,
+292 
+],
+[
+ 1955,
+325 
+],
+[
+ 1956,
+352 
+],
+[
+ 1957,
+381 
+],
+[
+ 1958,
+398 
+],
+[
+ 1959,
+412 
+],
+[
+ 1960,
+429 
+],
+[
+ 1961,
+444 
+],
+[
+ 1962,
+463 
+],
+[
+ 1963,
+475 
+] 
+],
+&quot;name&quot;: &quot;Stan Musial&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+1 
+],
+[
+ 1983,
+2 
+],
+[
+ 1984,
+7 
+],
+[
+ 1985,
+13 
+],
+[
+ 1986,
+27 
+],
+[
+ 1987,
+34 
+],
+[
+ 1988,
+41 
+],
+[
+ 1989,
+45 
+],
+[
+ 1990,
+49 
+],
+[
+ 1991,
+53 
+],
+[
+ 1992,
+59 
+],
+[
+ 1993,
+66 
+],
+[
+ 1994,
+78 
+],
+[
+ 1995,
+87 
+],
+[
+ 1996,
+90 
+],
+[
+ 1997,
+107 
+],
+[
+ 1998,
+123 
+],
+[
+ 1999,
+133 
+],
+[
+ 2000,
+134 
+],
+[
+ 2001,
+135 
+] 
+],
+&quot;name&quot;: &quot;Tony Gwynn&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1907,
+0 
+],
+[
+ 1908,
+0 
+],
+[
+ 1909,
+7 
+],
+[
+ 1910,
+14 
+],
+[
+ 1911,
+22 
+],
+[
+ 1912,
+32 
+],
+[
+ 1913,
+35 
+],
+[
+ 1914,
+39 
+],
+[
+ 1915,
+39 
+],
+[
+ 1916,
+41 
+],
+[
+ 1917,
+43 
+],
+[
+ 1918,
+43 
+],
+[
+ 1919,
+45 
+],
+[
+ 1920,
+53 
+],
+[
+ 1921,
+56 
+],
+[
+ 1922,
+67 
+],
+[
+ 1923,
+84 
+],
+[
+ 1924,
+93 
+],
+[
+ 1925,
+105 
+],
+[
+ 1926,
+112 
+],
+[
+ 1927,
+114 
+],
+[
+ 1928,
+117 
+] 
+],
+&quot;name&quot;: &quot;Tris Speaker&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1905,
+1 
+],
+[
+ 1906,
+2 
+],
+[
+ 1907,
+7 
+],
+[
+ 1908,
+11 
+],
+[
+ 1909,
+20 
+],
+[
+ 1910,
+28 
+],
+[
+ 1911,
+36 
+],
+[
+ 1912,
+43 
+],
+[
+ 1913,
+47 
+],
+[
+ 1914,
+49 
+],
+[
+ 1915,
+52 
+],
+[
+ 1916,
+57 
+],
+[
+ 1917,
+63 
+],
+[
+ 1918,
+66 
+],
+[
+ 1919,
+67 
+],
+[
+ 1920,
+69 
+],
+[
+ 1921,
+81 
+],
+[
+ 1922,
+85 
+],
+[
+ 1923,
+91 
+],
+[
+ 1924,
+95 
+],
+[
+ 1925,
+107 
+],
+[
+ 1926,
+111 
+],
+[
+ 1927,
+116 
+],
+[
+ 1928,
+117 
+] 
+],
+&quot;name&quot;: &quot;Ty Cobb&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+5 
+],
+[
+ 1983,
+10 
+],
+[
+ 1984,
+16 
+],
+[
+ 1985,
+24 
+],
+[
+ 1986,
+32 
+],
+[
+ 1987,
+56 
+],
+[
+ 1988,
+61 
+],
+[
+ 1989,
+64 
+],
+[
+ 1990,
+70 
+],
+[
+ 1991,
+78 
+],
+[
+ 1992,
+85 
+],
+[
+ 1993,
+87 
+],
+[
+ 1994,
+98 
+],
+[
+ 1995,
+103 
+],
+[
+ 1996,
+105 
+],
+[
+ 1997,
+109 
+],
+[
+ 1998,
+116 
+],
+[
+ 1999,
+118 
+] 
+],
+&quot;name&quot;: &quot;Wade Boggs&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1951,
+20 
+],
+[
+ 1952,
+24 
+],
+[
+ 1954,
+65 
+],
+[
+ 1955,
+116 
+],
+[
+ 1956,
+152 
+],
+[
+ 1957,
+187 
+],
+[
+ 1958,
+216 
+],
+[
+ 1959,
+250 
+],
+[
+ 1960,
+279 
+],
+[
+ 1961,
+319 
+],
+[
+ 1962,
+368 
+],
+[
+ 1963,
+406 
+],
+[
+ 1964,
+453 
+],
+[
+ 1965,
+505 
+],
+[
+ 1966,
+542 
+],
+[
+ 1967,
+564 
+],
+[
+ 1968,
+587 
+],
+[
+ 1969,
+600 
+],
+[
+ 1970,
+628 
+],
+[
+ 1971,
+646 
+],
+[
+ 1972,
+654 
+],
+[
+ 1973,
+660 
+] 
+],
+&quot;name&quot;: &quot;Willie Mays&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+} 
+],
+&quot;xAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;yearID&quot; 
+} 
+} 
+],
+&quot;subtitle&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;chart&quot;: {
+ &quot;forceY&quot;: [0],
+&quot;renderTo&quot;: &quot;chart8a6b28d1b43&quot; 
+},
+&quot;id&quot;: &quot;chart8a6b28d1b43&quot; 
+});
+        });
+    })(jQuery);
+&lt;/script&gt;
+    
+  &lt;/body&gt;
+&lt;/html&gt;
+' scrolling='no' seamless class='rChart 
+highcharts
+ '
+id=iframe-
+chart8a6b28d1b43
+></iframe>
+
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+<p>1940年台に何かが起きていることが分かります. 
+優秀な打者が増えていますし, ホームランの数も劇的に増えています.</p>
+
+<p>三振の数も見ます.</p>
+
+<pre><code class="r">hp2 = hPlot(data = career_data, x=&quot;yearID&quot;, y=&quot;careerSO&quot;, group = &quot;fullname&quot;, type=&quot;line&quot;)                  
+hp2$chart(forceY = &quot;#![0]!#&quot;)
+hp2$show(&quot;iframesrc&quot;, cdn = TRUE)
+</code></pre>
+
+<iframe srcdoc='
+&lt;!doctype HTML&gt;
+&lt;meta charset = &#039;utf-8&#039;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    
+    &lt;script src=&#039;http://code.jquery.com/jquery-1.9.1.min.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts-more.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/modules/exporting.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    
+    &lt;style&gt;
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    &lt;/style&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#039;chart8a6b595bc091&#039; class=&#039;rChart highcharts&#039;&gt;&lt;/div&gt;  
+    
+    &lt;script type=&#039;text/javascript&#039;&gt;
+    (function($){
+        $(function () {
+            var chart = new Highcharts.Chart({
+ &quot;dom&quot;: &quot;chart8a6b595bc091&quot;,
+&quot;width&quot;:            800,
+&quot;height&quot;:            400,
+&quot;credits&quot;: {
+ &quot;href&quot;: null,
+&quot;text&quot;: null 
+},
+&quot;exporting&quot;: {
+ &quot;enabled&quot;: false 
+},
+&quot;title&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;yAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;careerSO&quot; 
+} 
+} 
+],
+&quot;series&quot;: [
+ {
+ &quot;data&quot;: [
+ [
+ 1953,
+5 
+],
+[
+ 1954,
+50 
+],
+[
+ 1955,
+107 
+],
+[
+ 1956,
+162 
+],
+[
+ 1957,
+200 
+],
+[
+ 1958,
+247 
+],
+[
+ 1959,
+289 
+],
+[
+ 1960,
+336 
+],
+[
+ 1961,
+378 
+],
+[
+ 1962,
+417 
+],
+[
+ 1963,
+465 
+],
+[
+ 1964,
+516 
+],
+[
+ 1965,
+565 
+],
+[
+ 1966,
+631 
+],
+[
+ 1967,
+678 
+],
+[
+ 1968,
+717 
+],
+[
+ 1969,
+778 
+],
+[
+ 1970,
+827 
+],
+[
+ 1971,
+884 
+],
+[
+ 1972,
+917 
+],
+[
+ 1973,
+945 
+],
+[
+ 1974,
+1020 
+] 
+],
+&quot;name&quot;: &quot;Al Kaline&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1981,
+8 
+],
+[
+ 1982,
+103 
+],
+[
+ 1983,
+200 
+],
+[
+ 1984,
+289 
+],
+[
+ 1985,
+357 
+],
+[
+ 1986,
+417 
+],
+[
+ 1987,
+494 
+],
+[
+ 1988,
+563 
+],
+[
+ 1989,
+635 
+],
+[
+ 1990,
+701 
+],
+[
+ 1991,
+747 
+],
+[
+ 1992,
+797 
+],
+[
+ 1993,
+855 
+],
+[
+ 1994,
+896 
+],
+[
+ 1995,
+955 
+],
+[
+ 1996,
+1033 
+],
+[
+ 1997,
+1106 
+],
+[
+ 1998,
+1174 
+],
+[
+ 1999,
+1205 
+],
+[
+ 2000,
+1242 
+],
+[
+ 2001,
+1305 
+] 
+],
+&quot;name&quot;: &quot;Cal Ripken&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1871,
+1 
+],
+[
+ 1872,
+4 
+],
+[
+ 1873,
+5 
+],
+[
+ 1874,
+6 
+],
+[
+ 1875,
+8 
+],
+[
+ 1876,
+16 
+],
+[
+ 1877,
+19 
+],
+[
+ 1878,
+20 
+],
+[
+ 1879,
+22 
+],
+[
+ 1880,
+34 
+],
+[
+ 1881,
+38 
+],
+[
+ 1882,
+45 
+],
+[
+ 1883,
+54 
+],
+[
+ 1884,
+67 
+],
+[
+ 1885,
+80 
+],
+[
+ 1886,
+99 
+],
+[
+ 1887,
+117 
+],
+[
+ 1888,
+141 
+],
+[
+ 1889,
+160 
+],
+[
+ 1890,
+183 
+],
+[
+ 1891,
+212 
+],
+[
+ 1892,
+242 
+],
+[
+ 1893,
+254 
+],
+[
+ 1894,
+269 
+],
+[
+ 1895,
+292 
+],
+[
+ 1896,
+302 
+] 
+],
+&quot;name&quot;: &quot;Cap Anson&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1961,
+96 
+],
+[
+ 1962,
+178 
+],
+[
+ 1963,
+250 
+],
+[
+ 1964,
+340 
+],
+[
+ 1965,
+398 
+],
+[
+ 1966,
+458 
+],
+[
+ 1967,
+527 
+],
+[
+ 1968,
+617 
+],
+[
+ 1969,
+708 
+],
+[
+ 1970,
+774 
+],
+[
+ 1971,
+834 
+],
+[
+ 1972,
+878 
+],
+[
+ 1973,
+936 
+],
+[
+ 1974,
+984 
+],
+[
+ 1975,
+1051 
+],
+[
+ 1976,
+1118 
+],
+[
+ 1977,
+1158 
+],
+[
+ 1978,
+1202 
+],
+[
+ 1979,
+1248 
+],
+[
+ 1980,
+1286 
+],
+[
+ 1981,
+1314 
+],
+[
+ 1982,
+1364 
+],
+[
+ 1983,
+1393 
+] 
+],
+&quot;name&quot;: &quot;Carl Yastrzemski&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1988,
+29 
+],
+[
+ 1989,
+93 
+],
+[
+ 1990,
+172 
+],
+[
+ 1991,
+243 
+],
+[
+ 1992,
+338 
+],
+[
+ 1993,
+431 
+],
+[
+ 1994,
+489 
+],
+[
+ 1995,
+574 
+],
+[
+ 1996,
+646 
+],
+[
+ 1997,
+753 
+],
+[
+ 1998,
+866 
+],
+[
+ 1999,
+973 
+],
+[
+ 2000,
+1046 
+],
+[
+ 2001,
+1146 
+],
+[
+ 2002,
+1257 
+],
+[
+ 2003,
+1373 
+],
+[
+ 2004,
+1467 
+],
+[
+ 2005,
+1557 
+],
+[
+ 2006,
+1641 
+],
+[
+ 2007,
+1753 
+] 
+],
+&quot;name&quot;: &quot;Craig Biggio&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+19 
+],
+[
+ 1974,
+115 
+],
+[
+ 1975,
+197 
+],
+[
+ 1976,
+275 
+],
+[
+ 1977,
+350 
+],
+[
+ 1978,
+431 
+],
+[
+ 1979,
+502 
+],
+[
+ 1980,
+585 
+],
+[
+ 1981,
+626 
+],
+[
+ 1982,
+690 
+],
+[
+ 1983,
+767 
+],
+[
+ 1984,
+838 
+],
+[
+ 1985,
+934 
+],
+[
+ 1986,
+1040 
+],
+[
+ 1987,
+1136 
+],
+[
+ 1988,
+1224 
+],
+[
+ 1990,
+1305 
+],
+[
+ 1991,
+1414 
+],
+[
+ 1992,
+1503 
+],
+[
+ 1993,
+1609 
+],
+[
+ 1994,
+1660 
+],
+[
+ 1995,
+1686 
+] 
+],
+&quot;name&quot;: &quot;Dave Winfield&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1995,
+11 
+],
+[
+ 1996,
+113 
+],
+[
+ 1997,
+238 
+],
+[
+ 1998,
+357 
+],
+[
+ 1999,
+473 
+],
+[
+ 2000,
+572 
+],
+[
+ 2001,
+671 
+],
+[
+ 2002,
+785 
+],
+[
+ 2003,
+873 
+],
+[
+ 2004,
+972 
+],
+[
+ 2005,
+1089 
+],
+[
+ 2006,
+1191 
+],
+[
+ 2007,
+1291 
+],
+[
+ 2008,
+1376 
+],
+[
+ 2009,
+1466 
+],
+[
+ 2010,
+1572 
+],
+[
+ 2011,
+1653 
+] 
+],
+&quot;name&quot;: &quot;Derek Jeter&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1977,
+104 
+],
+[
+ 1978,
+201 
+],
+[
+ 1979,
+279 
+],
+[
+ 1980,
+350 
+],
+[
+ 1981,
+393 
+],
+[
+ 1982,
+475 
+],
+[
+ 1983,
+565 
+],
+[
+ 1984,
+652 
+],
+[
+ 1985,
+720 
+],
+[
+ 1986,
+769 
+],
+[
+ 1987,
+849 
+],
+[
+ 1988,
+927 
+],
+[
+ 1989,
+1012 
+],
+[
+ 1990,
+1076 
+],
+[
+ 1991,
+1150 
+],
+[
+ 1992,
+1224 
+],
+[
+ 1993,
+1285 
+],
+[
+ 1994,
+1338 
+],
+[
+ 1995,
+1403 
+],
+[
+ 1996,
+1490 
+],
+[
+ 1997,
+1516 
+] 
+],
+&quot;name&quot;: &quot;Eddie Murray&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+5 
+],
+[
+ 1974,
+43 
+],
+[
+ 1975,
+92 
+],
+[
+ 1976,
+128 
+],
+[
+ 1977,
+152 
+],
+[
+ 1978,
+187 
+],
+[
+ 1979,
+223 
+],
+[
+ 1980,
+245 
+],
+[
+ 1981,
+268 
+],
+[
+ 1982,
+319 
+],
+[
+ 1983,
+358 
+],
+[
+ 1984,
+395 
+],
+[
+ 1985,
+444 
+],
+[
+ 1986,
+489 
+],
+[
+ 1987,
+536 
+],
+[
+ 1988,
+587 
+],
+[
+ 1989,
+634 
+],
+[
+ 1990,
+697 
+],
+[
+ 1991,
+772 
+],
+[
+ 1992,
+841 
+],
+[
+ 1993,
+908 
+] 
+],
+&quot;name&quot;: &quot;George Brett&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1954,
+39 
+],
+[
+ 1955,
+100 
+],
+[
+ 1956,
+154 
+],
+[
+ 1957,
+212 
+],
+[
+ 1958,
+261 
+],
+[
+ 1959,
+315 
+],
+[
+ 1960,
+378 
+],
+[
+ 1961,
+442 
+],
+[
+ 1962,
+515 
+],
+[
+ 1963,
+609 
+],
+[
+ 1964,
+655 
+],
+[
+ 1965,
+736 
+],
+[
+ 1966,
+832 
+],
+[
+ 1967,
+929 
+],
+[
+ 1968,
+991 
+],
+[
+ 1969,
+1038 
+],
+[
+ 1970,
+1101 
+],
+[
+ 1971,
+1159 
+],
+[
+ 1972,
+1214 
+],
+[
+ 1973,
+1265 
+],
+[
+ 1974,
+1294 
+],
+[
+ 1975,
+1345 
+],
+[
+ 1976,
+1383 
+] 
+],
+&quot;name&quot;: &quot;Hank Aaron&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1961,
+3 
+],
+[
+ 1962,
+99 
+],
+[
+ 1963,
+221 
+],
+[
+ 1964,
+348 
+],
+[
+ 1965,
+464 
+],
+[
+ 1966,
+598 
+],
+[
+ 1967,
+707 
+],
+[
+ 1968,
+831 
+],
+[
+ 1969,
+946 
+],
+[
+ 1970,
+1045 
+],
+[
+ 1971,
+1152 
+],
+[
+ 1972,
+1245 
+],
+[
+ 1973,
+1357 
+],
+[
+ 1974,
+1445 
+],
+[
+ 1975,
+1509 
+],
+[
+ 1976,
+1584 
+],
+[
+ 1977,
+1658 
+],
+[
+ 1978,
+1687 
+],
+[
+ 1979,
+1730 
+] 
+],
+&quot;name&quot;: &quot;Lou Brock&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1896,
+11 
+] 
+],
+&quot;name&quot;: &quot;Nap Lajoie&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1978,
+54 
+],
+[
+ 1979,
+102 
+],
+[
+ 1980,
+150 
+],
+[
+ 1981,
+179 
+],
+[
+ 1982,
+272 
+],
+[
+ 1983,
+346 
+],
+[
+ 1984,
+354 
+],
+[
+ 1985,
+434 
+],
+[
+ 1986,
+515 
+],
+[
+ 1987,
+582 
+],
+[
+ 1988,
+636 
+],
+[
+ 1989,
+703 
+],
+[
+ 1990,
+754 
+],
+[
+ 1991,
+816 
+],
+[
+ 1992,
+882 
+],
+[
+ 1993,
+953 
+],
+[
+ 1994,
+1001 
+],
+[
+ 1995,
+1058 
+],
+[
+ 1996,
+1130 
+],
+[
+ 1997,
+1203 
+],
+[
+ 1998,
+1244 
+] 
+],
+&quot;name&quot;: &quot;Paul Molitor&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1926,
+19 
+],
+[
+ 1927,
+33 
+],
+[
+ 1928,
+49 
+],
+[
+ 1929,
+73 
+],
+[
+ 1930,
+91 
+],
+[
+ 1931,
+112 
+],
+[
+ 1932,
+136 
+],
+[
+ 1933,
+156 
+],
+[
+ 1934,
+180 
+],
+[
+ 1935,
+202 
+],
+[
+ 1936,
+231 
+],
+[
+ 1937,
+265 
+],
+[
+ 1938,
+293 
+],
+[
+ 1939,
+311 
+],
+[
+ 1940,
+325 
+],
+[
+ 1941,
+339 
+],
+[
+ 1942,
+359 
+],
+[
+ 1943,
+368 
+],
+[
+ 1944,
+376 
+],
+[
+ 1945,
+376 
+] 
+],
+&quot;name&quot;: &quot;Paul Waner&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1963,
+72 
+],
+[
+ 1964,
+123 
+],
+[
+ 1965,
+199 
+],
+[
+ 1966,
+260 
+],
+[
+ 1967,
+326 
+],
+[
+ 1968,
+402 
+],
+[
+ 1969,
+467 
+],
+[
+ 1970,
+531 
+],
+[
+ 1971,
+581 
+],
+[
+ 1972,
+627 
+],
+[
+ 1973,
+669 
+],
+[
+ 1974,
+723 
+],
+[
+ 1975,
+773 
+],
+[
+ 1976,
+827 
+],
+[
+ 1977,
+869 
+],
+[
+ 1978,
+899 
+],
+[
+ 1979,
+931 
+],
+[
+ 1980,
+964 
+],
+[
+ 1981,
+990 
+],
+[
+ 1982,
+1022 
+],
+[
+ 1983,
+1050 
+],
+[
+ 1984,
+1077 
+],
+[
+ 1985,
+1112 
+],
+[
+ 1986,
+1143 
+] 
+],
+&quot;name&quot;: &quot;Pete Rose&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1986,
+6 
+],
+[
+ 1987,
+32 
+],
+[
+ 1988,
+66 
+],
+[
+ 1989,
+114 
+],
+[
+ 1990,
+173 
+],
+[
+ 1991,
+245 
+],
+[
+ 1992,
+328 
+],
+[
+ 1993,
+413 
+],
+[
+ 1994,
+476 
+],
+[
+ 1995,
+541 
+],
+[
+ 1996,
+637 
+],
+[
+ 1997,
+746 
+],
+[
+ 1998,
+837 
+],
+[
+ 1999,
+906 
+],
+[
+ 2000,
+983 
+],
+[
+ 2001,
+1073 
+],
+[
+ 2002,
+1167 
+],
+[
+ 2003,
+1244 
+],
+[
+ 2004,
+1305 
+],
+[
+ 2005,
+1348 
+] 
+],
+&quot;name&quot;: &quot;Rafael Palmeiro&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1979,
+39 
+],
+[
+ 1980,
+93 
+],
+[
+ 1981,
+161 
+],
+[
+ 1982,
+255 
+],
+[
+ 1983,
+335 
+],
+[
+ 1984,
+416 
+],
+[
+ 1985,
+481 
+],
+[
+ 1986,
+562 
+],
+[
+ 1987,
+614 
+],
+[
+ 1988,
+668 
+],
+[
+ 1989,
+736 
+],
+[
+ 1990,
+796 
+],
+[
+ 1991,
+869 
+],
+[
+ 1992,
+925 
+],
+[
+ 1993,
+990 
+],
+[
+ 1994,
+1035 
+],
+[
+ 1995,
+1101 
+],
+[
+ 1996,
+1191 
+],
+[
+ 1997,
+1276 
+],
+[
+ 1998,
+1390 
+],
+[
+ 1999,
+1472 
+],
+[
+ 2000,
+1547 
+],
+[
+ 2001,
+1631 
+],
+[
+ 2002,
+1678 
+],
+[
+ 2003,
+1694 
+] 
+],
+&quot;name&quot;: &quot;Rickey Henderson&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1955,
+60 
+],
+[
+ 1956,
+118 
+],
+[
+ 1957,
+163 
+],
+[
+ 1958,
+204 
+],
+[
+ 1959,
+255 
+],
+[
+ 1960,
+327 
+],
+[
+ 1961,
+386 
+],
+[
+ 1962,
+459 
+],
+[
+ 1963,
+523 
+],
+[
+ 1964,
+610 
+],
+[
+ 1965,
+688 
+],
+[
+ 1966,
+797 
+],
+[
+ 1967,
+900 
+],
+[
+ 1968,
+977 
+],
+[
+ 1969,
+1050 
+],
+[
+ 1970,
+1116 
+],
+[
+ 1971,
+1181 
+],
+[
+ 1972,
+1230 
+] 
+],
+&quot;name&quot;: &quot;Roberto Clemente&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1974,
+46 
+],
+[
+ 1975,
+115 
+],
+[
+ 1976,
+184 
+],
+[
+ 1977,
+264 
+],
+[
+ 1978,
+307 
+],
+[
+ 1979,
+359 
+],
+[
+ 1980,
+426 
+],
+[
+ 1981,
+463 
+],
+[
+ 1982,
+526 
+],
+[
+ 1983,
+584 
+],
+[
+ 1984,
+651 
+],
+[
+ 1985,
+707 
+],
+[
+ 1986,
+780 
+],
+[
+ 1987,
+874 
+],
+[
+ 1988,
+937 
+],
+[
+ 1989,
+1008 
+],
+[
+ 1990,
+1097 
+],
+[
+ 1991,
+1176 
+],
+[
+ 1992,
+1257 
+],
+[
+ 1993,
+1350 
+] 
+],
+&quot;name&quot;: &quot;Robin Yount&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1967,
+91 
+],
+[
+ 1968,
+162 
+],
+[
+ 1969,
+234 
+],
+[
+ 1970,
+262 
+],
+[
+ 1971,
+343 
+],
+[
+ 1972,
+403 
+],
+[
+ 1973,
+458 
+],
+[
+ 1974,
+507 
+],
+[
+ 1975,
+547 
+],
+[
+ 1976,
+599 
+],
+[
+ 1977,
+654 
+],
+[
+ 1978,
+716 
+],
+[
+ 1979,
+762 
+],
+[
+ 1980,
+800 
+],
+[
+ 1981,
+845 
+],
+[
+ 1982,
+894 
+],
+[
+ 1983,
+942 
+],
+[
+ 1984,
+981 
+],
+[
+ 1985,
+1028 
+] 
+],
+&quot;name&quot;: &quot;Rod Carew&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1941,
+1 
+],
+[
+ 1942,
+26 
+],
+[
+ 1943,
+44 
+],
+[
+ 1944,
+72 
+],
+[
+ 1946,
+103 
+],
+[
+ 1947,
+127 
+],
+[
+ 1948,
+161 
+],
+[
+ 1949,
+199 
+],
+[
+ 1950,
+235 
+],
+[
+ 1951,
+275 
+],
+[
+ 1952,
+304 
+],
+[
+ 1953,
+336 
+],
+[
+ 1954,
+375 
+],
+[
+ 1955,
+414 
+],
+[
+ 1956,
+453 
+],
+[
+ 1957,
+487 
+],
+[
+ 1958,
+513 
+],
+[
+ 1959,
+538 
+],
+[
+ 1960,
+572 
+],
+[
+ 1961,
+607 
+],
+[
+ 1962,
+653 
+],
+[
+ 1963,
+696 
+] 
+],
+&quot;name&quot;: &quot;Stan Musial&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+16 
+],
+[
+ 1983,
+37 
+],
+[
+ 1984,
+60 
+],
+[
+ 1985,
+93 
+],
+[
+ 1986,
+128 
+],
+[
+ 1987,
+163 
+],
+[
+ 1988,
+203 
+],
+[
+ 1989,
+233 
+],
+[
+ 1990,
+256 
+],
+[
+ 1991,
+275 
+],
+[
+ 1992,
+291 
+],
+[
+ 1993,
+310 
+],
+[
+ 1994,
+329 
+],
+[
+ 1995,
+344 
+],
+[
+ 1996,
+361 
+],
+[
+ 1997,
+389 
+],
+[
+ 1998,
+407 
+],
+[
+ 1999,
+421 
+],
+[
+ 2000,
+425 
+],
+[
+ 2001,
+434 
+] 
+],
+&quot;name&quot;: &quot;Tony Gwynn&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+21 
+],
+[
+ 1983,
+57 
+],
+[
+ 1984,
+101 
+],
+[
+ 1985,
+162 
+],
+[
+ 1986,
+206 
+],
+[
+ 1987,
+254 
+],
+[
+ 1988,
+288 
+],
+[
+ 1989,
+339 
+],
+[
+ 1990,
+407 
+],
+[
+ 1991,
+439 
+],
+[
+ 1992,
+470 
+],
+[
+ 1993,
+519 
+],
+[
+ 1994,
+548 
+],
+[
+ 1995,
+598 
+],
+[
+ 1996,
+630 
+],
+[
+ 1997,
+668 
+],
+[
+ 1998,
+722 
+],
+[
+ 1999,
+745 
+] 
+],
+&quot;name&quot;: &quot;Wade Boggs&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1951,
+60 
+],
+[
+ 1952,
+77 
+],
+[
+ 1954,
+134 
+],
+[
+ 1955,
+194 
+],
+[
+ 1956,
+259 
+],
+[
+ 1957,
+321 
+],
+[
+ 1958,
+377 
+],
+[
+ 1959,
+435 
+],
+[
+ 1960,
+505 
+],
+[
+ 1961,
+582 
+],
+[
+ 1962,
+667 
+],
+[
+ 1963,
+750 
+],
+[
+ 1964,
+822 
+],
+[
+ 1965,
+893 
+],
+[
+ 1966,
+974 
+],
+[
+ 1967,
+1066 
+],
+[
+ 1968,
+1147 
+],
+[
+ 1969,
+1218 
+],
+[
+ 1970,
+1308 
+],
+[
+ 1971,
+1431 
+],
+[
+ 1972,
+1479 
+],
+[
+ 1973,
+1526 
+] 
+],
+&quot;name&quot;: &quot;Willie Mays&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+} 
+],
+&quot;xAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;yearID&quot; 
+} 
+} 
+],
+&quot;subtitle&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;chart&quot;: {
+ &quot;forceY&quot;: [0],
+&quot;renderTo&quot;: &quot;chart8a6b595bc091&quot; 
+},
+&quot;id&quot;: &quot;chart8a6b595bc091&quot; 
+});
+        });
+    })(jQuery);
+&lt;/script&gt;
+    
+  &lt;/body&gt;
+&lt;/html&gt;
+' scrolling='no' seamless class='rChart 
+highcharts
+ '
+id=iframe-
+chart8a6b595bc091
+></iframe>
+
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+<p>古いデータには欠損があるみたいですね. 
+最近の選手だけ見ます</p>
+
+<pre><code class="r">hp = hPlot(data = data_recent, x=&quot;yearID&quot;, y=&quot;careerSO&quot;, group=&quot;fullname&quot;, type=&quot;line&quot;) 
+hp$show(&quot;iframesrc&quot;, cdn = TRUE)
+</code></pre>
+
+<iframe srcdoc='
+&lt;!doctype HTML&gt;
+&lt;meta charset = &#039;utf-8&#039;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    
+    &lt;script src=&#039;http://code.jquery.com/jquery-1.9.1.min.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/highcharts-more.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    &lt;script src=&#039;http://code.highcharts.com/modules/exporting.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    
+    &lt;style&gt;
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    &lt;/style&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#039;chart8a6b7df8291e&#039; class=&#039;rChart highcharts&#039;&gt;&lt;/div&gt;  
+    
+    &lt;script type=&#039;text/javascript&#039;&gt;
+    (function($){
+        $(function () {
+            var chart = new Highcharts.Chart({
+ &quot;dom&quot;: &quot;chart8a6b7df8291e&quot;,
+&quot;width&quot;:            800,
+&quot;height&quot;:            400,
+&quot;credits&quot;: {
+ &quot;href&quot;: null,
+&quot;text&quot;: null 
+},
+&quot;exporting&quot;: {
+ &quot;enabled&quot;: false 
+},
+&quot;title&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;yAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;careerSO&quot; 
+} 
+} 
+],
+&quot;series&quot;: [
+ {
+ &quot;data&quot;: [
+ [
+ 1981,
+8 
+],
+[
+ 1982,
+103 
+],
+[
+ 1983,
+200 
+],
+[
+ 1984,
+289 
+],
+[
+ 1985,
+357 
+],
+[
+ 1986,
+417 
+],
+[
+ 1987,
+494 
+],
+[
+ 1988,
+563 
+],
+[
+ 1989,
+635 
+],
+[
+ 1990,
+701 
+],
+[
+ 1991,
+747 
+],
+[
+ 1992,
+797 
+],
+[
+ 1993,
+855 
+],
+[
+ 1994,
+896 
+],
+[
+ 1995,
+955 
+],
+[
+ 1996,
+1033 
+],
+[
+ 1997,
+1106 
+],
+[
+ 1998,
+1174 
+],
+[
+ 1999,
+1205 
+],
+[
+ 2000,
+1242 
+],
+[
+ 2001,
+1305 
+] 
+],
+&quot;name&quot;: &quot;Cal Ripken&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1988,
+29 
+],
+[
+ 1989,
+93 
+],
+[
+ 1990,
+172 
+],
+[
+ 1991,
+243 
+],
+[
+ 1992,
+338 
+],
+[
+ 1993,
+431 
+],
+[
+ 1994,
+489 
+],
+[
+ 1995,
+574 
+],
+[
+ 1996,
+646 
+],
+[
+ 1997,
+753 
+],
+[
+ 1998,
+866 
+],
+[
+ 1999,
+973 
+],
+[
+ 2000,
+1046 
+],
+[
+ 2001,
+1146 
+],
+[
+ 2002,
+1257 
+],
+[
+ 2003,
+1373 
+],
+[
+ 2004,
+1467 
+],
+[
+ 2005,
+1557 
+],
+[
+ 2006,
+1641 
+],
+[
+ 2007,
+1753 
+] 
+],
+&quot;name&quot;: &quot;Craig Biggio&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+19 
+],
+[
+ 1974,
+115 
+],
+[
+ 1975,
+197 
+],
+[
+ 1976,
+275 
+],
+[
+ 1977,
+350 
+],
+[
+ 1978,
+431 
+],
+[
+ 1979,
+502 
+],
+[
+ 1980,
+585 
+],
+[
+ 1981,
+626 
+],
+[
+ 1982,
+690 
+],
+[
+ 1983,
+767 
+],
+[
+ 1984,
+838 
+],
+[
+ 1985,
+934 
+],
+[
+ 1986,
+1040 
+],
+[
+ 1987,
+1136 
+],
+[
+ 1988,
+1224 
+],
+[
+ 1990,
+1305 
+],
+[
+ 1991,
+1414 
+],
+[
+ 1992,
+1503 
+],
+[
+ 1993,
+1609 
+],
+[
+ 1994,
+1660 
+],
+[
+ 1995,
+1686 
+] 
+],
+&quot;name&quot;: &quot;Dave Winfield&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1995,
+11 
+],
+[
+ 1996,
+113 
+],
+[
+ 1997,
+238 
+],
+[
+ 1998,
+357 
+],
+[
+ 1999,
+473 
+],
+[
+ 2000,
+572 
+],
+[
+ 2001,
+671 
+],
+[
+ 2002,
+785 
+],
+[
+ 2003,
+873 
+],
+[
+ 2004,
+972 
+],
+[
+ 2005,
+1089 
+],
+[
+ 2006,
+1191 
+],
+[
+ 2007,
+1291 
+],
+[
+ 2008,
+1376 
+],
+[
+ 2009,
+1466 
+],
+[
+ 2010,
+1572 
+],
+[
+ 2011,
+1653 
+] 
+],
+&quot;name&quot;: &quot;Derek Jeter&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1977,
+104 
+],
+[
+ 1978,
+201 
+],
+[
+ 1979,
+279 
+],
+[
+ 1980,
+350 
+],
+[
+ 1981,
+393 
+],
+[
+ 1982,
+475 
+],
+[
+ 1983,
+565 
+],
+[
+ 1984,
+652 
+],
+[
+ 1985,
+720 
+],
+[
+ 1986,
+769 
+],
+[
+ 1987,
+849 
+],
+[
+ 1988,
+927 
+],
+[
+ 1989,
+1012 
+],
+[
+ 1990,
+1076 
+],
+[
+ 1991,
+1150 
+],
+[
+ 1992,
+1224 
+],
+[
+ 1993,
+1285 
+],
+[
+ 1994,
+1338 
+],
+[
+ 1995,
+1403 
+],
+[
+ 1996,
+1490 
+],
+[
+ 1997,
+1516 
+] 
+],
+&quot;name&quot;: &quot;Eddie Murray&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1973,
+5 
+],
+[
+ 1974,
+43 
+],
+[
+ 1975,
+92 
+],
+[
+ 1976,
+128 
+],
+[
+ 1977,
+152 
+],
+[
+ 1978,
+187 
+],
+[
+ 1979,
+223 
+],
+[
+ 1980,
+245 
+],
+[
+ 1981,
+268 
+],
+[
+ 1982,
+319 
+],
+[
+ 1983,
+358 
+],
+[
+ 1984,
+395 
+],
+[
+ 1985,
+444 
+],
+[
+ 1986,
+489 
+],
+[
+ 1987,
+536 
+],
+[
+ 1988,
+587 
+],
+[
+ 1989,
+634 
+],
+[
+ 1990,
+697 
+],
+[
+ 1991,
+772 
+],
+[
+ 1992,
+841 
+],
+[
+ 1993,
+908 
+] 
+],
+&quot;name&quot;: &quot;George Brett&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1978,
+54 
+],
+[
+ 1979,
+102 
+],
+[
+ 1980,
+150 
+],
+[
+ 1981,
+179 
+],
+[
+ 1982,
+272 
+],
+[
+ 1983,
+346 
+],
+[
+ 1984,
+354 
+],
+[
+ 1985,
+434 
+],
+[
+ 1986,
+515 
+],
+[
+ 1987,
+582 
+],
+[
+ 1988,
+636 
+],
+[
+ 1989,
+703 
+],
+[
+ 1990,
+754 
+],
+[
+ 1991,
+816 
+],
+[
+ 1992,
+882 
+],
+[
+ 1993,
+953 
+],
+[
+ 1994,
+1001 
+],
+[
+ 1995,
+1058 
+],
+[
+ 1996,
+1130 
+],
+[
+ 1997,
+1203 
+],
+[
+ 1998,
+1244 
+] 
+],
+&quot;name&quot;: &quot;Paul Molitor&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1986,
+6 
+],
+[
+ 1987,
+32 
+],
+[
+ 1988,
+66 
+],
+[
+ 1989,
+114 
+],
+[
+ 1990,
+173 
+],
+[
+ 1991,
+245 
+],
+[
+ 1992,
+328 
+],
+[
+ 1993,
+413 
+],
+[
+ 1994,
+476 
+],
+[
+ 1995,
+541 
+],
+[
+ 1996,
+637 
+],
+[
+ 1997,
+746 
+],
+[
+ 1998,
+837 
+],
+[
+ 1999,
+906 
+],
+[
+ 2000,
+983 
+],
+[
+ 2001,
+1073 
+],
+[
+ 2002,
+1167 
+],
+[
+ 2003,
+1244 
+],
+[
+ 2004,
+1305 
+],
+[
+ 2005,
+1348 
+] 
+],
+&quot;name&quot;: &quot;Rafael Palmeiro&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1979,
+39 
+],
+[
+ 1980,
+93 
+],
+[
+ 1981,
+161 
+],
+[
+ 1982,
+255 
+],
+[
+ 1983,
+335 
+],
+[
+ 1984,
+416 
+],
+[
+ 1985,
+481 
+],
+[
+ 1986,
+562 
+],
+[
+ 1987,
+614 
+],
+[
+ 1988,
+668 
+],
+[
+ 1989,
+736 
+],
+[
+ 1990,
+796 
+],
+[
+ 1991,
+869 
+],
+[
+ 1992,
+925 
+],
+[
+ 1993,
+990 
+],
+[
+ 1994,
+1035 
+],
+[
+ 1995,
+1101 
+],
+[
+ 1996,
+1191 
+],
+[
+ 1997,
+1276 
+],
+[
+ 1998,
+1390 
+],
+[
+ 1999,
+1472 
+],
+[
+ 2000,
+1547 
+],
+[
+ 2001,
+1631 
+],
+[
+ 2002,
+1678 
+],
+[
+ 2003,
+1694 
+] 
+],
+&quot;name&quot;: &quot;Rickey Henderson&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1974,
+46 
+],
+[
+ 1975,
+115 
+],
+[
+ 1976,
+184 
+],
+[
+ 1977,
+264 
+],
+[
+ 1978,
+307 
+],
+[
+ 1979,
+359 
+],
+[
+ 1980,
+426 
+],
+[
+ 1981,
+463 
+],
+[
+ 1982,
+526 
+],
+[
+ 1983,
+584 
+],
+[
+ 1984,
+651 
+],
+[
+ 1985,
+707 
+],
+[
+ 1986,
+780 
+],
+[
+ 1987,
+874 
+],
+[
+ 1988,
+937 
+],
+[
+ 1989,
+1008 
+],
+[
+ 1990,
+1097 
+],
+[
+ 1991,
+1176 
+],
+[
+ 1992,
+1257 
+],
+[
+ 1993,
+1350 
+] 
+],
+&quot;name&quot;: &quot;Robin Yount&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+16 
+],
+[
+ 1983,
+37 
+],
+[
+ 1984,
+60 
+],
+[
+ 1985,
+93 
+],
+[
+ 1986,
+128 
+],
+[
+ 1987,
+163 
+],
+[
+ 1988,
+203 
+],
+[
+ 1989,
+233 
+],
+[
+ 1990,
+256 
+],
+[
+ 1991,
+275 
+],
+[
+ 1992,
+291 
+],
+[
+ 1993,
+310 
+],
+[
+ 1994,
+329 
+],
+[
+ 1995,
+344 
+],
+[
+ 1996,
+361 
+],
+[
+ 1997,
+389 
+],
+[
+ 1998,
+407 
+],
+[
+ 1999,
+421 
+],
+[
+ 2000,
+425 
+],
+[
+ 2001,
+434 
+] 
+],
+&quot;name&quot;: &quot;Tony Gwynn&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+},
+{
+ &quot;data&quot;: [
+ [
+ 1982,
+21 
+],
+[
+ 1983,
+57 
+],
+[
+ 1984,
+101 
+],
+[
+ 1985,
+162 
+],
+[
+ 1986,
+206 
+],
+[
+ 1987,
+254 
+],
+[
+ 1988,
+288 
+],
+[
+ 1989,
+339 
+],
+[
+ 1990,
+407 
+],
+[
+ 1991,
+439 
+],
+[
+ 1992,
+470 
+],
+[
+ 1993,
+519 
+],
+[
+ 1994,
+548 
+],
+[
+ 1995,
+598 
+],
+[
+ 1996,
+630 
+],
+[
+ 1997,
+668 
+],
+[
+ 1998,
+722 
+],
+[
+ 1999,
+745 
+] 
+],
+&quot;name&quot;: &quot;Wade Boggs&quot;,
+&quot;type&quot;: &quot;line&quot;,
+&quot;marker&quot;: {
+ &quot;radius&quot;:              3 
+} 
+} 
+],
+&quot;xAxis&quot;: [
+ {
+ &quot;title&quot;: {
+ &quot;text&quot;: &quot;yearID&quot; 
+} 
+} 
+],
+&quot;subtitle&quot;: {
+ &quot;text&quot;: null 
+},
+&quot;id&quot;: &quot;chart8a6b7df8291e&quot;,
+&quot;chart&quot;: {
+ &quot;renderTo&quot;: &quot;chart8a6b7df8291e&quot; 
+} 
+});
+        });
+    })(jQuery);
+&lt;/script&gt;
+    
+  &lt;/body&gt;
+&lt;/html&gt;
+' scrolling='no' seamless class='rChart 
+highcharts
+ '
+id=iframe-
+chart8a6b7df8291e
+></iframe>
+
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+<p>一人半端ない人がいますね&hellip;</p>
+
+<p>トニー・グウィン.
+<a href="http://ja.wikipedia.org/wiki/%E3%83%88%E3%83%8B%E3%83%BC%E3%83%BB%E3%82%B0%E3%82%A6%E3%82%A3%E3%83%B3">http://ja.wikipedia.org/wiki/%E3%83%88%E3%83%8B%E3%83%BC%E3%83%BB%E3%82%B0%E3%82%A6%E3%82%A3%E3%83%B3</a></p>
+
+<p>&ldquo;通算の打数/三振比率21.4という数字はバッティングスタイルを比較されるイチロー(約10)と比べても倍以上高い&rdquo;</p>
+
+<p>ひいい</p>
+
+<p>以上です.</p>
+
+</body>
+
+</html>
+

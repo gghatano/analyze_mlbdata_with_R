@@ -1,0 +1,85 @@
+rChartsを使ってレジェンドプレーヤーの成績を可視化したい
+========================================================
+
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE}
+opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE)
+```
+
+Lahmanのデータベースを使って, 歴代の投手成績推移をrChartsで可視化します.
+
+データは
+http://seanlahman.com/files/database/lahman-csv_2014-02-14.zip
+でダウンロードできます. 
+
+解凍したら, Pitching.csvとMaster.csvを使います.
+
+今回は, 250勝以上した投手の成績の伸び具合を見てみます.
+
+```{r results='asis'}
+library(RPostgreSQL)
+library(dplyr)
+library(magrittr)
+library(xtable)
+# 投手成績が入ったデータ: Pitching.csv
+pitch_data = fread("Pitching.csv")
+# できたデータ
+pitch_data %>% head %>% xtable() %>% print(type="html")
+
+# 各種選手情報が入ったデータ: Master.csv
+master = fread("Master.csv")
+
+# 250勝以上した投手を調べる
+over250wins = pitch_data %>% 
+  dplyr::select(playerID, W) %>% 
+  group_by(playerID) %>% 
+  dplyr::summarise(win = sum(W)) %>% 
+  filter(win >= 250) %>% 
+  dplyr::arrange(desc(win)) 
+
+# 250勝以上した投手のデータを調べる
+data_over250wins = inner_join(pitch_data, over250wins, by = "playerID") %>% as.data.table()
+
+# シーズン途中で移籍した場合を考えて, 同じ年のデータはマージ
+data_over250wins = 
+  data_over250wins %>% 
+  group_by(playerID, yearID) %>% 
+  dplyr::summarise(win = sum(W), 
+                   lose = sum(L), 
+                   hit = sum(H), 
+                   so = sum(SO),
+                   hr = sum(HR), 
+                   bb = sum(BB))
+
+# フルネームを調べてマージ
+fullname_id = 
+  master %>% mutate(fullname = paste(nameFirst, nameLast, sep=" ")) %>% 
+  select(lahman40ID, fullname) %>% 
+  setnames(c("playerID", "fullname"))
+
+data_over250wins_fullname = 
+  data_over250wins %>% inner_join(fullname_id, by = "playerID")
+
+# 通算成績を調べるためにcumsumする
+career_data = 
+  data_over250wins_fullname %>% 
+  group_by(fullname) %>% 
+  dplyr::summarise(year = yearID, 
+                   careerWIN = cumsum(win), 
+                   careerHR = cumsum(hr), 
+                   careerSO = cumsum(so), 
+                   careerBB = cumsum(bb))
+# できたデータ
+career_data %>% head %>% xtable %>% print(type="html")
+```
+通算勝利数の推移を可視化してみます. 
+nPlotが不安定なので, hPlotします. 
+```{r results='asis'}
+library(rCharts)
+hp = hPlot(data = career_data, x = "year", y = "careerWIN", group="fullname", type= "line")
+hp$show("iframesrc", cdn = TRUE)
+```
+
+
+
+```
+

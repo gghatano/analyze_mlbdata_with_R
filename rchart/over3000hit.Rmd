@@ -1,0 +1,135 @@
+rChartsでレジェンドプレーヤーの成績を可視化したい
+========================================================
+
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE}
+opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE)
+```
+Lahmanのデータベースを使って, 歴代の打者成績推移をrChartsで可視化します.
+
+データは
+http://seanlahman.com/files/database/lahman-csv_2014-02-14.zip
+でダウンロードできます. 
+
+解凍したら, Batting.csvとMaster.csvを使います.
+```{r echo=TRUE, results='asis', warning=FALSE}
+library(rCharts)
+library(RPostgreSQL)
+library(dplyr)
+library(magrittr)
+library(xtable)
+# 各打者のシーズン記録のまとめデータ: Batting.csv
+dat = fread("Batting.csv")
+
+```
+
+データの中身はこんな感じです.
+```{r, results='asis'}
+head(dat) %>% xtable() %>% print(type="html")
+
+# 選手をidで扱うのは淋しいので, フルネームを調べます
+# フルネームはMaster.csvから作ります.
+fullname_and_id = 
+  fread("Master.csv") %>% 
+  mutate(fullname = paste(nameFirst, nameLast, sep=" ")) %>% 
+  dplyr::select(lahman40ID, fullname) %>% 
+  setnames(c("playerID", "fullname"))
+
+# 2012年までに3000本安打を超えている選手で遊びます
+bat_over_3000 = 
+  dat %>% group_by(playerID) %>% 
+  dplyr::summarise(HIT = sum(H)) %>% 
+  filter(HIT >= 3000) %>% 
+  select(playerID)
+
+# フルネームとIDを統合
+batters = bat_over_3000 %>% inner_join(fullname_and_id, by="playerID")
+
+# 3000本打った選手の成績まとめ
+batters_data = batters %>% inner_join(dat, by = "playerID")
+
+# シーズン中に移籍すると, データが別の行になります. 
+# 欲しいのは年度別の成績なので, 年度が同じなら成績はマージします
+# 移籍はなかったことにします.
+batters_data_hit = 
+  batters_data %>%
+  dplyr::select(fullname, yearID, G, AB, H, HR, SO) %>% 
+  group_by(fullname, yearID) %>%
+  dplyr::summarise(game = sum(G), atbat = sum(AB), hit = sum(H), homerun = sum(HR), so = sum(SO))
+
+# デビューの年をチェックします
+start = batters_data_hit %>% 
+  group_by(fullname) %>% 
+  dplyr::summarise(start = min(yearID)) 
+
+# 最近の選手かどうか. 1975以降かどうかで場合分け
+batters_data_hit = 
+  batters_data_hit %>% inner_join(start, by="fullname") %>% 
+  mutate(recent = ifelse(start > 1970, "recent", "old")) 
+
+# できたデータ
+head(batters_data_hit) %>% xtable() %>% print(type="html")
+```
+
+通算成績の積み上げの様子を見てみます.
+```{r results='asis'}
+# ひたすらcumsumします
+career_data =
+  batters_data_hit %>% group_by(fullname) %>%
+  dplyr::summarise(yearID = yearID, 
+                   careerHIT= cumsum(hit),
+                   careerHR = cumsum(homerun), 
+                   careerSO = cumsum(so), 
+                   careerGAME=cumsum(game), 
+                   recent = recent
+                   )
+# できたデータ
+head(career_data) %>% xtable() %>% print(type="html")
+
+# hPlotで可視化してみる
+hp2 = hPlot(data = career_data, x="yearID", y="careerHIT", group = "fullname", type="line")                  
+hp2$chart(forceY = "#![0]!#")
+hp2$show("iframesrc", cdn = TRUE)
+```
+これは通算ヒット数の積み上げの様子です.
+1970年代以降に, レジェンドプレーヤーが固まっているように見えますね.
+
+割と最近の選手の成績だけ見てみると, 
+```{r results='asis'}
+data_recent = career_data %>% filter(recent == "recent") 
+hp = hPlot(data = data_recent, x="yearID", y="careerHIT", group="fullname", type="line") 
+hp$show("iframesrc", cdn = TRUE)
+```
+こんな感じです. 
+
+ホームラン数も見たいです.
+```{r results='asis'}
+hp2 = hPlot(data = career_data, x="yearID", y="careerHR", group = "fullname", type="line")                  
+hp2$chart(forceY = "#![0]!#")
+hp2$show("iframesrc", cdn = TRUE)
+```
+1940年台に何かが起きていることが分かります. 
+優秀な打者が増えていますし, ホームランの数も劇的に増えています.
+
+
+三振の数も見ます.
+```{r results='asis'}
+hp2 = hPlot(data = career_data, x="yearID", y="careerSO", group = "fullname", type="line")                  
+hp2$chart(forceY = "#![0]!#")
+hp2$show("iframesrc", cdn = TRUE)
+```
+古いデータには欠損があるみたいですね. 
+最近の選手だけ見ます
+```{r results='asis'}
+hp = hPlot(data = data_recent, x="yearID", y="careerSO", group="fullname", type="line") 
+hp$show("iframesrc", cdn = TRUE)
+```
+一人半端ない人がいますね...
+
+トニー・グウィン.
+http://ja.wikipedia.org/wiki/%E3%83%88%E3%83%8B%E3%83%BC%E3%83%BB%E3%82%B0%E3%82%A6%E3%82%A3%E3%83%B3
+
+"通算の打数/三振比率21.4という数字はバッティングスタイルを比較されるイチロー(約10)と比べても倍以上高い"
+
+ひいい
+
+以上です.
