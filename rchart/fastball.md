@@ -9,7 +9,7 @@ Now, visualize the fastball-count of some pitchers by using R and pitch-f/x data
 
 The code and data can be obtained from github (fastball.Rmd)
 
-https://github.com/gghatano/MLB_data
+https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/rchart
 
 
 ```r
@@ -42,7 +42,7 @@ data_fast %>% head %>% xtable %>% print(type="html")
 ```
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-<!-- Mon Mar 24 07:30:58 2014 -->
+<!-- Mon Mar 24 07:46:45 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> pitch_type </TH> <TH> sv_id </TH> <TH> type </TH> <TH> count </TH> <TH> pitcher_name </TH> <TH> month </TH> <TH> FAST_FL </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> FF </TD> <TD> 130401_131510 </TD> <TD> S </TD> <TD> 0-0 </TD> <TD> Clayton Kershaw </TD> <TD> 4 </TD> <TD> T </TD> </TR>
@@ -109,11 +109,11 @@ rp$show("iframesrc", cdn = TRUE)
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;div id=&#039;chart5ec4e4b3af3&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    &lt;div id=&#039;chart6d3e094d6e&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
     
     &lt;script type=&#039;text/javascript&#039;&gt;
     var chartParams = {
- &quot;dom&quot;: &quot;chart5ec4e4b3af3&quot;,
+ &quot;dom&quot;: &quot;chart6d3e094d6e&quot;,
 &quot;width&quot;:    800,
 &quot;height&quot;:    400,
 &quot;layers&quot;: [
@@ -133,12 +133,12 @@ rp$show("iframesrc", cdn = TRUE)
 &quot;facet&quot;: [],
 &quot;guides&quot;: [],
 &quot;coord&quot;: [],
-&quot;id&quot;: &quot;chart5ec4e4b3af3&quot; 
+&quot;id&quot;: &quot;chart6d3e094d6e&quot; 
 }
     _.each(chartParams.layers, function(el){
         el.data = polyjs.data(el.data)
     })
-    var graph_chart5ec4e4b3af3 = polyjs.chart(chartParams);
+    var graph_chart6d3e094d6e = polyjs.chart(chartParams);
 &lt;/script&gt;
     
   &lt;/body&gt;
@@ -147,7 +147,7 @@ rp$show("iframesrc", cdn = TRUE)
 polycharts
  '
 id=iframe-
-chart5ec4e4b3af3
+chart6d3e094d6e
 ></iframe>
 <style>iframe.rChart{ width: 100%; height: 400px;}</style>
 
@@ -179,11 +179,11 @@ rp$show("iframesrc", cdn = TRUE)
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;div id=&#039;chart5ec419bfdf5&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    &lt;div id=&#039;chart6d36e19783f&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
     
     &lt;script type=&#039;text/javascript&#039;&gt;
     var chartParams = {
- &quot;dom&quot;: &quot;chart5ec419bfdf5&quot;,
+ &quot;dom&quot;: &quot;chart6d36e19783f&quot;,
 &quot;width&quot;:    800,
 &quot;height&quot;:    400,
 &quot;layers&quot;: [
@@ -203,12 +203,12 @@ rp$show("iframesrc", cdn = TRUE)
 &quot;facet&quot;: [],
 &quot;guides&quot;: [],
 &quot;coord&quot;: [],
-&quot;id&quot;: &quot;chart5ec419bfdf5&quot; 
+&quot;id&quot;: &quot;chart6d36e19783f&quot; 
 }
     _.each(chartParams.layers, function(el){
         el.data = polyjs.data(el.data)
     })
-    var graph_chart5ec419bfdf5 = polyjs.chart(chartParams);
+    var graph_chart6d36e19783f = polyjs.chart(chartParams);
 &lt;/script&gt;
     
   &lt;/body&gt;
@@ -217,7 +217,7 @@ rp$show("iframesrc", cdn = TRUE)
 polycharts
  '
 id=iframe-
-chart5ec419bfdf5
+chart6d36e19783f
 ></iframe>
 <style>iframe.rChart{ width: 100%; height: 400px;}</style>
 
@@ -249,11 +249,11 @@ rp$show("iframesrc", cdn = TRUE)
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;div id=&#039;chart5ec3ed2e466&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    &lt;div id=&#039;chart6d36e5ded9e&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
     
     &lt;script type=&#039;text/javascript&#039;&gt;
     var chartParams = {
- &quot;dom&quot;: &quot;chart5ec3ed2e466&quot;,
+ &quot;dom&quot;: &quot;chart6d36e5ded9e&quot;,
 &quot;width&quot;:    800,
 &quot;height&quot;:    400,
 &quot;layers&quot;: [
@@ -273,12 +273,12 @@ rp$show("iframesrc", cdn = TRUE)
 &quot;facet&quot;: [],
 &quot;guides&quot;: [],
 &quot;coord&quot;: [],
-&quot;id&quot;: &quot;chart5ec3ed2e466&quot; 
+&quot;id&quot;: &quot;chart6d36e5ded9e&quot; 
 }
     _.each(chartParams.layers, function(el){
         el.data = polyjs.data(el.data)
     })
-    var graph_chart5ec3ed2e466 = polyjs.chart(chartParams);
+    var graph_chart6d36e5ded9e = polyjs.chart(chartParams);
 &lt;/script&gt;
     
   &lt;/body&gt;
@@ -287,7 +287,7 @@ rp$show("iframesrc", cdn = TRUE)
 polycharts
  '
 id=iframe-
-chart5ec3ed2e466
+chart6d36e5ded9e
 ></iframe>
 <style>iframe.rChart{ width: 100%; height: 400px;}</style>
 

@@ -10,7 +10,7 @@ Now, visualize the fastball-count of some pitchers by using R and pitch-f/x data
 
 The code and data can be obtained from github (fastball.Rmd)
 
-https://github.com/gghatano/MLB_data
+https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/rchart
 
 ```{r results='asis'}
 library(dplyr)
