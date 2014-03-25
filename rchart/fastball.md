@@ -19,6 +19,7 @@ library(magrittr)
 library(rCharts)
 library(xtable)
 
+
 # select the column used for this document
 col_used = c("pitch_type", "type", "count", "pitcher_name", "sv_id")
 # dat = fread(paste(getwd(), "/pitch_fx/2013.csv", sep=""), 
@@ -38,20 +39,79 @@ data_fast = data %>%
   mutate(FAST_FL = ifelse(pitch_type %in% fastball, "T", "F")) 
 
 # check the data-table
-data_fast %>% head %>% xtable %>% print(type="html")
+# data_fast %>% head %>% xtable %>% print(type="html")
+data_fast %>% head %>% kable(format="html")
 ```
 
-<!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-<!-- Mon Mar 24 07:46:45 2014 -->
-<TABLE border=1>
-<TR> <TH>  </TH> <TH> pitch_type </TH> <TH> sv_id </TH> <TH> type </TH> <TH> count </TH> <TH> pitcher_name </TH> <TH> month </TH> <TH> FAST_FL </TH>  </TR>
-  <TR> <TD align="right"> 1 </TD> <TD> FF </TD> <TD> 130401_131510 </TD> <TD> S </TD> <TD> 0-0 </TD> <TD> Clayton Kershaw </TD> <TD> 4 </TD> <TD> T </TD> </TR>
-  <TR> <TD align="right"> 2 </TD> <TD> CU </TD> <TD> 130401_131526 </TD> <TD> X </TD> <TD> 0-1 </TD> <TD> Clayton Kershaw </TD> <TD> 4 </TD> <TD> F </TD> </TR>
-  <TR> <TD align="right"> 3 </TD> <TD> FF </TD> <TD> 130401_131606 </TD> <TD> B </TD> <TD> 0-0 </TD> <TD> Clayton Kershaw </TD> <TD> 4 </TD> <TD> T </TD> </TR>
-  <TR> <TD align="right"> 4 </TD> <TD> FF </TD> <TD> 130401_131619 </TD> <TD> S </TD> <TD> 1-0 </TD> <TD> Clayton Kershaw </TD> <TD> 4 </TD> <TD> T </TD> </TR>
-  <TR> <TD align="right"> 5 </TD> <TD> CU </TD> <TD> 130401_131652 </TD> <TD> B </TD> <TD> 1-1 </TD> <TD> Clayton Kershaw </TD> <TD> 4 </TD> <TD> F </TD> </TR>
-  <TR> <TD align="right"> 6 </TD> <TD> FF </TD> <TD> 130401_131712 </TD> <TD> B </TD> <TD> 2-1 </TD> <TD> Clayton Kershaw </TD> <TD> 4 </TD> <TD> T </TD> </TR>
-   </TABLE>
+<table>
+ <thead>
+  <tr>
+   <th> pitch_type </th>
+   <th> sv_id </th>
+   <th> type </th>
+   <th> count </th>
+   <th> pitcher_name </th>
+   <th> month </th>
+   <th> FAST_FL </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td> FF </td>
+   <td> 130401_131510 </td>
+   <td> S </td>
+   <td> 0-0 </td>
+   <td> Clayton Kershaw </td>
+   <td> 4 </td>
+   <td> T </td>
+  </tr>
+  <tr>
+   <td> CU </td>
+   <td> 130401_131526 </td>
+   <td> X </td>
+   <td> 0-1 </td>
+   <td> Clayton Kershaw </td>
+   <td> 4 </td>
+   <td> F </td>
+  </tr>
+  <tr>
+   <td> FF </td>
+   <td> 130401_131606 </td>
+   <td> B </td>
+   <td> 0-0 </td>
+   <td> Clayton Kershaw </td>
+   <td> 4 </td>
+   <td> T </td>
+  </tr>
+  <tr>
+   <td> FF </td>
+   <td> 130401_131619 </td>
+   <td> S </td>
+   <td> 1-0 </td>
+   <td> Clayton Kershaw </td>
+   <td> 4 </td>
+   <td> T </td>
+  </tr>
+  <tr>
+   <td> CU </td>
+   <td> 130401_131652 </td>
+   <td> B </td>
+   <td> 1-1 </td>
+   <td> Clayton Kershaw </td>
+   <td> 4 </td>
+   <td> F </td>
+  </tr>
+  <tr>
+   <td> FF </td>
+   <td> 130401_131712 </td>
+   <td> B </td>
+   <td> 2-1 </td>
+   <td> Clayton Kershaw </td>
+   <td> 4 </td>
+   <td> T </td>
+  </tr>
+</tbody>
+</table>
 
 
 
@@ -59,7 +119,7 @@ data_fast %>% head %>% xtable %>% print(type="html")
 Function "fast_rate" calculates the pitcher's fastball-ratio of each Ball/Strike count and visualizes them
 
 ```r
-# output the fastball-ratio barplot of "pitcher"
+# output the fastball-ratio badata_plotlot of "pitcher"
 # default : "Hiroki Kuroda"
 fast_rate = function(pitcher = "Hiroki Kuroda"){
   # calculate fastball/non-fastball ratio 
@@ -72,10 +132,18 @@ fast_rate = function(pitcher = "Hiroki Kuroda"){
            non_FAST = non_fast / (fast+non_fast)) %>% 
     dplyr::select(count, FAST, non_FAST) %>% 
     melt(id.var = "count") %>% 
-    setnames(c("count", "pitch", "freq"))
+    setnames(c("count", "pitch", "freq")) %>% 
+    mutate(count = paste(count))
   
-  # visualize by using rPlot
-  rp = rPlot(data = data_count, freq ~ count, color = "pitch", type = "bar")
+  # make plot by using ggplot2
+  gp = ggplot(data_count, aes(x = count,  y=freq, fill=pitch)) + 
+    geom_bar(stat="identity") + 
+    xlab("count") + ylab("frequency") + 
+    ggtitle("Fastball-ratio") + 
+    theme(plot.title=element_text(size=20, face="bold"))
+  # make plot by using polychart.js
+  rp = rPlot(freq~count, data = data_count, color="pitch", type="bar") 
+    
   return(rp)
 }
   
@@ -85,8 +153,8 @@ fast_rate = function(pitcher = "Hiroki Kuroda"){
 ### Fastball-ratio of Hiroki Kuroda (NYY).
 
 ```r
-rp = fast_rate("Hiroki Kuroda")
-rp$show("iframesrc", cdn = TRUE)
+plot = fast_rate("Hiroki Kuroda")
+plot$show("iframesrc", cdn = TRUE)
 ```
 
 <iframe srcdoc='
@@ -109,11 +177,11 @@ rp$show("iframesrc", cdn = TRUE)
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;div id=&#039;chart6d3e094d6e&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    &lt;div id=&#039;chart11eb26daf83f&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
     
     &lt;script type=&#039;text/javascript&#039;&gt;
     var chartParams = {
- &quot;dom&quot;: &quot;chart6d3e094d6e&quot;,
+ &quot;dom&quot;: &quot;chart11eb26daf83f&quot;,
 &quot;width&quot;:    800,
 &quot;height&quot;:    400,
 &quot;layers&quot;: [
@@ -133,12 +201,12 @@ rp$show("iframesrc", cdn = TRUE)
 &quot;facet&quot;: [],
 &quot;guides&quot;: [],
 &quot;coord&quot;: [],
-&quot;id&quot;: &quot;chart6d3e094d6e&quot; 
+&quot;id&quot;: &quot;chart11eb26daf83f&quot; 
 }
     _.each(chartParams.layers, function(el){
         el.data = polyjs.data(el.data)
     })
-    var graph_chart6d3e094d6e = polyjs.chart(chartParams);
+    var graph_chart11eb26daf83f = polyjs.chart(chartParams);
 &lt;/script&gt;
     
   &lt;/body&gt;
@@ -147,16 +215,20 @@ rp$show("iframesrc", cdn = TRUE)
 polycharts
  '
 id=iframe-
-chart6d3e094d6e
+chart11eb26daf83f
 ></iframe>
 <style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+```r
+
+```
 
 
 ### Fastball-ratio of Yu Darvish (TEX).
 
 ```r
-rp = fast_rate("Yu Darvish")
-rp$show("iframesrc", cdn = TRUE)
+plot = fast_rate("Yu Darvish")
+plot$show("iframesrc", cdn = TRUE)
 ```
 
 <iframe srcdoc='
@@ -179,11 +251,11 @@ rp$show("iframesrc", cdn = TRUE)
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;div id=&#039;chart6d36e19783f&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    &lt;div id=&#039;chart11eb2a286052&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
     
     &lt;script type=&#039;text/javascript&#039;&gt;
     var chartParams = {
- &quot;dom&quot;: &quot;chart6d36e19783f&quot;,
+ &quot;dom&quot;: &quot;chart11eb2a286052&quot;,
 &quot;width&quot;:    800,
 &quot;height&quot;:    400,
 &quot;layers&quot;: [
@@ -203,12 +275,12 @@ rp$show("iframesrc", cdn = TRUE)
 &quot;facet&quot;: [],
 &quot;guides&quot;: [],
 &quot;coord&quot;: [],
-&quot;id&quot;: &quot;chart6d36e19783f&quot; 
+&quot;id&quot;: &quot;chart11eb2a286052&quot; 
 }
     _.each(chartParams.layers, function(el){
         el.data = polyjs.data(el.data)
     })
-    var graph_chart6d36e19783f = polyjs.chart(chartParams);
+    var graph_chart11eb2a286052 = polyjs.chart(chartParams);
 &lt;/script&gt;
     
   &lt;/body&gt;
@@ -217,16 +289,16 @@ rp$show("iframesrc", cdn = TRUE)
 polycharts
  '
 id=iframe-
-chart6d36e19783f
+chart11eb2a286052
 ></iframe>
 <style>iframe.rChart{ width: 100%; height: 400px;}</style>
 
 
-### Fastball ratio of Clayton Kershaw (LAD).
+### Fastball-ratio of Clayton Kershaw (LAD).
 
 ```r
-rp = fast_rate("Clayton Kershaw")
-rp$show("iframesrc", cdn = TRUE)
+plot = fast_rate("Clayton Kershaw")
+plot$show("iframesrc", cdn = TRUE)
 ```
 
 <iframe srcdoc='
@@ -249,11 +321,11 @@ rp$show("iframesrc", cdn = TRUE)
     
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;div id=&#039;chart6d36e5ded9e&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    &lt;div id=&#039;chart11eb7fecdc26&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
     
     &lt;script type=&#039;text/javascript&#039;&gt;
     var chartParams = {
- &quot;dom&quot;: &quot;chart6d36e5ded9e&quot;,
+ &quot;dom&quot;: &quot;chart11eb7fecdc26&quot;,
 &quot;width&quot;:    800,
 &quot;height&quot;:    400,
 &quot;layers&quot;: [
@@ -273,12 +345,12 @@ rp$show("iframesrc", cdn = TRUE)
 &quot;facet&quot;: [],
 &quot;guides&quot;: [],
 &quot;coord&quot;: [],
-&quot;id&quot;: &quot;chart6d36e5ded9e&quot; 
+&quot;id&quot;: &quot;chart11eb7fecdc26&quot; 
 }
     _.each(chartParams.layers, function(el){
         el.data = polyjs.data(el.data)
     })
-    var graph_chart6d36e5ded9e = polyjs.chart(chartParams);
+    var graph_chart11eb7fecdc26 = polyjs.chart(chartParams);
 &lt;/script&gt;
     
   &lt;/body&gt;
@@ -287,8 +359,11 @@ rp$show("iframesrc", cdn = TRUE)
 polycharts
  '
 id=iframe-
-chart6d36e5ded9e
+chart11eb7fecdc26
 ></iframe>
 <style>iframe.rChart{ width: 100%; height: 400px;}</style>
 
+```r
+
+```
 

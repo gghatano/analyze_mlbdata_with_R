@@ -1,7 +1,7 @@
 MLB Scouting Report: Fastball-Count (2013)
 ========================================================
 ```{r global_option, echo=FALSE, error=FALSE, warning=FALSE}
-opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+# opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE, error=FALSE)
 ```
 
 Fastball-count is the pitching-count such that the fastball is often thrown.
@@ -40,14 +40,14 @@ data_fast = data %>%
 
 # check the data-table
 # data_fast %>% head %>% xtable %>% print(type="html")
-data_fast %>% head %>% kable(format="html")
+data_fast %>% head %>% xtable %>% print(type="html")
 ```
 
 
 ### ------------------------------------------------------------------
 Function "fast_rate" calculates the pitcher's fastball-ratio of each Ball/Strike count and visualizes them
 ```{r results='asis'}
-# output the fastball-ratio badata_plotlot of "pitcher"
+# output the fastball-ratio barplot of "pitcher"
 # default : "Hiroki Kuroda"
 fast_rate = function(pitcher = "Hiroki Kuroda"){
   # calculate fastball/non-fastball ratio 
@@ -60,40 +60,21 @@ fast_rate = function(pitcher = "Hiroki Kuroda"){
            non_FAST = non_fast / (fast+non_fast)) %>% 
     dplyr::select(count, FAST, non_FAST) %>% 
     melt(id.var = "count") %>% 
-    setnames(c("count", "pitch", "freq")) %>% 
-    mutate(count = paste(count))
-  
-  # make plot by using ggplot2
-  gp = ggplot(data_count, aes(x = count,  y=freq, fill=pitch)) + 
-    geom_bar(stat="identity") + 
-    xlab("count") + ylab("frequency") + 
-    ggtitle("Fastball-ratio") + 
-    theme(plot.title=element_text(size=20, face="bold"))
-  # make plot by using polychart.js
-  rp = rPlot(freq~count, data = data_count, color="pitch", type="bar") 
-    
-  return(rp)
+    setnames(c("count", "pitch", "freq"))
+  return(data_count)  
 }
   
 ```
 
-### Fastball-ratio of Hiroki Kuroda (NYY).
 ```{r results='asis'}
-plot = fast_rate("Hiroki Kuroda")
-plot$show("iframesrc", cdn = TRUE)
+dat_kuroda = fast_rate("Hiroki Kuroda")
+
+dp = dPlot(x = "count", y = "freq", groups = "pitch", data = dat_kuroda, type = "bar")
+dp$yAxis(type="addPctAxis", order="pitch")
+dp$legend()
+dp$legend( x = 60, y = 10, width = 700, height = 20, horizontalAlign = "left", orderRule = "Ancestry")
+dp
+
 ```
 
-### Fastball-ratio of Yu Darvish (TEX).
-```{r results='asis'}
-plot = fast_rate("Yu Darvish")
-plot$show("iframesrc", cdn = TRUE)
 
-```
-
-### Fastball-ratio of Clayton Kershaw (LAD).
-```{r results='asis'}
-plot = fast_rate("Clayton Kershaw")
-plot$show("iframesrc", cdn = TRUE)
-
-
-```
