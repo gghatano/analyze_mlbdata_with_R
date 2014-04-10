@@ -5,4 +5,3 @@ Rでメジャーリーグのデータ解析をします.
 
 http://gg-hogehoge.hatenablog.com
 
-テスト
