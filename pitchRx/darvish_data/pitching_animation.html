@@ -38,7 +38,7 @@ library(ggplot2)
 dat %>% filter(sv_id != "NA") %>% filter(pitch_type %in% 
     c("SL", "FF")) %>% head(30) %>% animateFX(interval = 0.01, 
     point.alpha = 0.9, layer = facet_grid(pitcher_name ~ 
-        stand))
+        pitch_type))
 ## R version 3.0.2 (2013-09-25)
 ## Platform: x86_64-apple-darwin10.8.0 (64-bit)
 ## Other packages: pitchRx 1.3, magrittr 1.0.0, pingr 0.1, RPostgreSQL
