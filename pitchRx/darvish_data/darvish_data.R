@@ -14,7 +14,7 @@ dat %>% filter(sv_id != "NA") %>%
 animation::saveHTML({
 dat %>% filter(sv_id != "NA") %>%
   filter(pitch_type %in% c("SL", "FF")) %>% head(30) %>% 
-  animateFX(interval = 0.01, point.alpha = 0.9, layer=facet_grid(pitcher_name~stand))
+  animateFX(interval = 0.01, point.alpha = 0.9, layer=facet_grid(pitcher_name~pitch_type))
 }, htmlfile = "pitching_animation.html", outdir = getwd())
 
 # density plot
