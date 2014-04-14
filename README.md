@@ -11,8 +11,8 @@ pitch f/xのデータを使って遊びます
 
 ** batting_data
 
-retrosheetからデータをダウンロードして, 
-パースして整形してcsvにします. 
+retrosheetからデータをダウンロードして, パースして整形してcsvにします. 
+
 batting_data/README.txt に詳しく書いてあります. 
 
 ** rChart 

@@ -3,7 +3,7 @@ library(dplyr)
 library(magrittr)
 library(pings)
 # Batting: season stats data frame of all the players
-all_dat <- Batting %>% 
+all_data <- Batting %>% 
   select(yearID, AB, H, HR) %>%
   group_by(yearID) %>% 
   dplyr::summarise(H = sum(H, na.rm = TRUE), 
@@ -16,7 +16,7 @@ all_dat <- Batting %>%
   setnames(c("year", "var", "rate")) 
 
 library(ggplot2)
-all_dat %>% filter(var=="HR_rate") %>% 
+all_data %>% filter(var=="HR_rate") %>% 
   ggplot() + geom_line(aes(x=year, y=rate)) + 
   ggtitle("season-HR rate") + 
   theme(plot.title=element_text(face="bold", size=24)) + 
@@ -24,4 +24,7 @@ all_dat %>% filter(var=="HR_rate") %>%
   theme(axis.title.y=element_text(size=24)) + 
   ggsave("season_HR.pdf", width=0.353*1024, height=0.353*628, unit="mm")
   
-  
+library(rCharts)
+all_data_for_hplot = all_dat %>% mutate(rate = round(rate, 3))
+hp = hPlot(data = all_data_for_hplot, x = "year", y = "rate", group="var", type= "line")
+hp
