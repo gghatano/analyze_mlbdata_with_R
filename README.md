@@ -22,3 +22,9 @@ rChartでかっこ良く可視化がしたいです
 ### shiny 
 
 shinyを使って何か作ります.
+
+
+### 参考文献
+http://www.amazon.com/Analyzing-Baseball-Data-Chapman-Series/dp/1466570229
+
+
