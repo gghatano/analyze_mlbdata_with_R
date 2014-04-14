@@ -5,13 +5,20 @@ Rでメジャーリーグのデータ解析をします.
 
 http://gg-hogehoge.hatenablog.com
 
+** pitchRx
 
-pitchRx: 投球データ取得, 解析
+pitch f/xのデータを使って遊びます
 
-batting_data: 打席結果データ解析
+** batting_data
 
-shiny: shinyでwebアプリ作成
+retrosheetからデータをダウンロードして, 
+パースして整形してcsvにします. 
+batting_data/README.txt に詳しく書いてあります. 
 
-rCharts: かっこいいグラフ
+** rChart 
 
+rChartでかっこ良く可視化がしたいです
 
+** shiny 
+
+shinyを使って何か作ります.
