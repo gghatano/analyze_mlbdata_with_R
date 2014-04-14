@@ -1,15 +1,15 @@
 library(pitchRx)
 library(rgl)
 
-dat = fread("darvish_data.csv") 
+dat = fread("/Users/taku/analyze_mlbdata_with_R/pitchRx/darvish_data/darvish_data.csv") 
 
 # 公式記録のあるデータを使う
 dat = dat %>% filter(sv_id != "NA")
 
 # make the pitching ball trajectry by using rgl
 dat %>% filter(sv_id != "NA") %>%
-  filter(pitch_type %in% c("SL", "FF")) %>% 
-  head(100) %>% interactiveFX
+  filter(pitch_type %in% c("FF","SL")) %>% 
+  head(50) %>% interactiveFX
 writeWebGL(width=500, height=550)
 
 # make animation of the pitching
