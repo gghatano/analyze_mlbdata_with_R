@@ -30,7 +30,7 @@ Execute the download_battingdata passing the year you want to analyze as the arg
 Ex. if you want to get the 2010 data, execute the following command:
 
 ----------------------------------------
-./download_battingdata 2010
+./download_battingdata.sh 2010
 ----------------------------------------
 
 The output all2010.csv includes all the batting results of 2010 MLB season.
