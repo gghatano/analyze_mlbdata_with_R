@@ -25,21 +25,21 @@ make install
 
 2. Download the data of specified season 
 
-Execute the download_battingdata passing the year you want to analyze as the argument.
+Execute the download_battingdata.sh with the year as the argument.
 
-Ex. if you want to get the 2010 data, execute the following command:
+Ex. If you want to get the 2010 data, execute the following command:
 
 ----------------------------------------
 ./download_battingdata.sh 2010
 ----------------------------------------
 
-The output all2010.csv includes all the batting results of 2010 MLB season.
+The output: all2010.csv includes all the batting results of 2010 MLB season.
 
 3. How to Analyze
 The explanation of the data-table is shown in the following web site:
 http://chadwick.sourceforge.net/doc/cwevent.html
 
-Some example of analysis was published in the blog site: 
+Some example of analysis are published in the blog site: 
 
 http://gg-hogehoge.hatenablog.com/entry/2013/12/16/002254
 
