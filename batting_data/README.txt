@@ -30,6 +30,7 @@ Execute the download_battingdata.sh with the year as the argument.
 Ex. If you want to get the 2010 data, execute the following command:
 
 ----------------------------------------
+# chmod u+x download_battingdata
 ./download_battingdata.sh 2010
 ----------------------------------------
 
