@@ -109,4 +109,5 @@ data_stan %>%
   ylab("AVG") + 
   ggtitle("Estimate SEASON_AVG with BHM") 
 
+# show the result
 data_stan
