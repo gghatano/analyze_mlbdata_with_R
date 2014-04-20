@@ -5,6 +5,8 @@ Rでメジャーリーグのデータ解析をします.
 
 http://gg-hogehoge.hatenablog.com
 
+ディレクトリがたくさんあります. 
+
 ### pitchRx
 
 pitch f/xのデータを使って遊びます
@@ -25,6 +27,12 @@ rChartでかっこ良く可視化がしたいです
 
 shinyを使って何か作ります.
 
+
+### rstan 
+
+rstanを使って野球データ解析します.
+
+統計的モデリングしてMCMCして打率推定とかします
 
 ### 参考文献
 http://www.amazon.com/Analyzing-Baseball-Data-Chapman-Series/dp/1466570229
