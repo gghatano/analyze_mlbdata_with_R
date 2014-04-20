@@ -1,0 +1,112 @@
+# input dat_hoge and run the stan code to estimate AVG with MCMC
+library(rstan)
+
+# dat_A20: batting result of first 20 games
+data = fread("dat_before_A20.csv")
+sample_size = data$FULLNAME %>% length() 
+hit = data$HITS
+atbat = data$ATBAT
+
+# make list for argument 
+data_list = list(N = sample_size, 
+                 hit = hit, 
+                 atbat = atbat)
+# stan code
+model_code = '
+data{
+  int<lower=1> N; // sample size
+  int<lower=0> hit[N];
+  int<lower=1> atbat[N];
+}
+parameters{
+  real a; // mean skill
+  real b[N]; // difference from mean 
+  real<lower=0.1> sigma; // variance of b
+}
+transformed parameters{
+  real<lower=0, upper=1> q[N]; // i-th avg
+  for (n in 1:N){
+    q[n] <- inv_logit(a + b[n]); // a + b[n] : skill_i
+  }
+}
+model{
+  sigma ~ uniform(0.1, 10) ; // 無情報事前分布
+  a ~ normal(0, 10000); // 無情報事前分布
+  b ~ normal(0, sigma); // bの事前分布
+  for(n in 1:N){
+    hit[n] ~ binomial(atbat[n], q[n]); 
+  }
+}
+'
+
+# running the MCMC 
+stan_res = stan(model_code=model_code, data = data_list, iter = 10000)
+
+# make plot
+library(coda)
+stan_res_coda <- mcmc.list(lapply(1:ncol(stan_res),
+                                 function(x) mcmc(as.array(stan_res)[,x,])))
+# plot(stan_res_coda)
+
+stan_res_param = as.array(stan_res)[,1,(sample_size+3):(2*sample_size + 2)] 
+stan_res_sigma = as.array(stan_res)[,1,91] 
+
+# make plot of q1, 
+q1 = stan_res_param[,1]
+qplot(q1, geom="density")
+qplot(stan_res_sigma, geom="density")
+q1 = as.data.frame(q1) 
+
+# histogram of posterior
+ggplot(q1) + 
+  geom_histogram(aes(x=q1), fill="white", stat="bin", color="black", binwidth=0.01) +
+  ggtitle("Histogram of q_1") + 
+  theme(plot.title=element_text(face="bold", size=24)) + 
+  theme(legend.position="NULL")
+
+# density
+ggplot(q1) + 
+  geom_density(aes(x=q1), ) + 
+  ggtitle("Posterior of q_1") + 
+  theme(plot.title=element_text(face="bold", size=24)) + 
+  theme(legend.position="NULL")
+
+
+stan_res_param_median = stan_res_param %>% apply(2, median)
+stan_res_param_low5 = stan_res_param %>% apply(2, function(x) quantile(x, 0.05))
+stan_res_param_high5 = stan_res_param %>% apply(2, function(x) quantile(x, 0.95))
+
+stan_res_df = data.frame(median = stan_res_param_median, 
+                         low5 = stan_res_param_low5, 
+                         high5 = stan_res_param_low5, 
+                         true = data$SEASON_AVG)
+
+ggplot(data = stan_res_df, aes(x=true)) + 
+  geom_point(aes(y=median)) + 
+  geom_ribbon(data= stan_res_df, aes(ymin = low5, ymax = high5))
+
+
+# join with result of stan 
+data_stan = cbind(data, stan_res_param_median)
+setnames(data_stan, c("BAT_ID", "SEASON_AVG", "ATBAT", "HITS", "MLE", "FULLNAME", "MCMC"))
+write.csv(data_stan, "avg_stan.csv", row.names=FALSE, quote=FALSE)
+
+# plot
+data_stan = fread("avg_stan.csv")
+ggplot(data = data_stan , aes(x=SEASON_AVG, y=MLE)) + 
+  geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed") + 
+  ggtitle("ESTIMATE SEASON_AVG with MLE")
+ggplot(data = data_stan , aes(x=SEASON_AVG, y=MCMC)) + 
+  geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed")
+  ggtitle("ESTIMATE SEASON_AVG with MCMC")
+
+library(reshape2)
+data_stan %>% 
+  dplyr::select(FULLNAME, MLE, SEASON_AVG, MCMC) %>% 
+  reshape2::melt(id.var=c("FULLNAME", "SEASON_AVG")) %>% 
+  ggplot(aes(x=SEASON_AVG, y=value, colour=variable)) + geom_point(size=4, alpha=0.8) +
+  stat_function(fun=function(x) x, linetype="dashed") +
+  ylab("AVG") + 
+  ggtitle("Estimate SEASON_AVG with BHM") 
+
+data_stan
