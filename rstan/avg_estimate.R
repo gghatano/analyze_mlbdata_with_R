@@ -39,67 +39,80 @@ model{
 }
 '
 
-# running the MCMC 
+## running the MCMC 
+## stan_res : the result of MCMC
 stan_res = stan(model_code=model_code, data = data_list, iter = 10000)
 
-# make plot
+## show the behavior of MCMC sample
 library(coda)
 stan_res_coda <- mcmc.list(lapply(1:ncol(stan_res),
                                  function(x) mcmc(as.array(stan_res)[,x,])))
+## this process takes a lot of time
 # plot(stan_res_coda)
 
+## get the estimated parameter value
+## stan_res_param : estimated value of q_i
+## stan_res_sigma : estimated value of sigma 
 stan_res_param = as.array(stan_res)[,1,(sample_size+3):(2*sample_size + 2)] 
 stan_res_sigma = as.array(stan_res)[,1,91] 
 
-# make plot of q1, 
+## make plot of q1
 q1 = stan_res_param[,1]
 qplot(q1, geom="density")
 qplot(stan_res_sigma, geom="density")
 q1 = as.data.frame(q1) 
 
-# histogram of posterior
+# histogram of posterior of q1
 ggplot(q1) + 
   geom_histogram(aes(x=q1), fill="white", stat="bin", color="black", binwidth=0.01) +
   ggtitle("Histogram of q_1") + 
   theme(plot.title=element_text(face="bold", size=24)) + 
   theme(legend.position="NULL")
 
-# density
+# density plot
 ggplot(q1) + 
   geom_density(aes(x=q1), ) + 
   ggtitle("Posterior of q_1") + 
   theme(plot.title=element_text(face="bold", size=24)) + 
   theme(legend.position="NULL")
 
-
+## check the representive value of estimated parameters
+## median, low 5% region, high 5% region
 stan_res_param_median = stan_res_param %>% apply(2, median)
 stan_res_param_low5 = stan_res_param %>% apply(2, function(x) quantile(x, 0.05))
 stan_res_param_high5 = stan_res_param %>% apply(2, function(x) quantile(x, 0.95))
 
+## dataframe of representive value and true value 
 stan_res_df = data.frame(median = stan_res_param_median, 
                          low5 = stan_res_param_low5, 
                          high5 = stan_res_param_low5, 
                          true = data$SEASON_AVG)
 
+## make plot: median vs true value
 ggplot(data = stan_res_df, aes(x=true)) + 
   geom_point(aes(y=median)) + 
   geom_ribbon(data= stan_res_df, aes(ymin = low5, ymax = high5))
 
 
-# join with result of stan 
+## join the original dataframe with result of stan 
 data_stan = cbind(data, stan_res_param_median)
 setnames(data_stan, c("BAT_ID", "SEASON_AVG", "ATBAT", "HITS", "MLE", "FULLNAME", "MCMC"))
 write.csv(data_stan, "avg_stan.csv", row.names=FALSE, quote=FALSE)
 
-# plot
-data_stan = fread("avg_stan.csv")
+## make plot of the result of estimation by MLE
 ggplot(data = data_stan , aes(x=SEASON_AVG, y=MLE)) + 
   geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed") + 
-  ggtitle("ESTIMATE SEASON_AVG with MLE")
-ggplot(data = data_stan , aes(x=SEASON_AVG, y=MCMC)) + 
-  geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed")
-  ggtitle("ESTIMATE SEASON_AVG with MCMC")
+  ggtitle("ESTIMATE SEASON_AVG with MLE") +
+  ggsave("MLE.pdf")
 
+## make plot of the result of estimation by MCMC
+ggplot(data = data_stan , aes(x=SEASON_AVG, y=MCMC)) + 
+  geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed") + 
+  ggtitle("ESTIMATE SEASON_AVG with MCMC") + 
+  ggsave("BHM.pdf")
+
+
+## compare MCMC vs MLE 
 library(reshape2)
 data_stan %>% 
   dplyr::select(FULLNAME, MLE, SEASON_AVG, MCMC) %>% 
@@ -107,7 +120,8 @@ data_stan %>%
   ggplot(aes(x=SEASON_AVG, y=value, colour=variable)) + geom_point(size=4, alpha=0.8) +
   stat_function(fun=function(x) x, linetype="dashed") +
   ylab("AVG") + 
-  ggtitle("Estimate SEASON_AVG with BHM") 
+  ggtitle("Estimate SEASON_AVG with BHM") +
+  ggsave("BHMvsMLE.pdf")
 
-# show the result
+# check the result
 data_stan
