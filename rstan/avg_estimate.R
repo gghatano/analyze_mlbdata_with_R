@@ -1,5 +1,10 @@
 # input dat_hoge and run the stan code to estimate AVG with MCMC
 library(rstan)
+library(data.table)
+library(dplry)
+library(magrittr)
+library(ggplot2)
+library(reshape2)
 
 # dat_A20: batting result of first 20 games
 data = fread("dat_before_A20.csv")
@@ -44,9 +49,8 @@ model{
 stan_res = stan(model_code=model_code, data = data_list, iter = 10000)
 
 ## show the behavior of MCMC sample
-library(coda)
-stan_res_coda <- mcmc.list(lapply(1:ncol(stan_res),
-                                 function(x) mcmc(as.array(stan_res)[,x,])))
+# library(coda) stan_res_coda <- mcmc.list(lapply(1:ncol(stan_res),
+#                                  function(x) mcmc(as.array(stan_res)[,x,])))
 ## this process takes a lot of time
 # plot(stan_res_coda)
 
@@ -56,7 +60,7 @@ stan_res_coda <- mcmc.list(lapply(1:ncol(stan_res),
 stan_res_param = as.array(stan_res)[,1,(sample_size+3):(2*sample_size + 2)] 
 stan_res_sigma = as.array(stan_res)[,1,91] 
 
-## make plot of q1
+## Example: make plot of q1
 q1 = stan_res_param[,1]
 qplot(q1, geom="density")
 qplot(stan_res_sigma, geom="density")
@@ -113,7 +117,6 @@ ggplot(data = data_stan , aes(x=SEASON_AVG, y=MCMC)) +
 
 
 ## compare MCMC vs MLE 
-library(reshape2)
 data_stan %>% 
   dplyr::select(FULLNAME, MLE, SEASON_AVG, MCMC) %>% 
   reshape2::melt(id.var=c("FULLNAME", "SEASON_AVG")) %>% 
