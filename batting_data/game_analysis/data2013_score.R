@@ -1,10 +1,9 @@
 ## data2013_score.R 
 
 ## check by 2013 data
-conn = dbConnect(PostgreSQL(), dbname="baseball_data")
-data2013 = dbReadTable(conn, name = "all2013") %>% as.data.table()
-
-
+## data2013 = fread("all2013.csv)
+## names = fread("names.csv")
+## setnames(data2013, names)
 ## スコア別試合数を集計. 
 ## まずは試合でgroup_byして, 別に最終的な試合
 ## ホームチーム, アウェイチームの得点でgroup_byして数を数えればいい. 
@@ -29,7 +28,7 @@ data2013_gamescore_home_away %>%
   ggplot(aes(x=home, y=away, size = game)) + 
   geom_point(shape = 21, color = "black", fill = "cornsilk") + 
   scale_size_area(max_size=15) + 
-  ggsavee("Score_balloonplot.png")
+  ggsave("Score_balloonplot.png")
 
 
 ## ホーム/アウェイの区別をなくした場合
@@ -42,12 +41,16 @@ data2013_gamescore_high_low =
   dplyr::summarise(game = sum(game)) %>% 
   arrange(desc(game))
 
-data2013_gamescore_high_low %>% head(10) %>% 
+data2013_gamescore_high_low %>% head(20) %>% 
   ggplot(aes(x=reorder(H_L, game), y=game)) + 
   geom_bar(stat="identity", fill = "lightblue", colour = "black") + 
   xlab("Score") + ylab("Number") + ggtitle("Score-game barplot in 2013-season (2431 games)")
   ggsave("GameScore.png")
 
-data2013 %>% 
+
+data2013_dim = 
+  data2013 %>% 
   group_by(GAME_ID, add=FALSE) %>% 
   dplyr::summarise(fullgame = n()) %>% dim
+game = data2013_dim[1]
+game
