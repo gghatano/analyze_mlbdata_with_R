@@ -4,6 +4,7 @@ library(magrittr)
 
 
 makedata = function(year = 2013){
+  # set the path of data file
   filename = paste("../../../data/all", year, ".csv", sep="")
   dat = fread(filename, header=FALSE)
   colnames = fread("names.csv", header = FALSE) %>% unlist
@@ -28,14 +29,19 @@ makedata = function(year = 2013){
 }
 
 dat = data.table()
-for(year in 1950:2013){
+for(year in 1938:2013){
   dat = rbind(dat, makedata(year))
   print(paste("now:", year))
 }
 
 
-dat %>% 
+result = dat %>% 
   group_by(h_l) %>% 
   dplyr::summarise(game = sum(game)) %>% 
   arrange(desc(game)) %>% 
-  head
+  setnames(c("win-lose", "game")) %>% 
+  head(20) 
+
+write.csv(result, "result.csv", quote=FALSE, row.names=FALSE)
+
+
