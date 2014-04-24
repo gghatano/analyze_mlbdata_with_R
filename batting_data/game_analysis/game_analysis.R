@@ -2,33 +2,46 @@ library(data.table)
 library(dplyr)
 library(magrittr)
 
-# data = data.table()
-# for (year in 2000:2013){
-#   filename = paste("./all", year, ".csv", sep="")
-#   data = rbind(data, fread(filename))
-# }
 
-dat = fread("../../../data/all2013.csv", header=FALSE)
-colnames = fread("names.csv", header = FALSE) %>% unlist
-setnames(dat, colnames)
+makedata = function(year = 2013){
+  # set the path of data file
+  filename = paste("../../../data/all", year, ".csv", sep="")
+  dat = fread(filename, header=FALSE)
+  colnames = fread("names.csv", header = FALSE) %>% unlist
+  setnames(dat, colnames)
 
-head(dat)
+  data_score = dat %>% 
+    dplyr::select(GAME_ID, AWAY_SCORE_CT, HOME_SCORE_CT) %>% 
+    group_by(GAME_ID) %>% 
+    dplyr::summarise(away = max(AWAY_SCORE_CT), 
+                     home = max(HOME_SCORE_CT)) %>%
+    group_by(away, home , add=FALSE) %>% 
+    dplyr::summarise(game = n())
 
-data_score = dat %>% 
-  dplyr::select(GAME_ID, AWAY_SCORE_CT, HOME_SCORE_CT) %>% 
-  group_by(GAME_ID) %>% 
-  dplyr::summarise(away = max(AWAY_SCORE_CT), home = max(HOME_SCORE_CT)) %>%
-  group_by(away, home , add=FALSE) %>% 
-  dplyr::summarise(game = n())
+  data_score_high_low = 
+    data_score %>% 
+    mutate(h_l = ifelse(home > away, 
+                        paste(home, "-", away, sep=""),
+                        paste(away, "-", home, sep=""))) %>% 
+    group_by(h_l, add=FALSE) %>% 
+    dplyr::summarise(game = sum(game), year = year) 
+  return(data_score_high_low %>% arrange(desc(game)))
+}
 
-data_score %>% arrange(desc(game))
+dat = data.table()
+for(year in 1938:2013){
+  dat = rbind(dat, makedata(year))
+  print(paste("now:", year))
+}
 
-data_score_high_low = 
-  data_score %>% 
-  mutate(h_l = ifelse(home > away, 
-                      paste(home, "-", away, sep=""),
-                      paste(away, "-", home, sep=""))) %>% 
-  group_by(h_l, add=FALSE) %>% 
-  dplyr::summarise(game = sum(game))
-  
-data_score_high_low %>% arrange(desc(game))
+
+result = dat %>% 
+  group_by(h_l) %>% 
+  dplyr::summarise(game = sum(game)) %>% 
+  arrange(desc(game)) %>% 
+  setnames(c("win-lose", "game")) %>% 
+  head(20) 
+
+write.csv(result, "result.csv", quote=FALSE, row.names=FALSE)
+
+
