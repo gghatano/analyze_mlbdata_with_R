@@ -14,7 +14,7 @@ setnames(dat, colnames)
 
 head(dat)
 
-data_score = data %>% 
+data_score = dat %>% 
   dplyr::select(GAME_ID, AWAY_SCORE_CT, HOME_SCORE_CT) %>% 
   group_by(GAME_ID) %>% 
   dplyr::summarise(away = max(AWAY_SCORE_CT), home = max(HOME_SCORE_CT)) %>%
