@@ -48,3 +48,19 @@ In this case, I calculate the scoring rate in the "super-chance" with R.
 By using the all2013.csv and extracting the situation that runners on the third base with 0 or 1 out, 
 the situation which I call "super chance" because the team can get score easily.
 
+--------------------------------------------------------------
+Notes.
+
+Make sure that /usr/local/lib is in your LD_LIBRARY_PATH
+
+Precisely how you do this depends on your shell,
+
+First, check that it's not set (it usually isn't these days)
+
+echo $LD_LIBRARY_PATH
+
+If it is unset and you're running bash then:
+
+export LD_LIBRARY_PATH=/usr/local/lib
+
+http://sourceforge.net/p/chadwick/mailman/chadwick-users/
