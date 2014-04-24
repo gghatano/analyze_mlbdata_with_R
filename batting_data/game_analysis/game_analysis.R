@@ -1,15 +1,21 @@
-data = data.table()
-for (year in 2000:2013){
-  filename = paste("./all", year, ".csv", sep="")
-  data = rbind(data, fread(filename))
-}
+library(data.table)
+library(dplyr)
+library(magrittr)
+
+# data = data.table()
+# for (year in 2000:2013){
+#   filename = paste("./all", year, ".csv", sep="")
+#   data = rbind(data, fread(filename))
+# }
+
 dat = fread("../../../data/all2013.csv", header=FALSE)
 colnames = fread("names.csv", header = FALSE) %>% unlist
-colnames
-setnames(dat, colnames )
+setnames(dat, colnames)
+
+head(dat)
 
 data_score = data %>% 
-  select(GAME_ID, AWAY_SCORE_CT, HOME_SCORE_CT) %>% 
+  dplyr::select(GAME_ID, AWAY_SCORE_CT, HOME_SCORE_CT) %>% 
   group_by(GAME_ID) %>% 
   dplyr::summarise(away = max(AWAY_SCORE_CT), home = max(HOME_SCORE_CT)) %>%
   group_by(away, home , add=FALSE) %>% 
