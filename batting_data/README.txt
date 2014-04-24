@@ -34,9 +34,27 @@ Ex. If you want to get the 2010 data, execute the following command:
 ./download_battingdata.sh 2010
 ----------------------------------------
 
-The output: all2010.csv includes all the batting results of 2010 MLB season.
+The output all2010.csv includes all the batting results of 2010 MLB season.
 
-3. How to Analyze
+3. Set the Colnames
+
+If you execute the command above, you can obtain all2010.csv, which include
+the data table about all the event in all the game in MLB 2010 season.
+
+The meaning of the column is shown in names.csv. 
+Please combine names.csv and all2010.csv. 
+The following is the example code of R
+
+-----------------------------------------
+library(data.table)
+data = fread("all2010")
+names = fread("names.csv")
+
+setnames(data, unlist(names))
+-----------------------------------------
+
+
+4. How to Analyze
 The explanation of the data-table is shown in the following web site:
 http://chadwick.sourceforge.net/doc/cwevent.html
 
@@ -49,6 +67,8 @@ By using the all2013.csv and extracting the situation that runners on the third 
 the situation which I call "super chance" because the team can get score easily.
 
 --------------------------------------------------------------
+
+
 Notes.
 
 Make sure that /usr/local/lib is in your LD_LIBRARY_PATH
