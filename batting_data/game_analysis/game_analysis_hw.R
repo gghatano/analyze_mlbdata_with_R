@@ -17,15 +17,7 @@ makedata = function(year = 2013){
                      home = max(HOME_SCORE_CT)) %>%
     group_by(away, home , add=FALSE) %>% 
     dplyr::summarise(game = n())
-  
-  # score \to win - lose 
-  data_score_high_low = 
-    data_score %>% 
-    mutate(h_l = ifelse(home > away, 
-                        paste(home, "-", away, sep=""),
-                        paste(away, "-", home, sep=""))) %>% 
-    group_by(h_l, add=FALSE) %>% 
-    dplyr::summarise(game = sum(game), year = year) 
+
   return(data_score_high_low %>% arrange(desc(game)))
 }
 
@@ -34,6 +26,7 @@ dat = data.table()
 for(year in 1938:2013){
   dat = rbind(dat, makedata(year))
   print(paste("now:", year))
+}
 
 # result
 result = dat %>% 
