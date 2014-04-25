@@ -25,15 +25,17 @@ dat = data.table()
 
 # makedata() %>% group_by(add=FALSE) %>% arrange(desc(game)) %>% head(100)
 
-
 files = fread("../../../data/files.txt", header=FALSE)
+files_length = dim(files)[1] -1
 
 dat = data.table()
-for (N in 1:length(files)){
+for (N in 1:files_length){
   dat_tmp = makedata(files[N])
   dat = rbind(dat, dat_tmp)
 }
+
 dat %>% head
+
 write.csv(dat, "gamedata.csv", quote=FALSE, row.names=FALSE)
 
 
