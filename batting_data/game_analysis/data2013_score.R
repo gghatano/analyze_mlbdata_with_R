@@ -52,5 +52,3 @@ data2013_dim =
   data2013 %>% 
   group_by(GAME_ID, add=FALSE) %>% 
   dplyr::summarise(fullgame = n()) %>% dim
-game = data2013_dim[1]
-game
