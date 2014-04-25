@@ -244,3 +244,86 @@ R は多くの貢献者による共同プロジェクトです。
 > 
 > 
 > 
+
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R は、自由なソフトウェアであり、「完全に無保証」です。 
+一定の条件に従えば、自由にこれを再配布することができます。 
+配布条件の詳細に関しては、'license()' あるいは 'licence()' と入力してください。 
+
+R は多くの貢献者による共同プロジェクトです。 
+詳しくは 'contributors()' と入力してください。 
+また、R や R のパッケージを出版物で引用する際の形式については 
+'citation()' と入力してください。 
+
+'demo()' と入力すればデモをみることができます。 
+'help()' とすればオンラインヘルプが出ます。 
+'help.start()' で HTML ブラウザによるヘルプがみられます。 
+'q()' と入力すれば R を終了します。 
+
+> library(data.table)
+> library(dplyr)
+
+ 次のパッケージを付け加えます: ‘dplyr’ 
+
+ 以下のオブジェクトはマスクされています (from ‘package:data.table’) : 
+
+     last 
+
+ 以下のオブジェクトはマスクされています (from ‘package:stats’) : 
+
+     filter, lag 
+
+ 以下のオブジェクトはマスクされています (from ‘package:base’) : 
+
+     intersect, setdiff, setequal, union 
+
+> library(magrittr)
+> 
+> makedata = function(filename = "all2013.csv"){
++   dat = fread(paste("../../../data/", filename, sep=""), header=FALSE)
++   year = substr(filename, 4, 7)
++   colnames = fread("names.csv", header = FALSE) %>% unlist
++   setnames(dat, colnames)
++   
++   # calculate the number of games of each result
++   data_score = dat %>% 
++     dplyr::select(GAME_ID, AWAY_SCORE_CT, HOME_SCORE_CT) %>% 
++     group_by(GAME_ID) %>% 
++     dplyr::summarise(away = max(AWAY_SCORE_CT), 
++                      home = max(HOME_SCORE_CT)) %>%
++     group_by(away, home , add=FALSE) %>% 
++     dplyr::summarise(game = n(), year = year)
++ 
++   return(data_score)
++ }
+> 
+> # merge the data from 1938 to 2013
+> dat = data.table()
+> 
+> # makedata() %>% group_by(add=FALSE) %>% arrange(desc(game)) %>% head(100)
+> 
+> files = fread("../../../data/files.txt", header=FALSE)
+> files_length = dim(files)[1] -1
+> 
+> dat = data.table()
+> for (N in 1:files_length){
++   dat_tmp = makedata(files[N])
++   dat = rbind(dat, dat_tmp)
++ }
+> 
+> dat %>% head
+   away home game year
+1:    0    0    2 1922
+2:    0    1    4 1922
+3:    0    2    8 1922
+4:    0    3   10 1922
+5:    0    4    6 1922
+6:    0    5    9 1922
+> 
+> write.csv(dat, "gamedata.csv", quote=FALSE, row.names=FALSE)
+> 
+> 
+> 
