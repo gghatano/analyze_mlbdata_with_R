@@ -2,10 +2,9 @@ library(data.table)
 library(dplyr)
 library(magrittr)
 
-makedata = function(year = 2013){
-  # set the path of data file
-  filename = paste("../../../data/all", year, ".csv", sep="")
-  dat = fread(filename, header=FALSE)
+makedata = function(filename = "all2013.csv"){
+  dat = fread(paste("../../../data/", filename, sep=""), header=FALSE)
+  year = substr(filename, 4, 7)
   colnames = fread("names.csv", header = FALSE) %>% unlist
   setnames(dat, colnames)
   
@@ -16,25 +15,25 @@ makedata = function(year = 2013){
     dplyr::summarise(away = max(AWAY_SCORE_CT), 
                      home = max(HOME_SCORE_CT)) %>%
     group_by(away, home , add=FALSE) %>% 
-    dplyr::summarise(game = n())
+    dplyr::summarise(game = n(), year = year)
 
-  return(data_score_high_low %>% arrange(desc(game)))
+  return(data_score)
 }
 
 # merge the data from 1938 to 2013
 dat = data.table()
-for(year in 1938:2013){
-  dat = rbind(dat, makedata(year))
-  print(paste("now:", year))
+
+# makedata() %>% group_by(add=FALSE) %>% arrange(desc(game)) %>% head(100)
+
+
+files = fread("../../../data/files.txt", header=FALSE)
+
+dat = data.table()
+for (N in 1:length(files)){
+  dat_tmp = makedata(files[N])
+  dat = rbind(dat, dat_tmp)
 }
-
-# result
-result = dat %>% 
-  group_by(h_l) %>% 
-  dplyr::summarise(game = sum(game)) %>% 
-  arrange(desc(game)) %>% 
-  setnames(c("win-lose", "game")) 
-
-write.csv(result, "result.csv", quote=FALSE, row.names=FALSE)
+dat %>% head
+write.csv(dat, "gamedata.csv", quote=FALSE, row.names=FALSE)
 
 
