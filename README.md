@@ -19,6 +19,9 @@ retrosheetからデータをダウンロードして, パースして整形し�
 
 面倒なのでRのパッケージにしたいです. 
 
+batting_data/game_analysis/
+で, ダウンロードしたデータを集計して遊んでいます. 
+
 ### rChart 
 
 rChartでかっこ良く可視化がしたいです
