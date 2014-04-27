@@ -22,5 +22,4 @@ library(xtable)
 res_games_hl %>% arrange(desc(game)) %>% 
   xtable %>% head(10) %>% print(type="html")
 
-
 res_games_hl$game %>% sum
