@@ -17,5 +17,10 @@ res_games_hl =
                      paste(away, "-", home, sep=""))) %>% 
   group_by(h_l, add=FALSE) %>% 
   dplyr::summarise(game = sum(game)) 
-res_games_hl %>% arrange(desc(game))
+
+library(xtable)
+res_games_hl %>% arrange(desc(game)) %>% 
+  xtable %>% head(10) %>% print(type="html")
+
+
 res_games_hl$game %>% sum
