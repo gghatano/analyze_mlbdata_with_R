@@ -1,13 +1,19 @@
 require(lattice)
 require(latticeExtra)
 
+## create 3d bar plot 
+
 res = fread("gamedata.csv")
-res_game = res %>% group_by(home, away) %>%
+res_game = 
+  res %>% 
+  group_by(home, away) %>%
   dplyr::summarise(game = sum(game)) %>% 
   filter(home < 10 & away < 10)
 
+## create closs table: home \times away \to game
 res_game_tabs = xtabs(game ~ home + away, data = res_game)
 
+## make 3dbarplot
 cloud(res_game_tabs, panel.3d.cloud = panel.3dbars,
       xbase = 0.4, ybase = 0.4, zlim = c(0, max(res_game_tabs)),
       scales = list(arrows = FALSE, just = "right"), xlab = NULL, ylab = NULL,
@@ -17,8 +23,7 @@ cloud(res_game_tabs, panel.3d.cloud = panel.3dbars,
       colorkey = list(col = cm.colors, at = do.breaks(range(res_game_tabs), 20)),
       screen = list(z = 40, x = -30))
 
-
-## tile plot
+## create tile plot
 res_game %>% mutate(home = as.factor(home), away = as.factor(away)) %>% 
   ggplot() + 
   geom_tile(aes(x=home, y=away, fill = game)) + 
