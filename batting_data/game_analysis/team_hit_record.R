@@ -1,6 +1,10 @@
 ## team_hit_record.R 
 ## calculate the team_hit of first 5 games
-  
+
+library(data.table)
+library(dplyr)
+library(magrittr)
+
 team_hit = function(year = 2013){
   file = paste("../../../data/all", year, ".csv", sep="")
   dat = fread(file)
@@ -34,4 +38,5 @@ for(year in start:end){
   print(paste("now:", year))
 }
 
-dat %>% arrange(desc(teamhit))
+dat %>% 
+ write.csv("teamhit.csv", quote = FALSE, row.names=FALSE)
