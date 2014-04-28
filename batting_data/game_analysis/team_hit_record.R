@@ -5,11 +5,10 @@ library(data.table)
 library(dplyr)
 library(magrittr)
 
-team_hit = function(year = 2013){
-  file = paste("../../../data/all", year, ".csv", sep="")
-  dat = fread(file)
+team_hit = function(file = "all2013.csv"){
+  dat = fread(paste("../../../data/", file, sep=""))
   name= fread("names.csv", header=FALSE) %>% unlist
-  
+  year = substr(file, 4, 8)
   dat = dat %>% 
     setnames(name) %>% 
     dplyr::select(GAME_ID, AWAY_TEAM_ID, BAT_HOME_ID, H_FL)
@@ -28,14 +27,13 @@ team_hit = function(year = 2013){
     return
 }
 
-dat = data.table()
+files = fread("../../../data/files.txt", header=FALSE) %>% unlist
 
-start = 2012
-end = 2013
-for(year in start:end){
-  dat_tmp = team_hit(year)
+dat = data.table()
+for(file in files){
+  dat_tmp = team_hit(file)
   dat = rbind(dat, dat_tmp)
-  print(paste("now:", year))
+  print(paste("now:", file))
 }
 
 dat %>% 
