@@ -2,11 +2,13 @@ library(xts)
 ## calculate the number of hit in each game
 
 teamhit = function(file = "all2013.csv"){
-  year = substr(file, 4, 8)
+  
   print(paste("now:" , year))
-  filename = paste("../../../data/", file, sep="")
-  name = fread("names.csv", header=FALSE) %>% unlist
+  year = substr(file, 4, 8)
+  
+  filename = paste("../../../../data/", file, sep="")
   dat = fread(filename)
+  name = fread("../names.csv", header=FALSE) %>% unlist
   dat1 = dat %>% setnames(name) %>% 
     dplyr::select(GAME_ID, AWAY_TEAM_ID, BAT_HOME_ID, H_FL)
   
@@ -39,7 +41,17 @@ teamhit = function(file = "all2013.csv"){
     dat_teamhit5 %>% 
     inner_join(dat_teamhit_game, by=c("team", "game")) %>% 
     select(id, team, game, teamhit5game) %>% 
+    setnames(c("start_game_id", "team", "game", "teamhit_in_5games")) %>% 
     mutate(year = year)
   return(dat_teamhit5_id)
 }
-teamhit()
+
+files = fread("../../../../data/files.txt", header=FALSE) %>% unlist
+files
+dat = data.table()
+for(file in files){
+  dat_tmp = teamhit(file)
+  dat = rbind(dat, dat_tmp)
+  print(paste("file: " , file))
+}
+dat %>% write.csv("teamhit.csv", quote = FALSE, row.names=FALSE)
