@@ -36,12 +36,13 @@ teamhit = function(file = "all2013.csv"){
                      game = head(game, length(game)-4)) 
   
   dat_teamhit_game
+  print("dat_teamhit_game")
   dat_teamhit5_id = 
     dat_teamhit5 %>% 
     inner_join(dat_teamhit_game, by=c("team", "game")) %>% 
     select(id, team, game, teamhit5game) %>% 
-    setnames(c("start_game_id", "team", "game", "teamhit_in_5games")) %>% 
-    dplyr::mutate(year = year)
+    dplyr::mutate(year = substr(id, 4,7))
+
   return(dat_teamhit5_id)
 }
 
