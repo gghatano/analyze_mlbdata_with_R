@@ -5,8 +5,7 @@ library(magrittr)
 ## calculate the number of hit in each game
 
 teamhit = function(file = "all2013.csv"){
-  year = substr(file, 4, 8)
-  
+  year = substr(file, 4, 7)
   filename = paste("../../../../data/", file, sep="")
   dat = fread(filename)
   name = fread("../names.csv", header=FALSE) %>% unlist
@@ -22,7 +21,6 @@ teamhit = function(file = "all2013.csv"){
     mutate(team = ifelse(h_a==1, home, away)) %>% 
     group_by(add=FALSE) %>%
     dplyr::select(id, hit, team) 
-  
   ## set the column "game" as the number of game 
   dat_teamhit_game = 
     dat_teamhit %>% 
@@ -43,12 +41,10 @@ teamhit = function(file = "all2013.csv"){
     inner_join(dat_teamhit_game, by=c("team", "game")) %>% 
     select(id, team, game, teamhit5game) %>% 
     setnames(c("start_game_id", "team", "game", "teamhit_in_5games")) %>% 
-    mutate(year = year)
+    dplyr::mutate(year = year)
   return(dat_teamhit5_id)
 }
 
-teamhit()
-stop()
 files = fread("../../../../data/files_test.txt", header=FALSE) %>% unlist
 dat = data.table()
 for(file in files){
