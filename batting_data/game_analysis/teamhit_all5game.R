@@ -1,0 +1,45 @@
+library(xts)
+## calculate the number of hit in each game
+
+teamhit = function(file = "all2013.csv"){
+  year = substr(file, 4, 8)
+  print(paste("now:" , year))
+  filename = paste("../../../data/", file, sep="")
+  name = fread("names.csv", header=FALSE) %>% unlist
+  dat = fread(filename)
+  dat1 = dat %>% setnames(name) %>% 
+    dplyr::select(GAME_ID, AWAY_TEAM_ID, BAT_HOME_ID, H_FL)
+  
+  dat_teamhit = dat1 %>% 
+    setnames(c("id", "away", "h_a", "h_fl")) %>% 
+    mutate(home= substr(id, 1,3)) %>% 
+    mutate(hit = ifelse(h_fl > 0, 1, 0)) %>% 
+    group_by(id, home, away, h_a) %>% 
+    dplyr::summarise(hit = sum(hit)) %>% 
+    mutate(team = ifelse(h_a==1, home, away)) %>% 
+    group_by(add=FALSE) %>%
+    dplyr::select(id, hit, team) 
+  
+  ## set the column "game" as the number of game 
+  dat_teamhit_game = 
+    dat_teamhit %>% 
+    group_by(team) %>% 
+    dplyr::summarise(id = id , hit = hit, game = row_number(id)) 
+  dat_teamhit_game
+  
+  ## calculate the numebr of team-hit in 5-streak-games.
+  dat_teamhit5 = 
+    dat_teamhit_game %>% 
+    group_by(team, add=FALSE) %>%
+    dplyr::summarise(teamhit5game=rollapplyr(hit, 5, sum), 
+                     game = head(game, length(game)-4)) 
+  
+  dat_teamhit_game
+  dat_teamhit5_id = 
+    dat_teamhit5 %>% 
+    inner_join(dat_teamhit_game, by=c("team", "game")) %>% 
+    select(id, team, game, teamhit5game) %>% 
+    mutate(year = year)
+  return(dat_teamhit5_id)
+}
+teamhit()
