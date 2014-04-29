@@ -1,10 +1,12 @@
 library(xts)
+library(data.table)
+library(dplyr)
+library(magrittr)
 ## calculate the number of hit in each game
 
 teamhit = function(file = "all2013.csv"){
-  
-  print(paste("now:" , year))
   year = substr(file, 4, 8)
+  print(paste("now:" , year))
   
   filename = paste("../../../../data/", file, sep="")
   dat = fread(filename)
@@ -46,12 +48,12 @@ teamhit = function(file = "all2013.csv"){
   return(dat_teamhit5_id)
 }
 
-files = fread("../../../../data/files.txt", header=FALSE) %>% unlist
-files
+teamhit()
+stop()
+files = fread("../../../../data/files_test.txt", header=FALSE) %>% unlist
 dat = data.table()
 for(file in files){
   dat_tmp = teamhit(file)
   dat = rbind(dat, dat_tmp)
-  print(paste("file: " , file))
 }
 dat %>% write.csv("teamhit.csv", quote = FALSE, row.names=FALSE)
