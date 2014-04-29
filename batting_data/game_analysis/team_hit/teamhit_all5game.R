@@ -46,9 +46,10 @@ teamhit = function(file = "all2013.csv"){
   return(dat_teamhit5_id)
 }
 
-files = fread("../../../../data/files_test.txt", header=FALSE) %>% unlist
+files = fread("../../../../data/files.txt", header=FALSE) %>% unlist
 dat = data.table()
 for(file in files){
+  print(paste("file:", file))
   dat_tmp = teamhit(file)
   dat = rbind(dat, dat_tmp)
 }
