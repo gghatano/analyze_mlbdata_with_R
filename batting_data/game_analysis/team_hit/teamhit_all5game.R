@@ -6,7 +6,6 @@ library(magrittr)
 
 teamhit = function(file = "all2013.csv"){
   year = substr(file, 4, 8)
-  print(paste("now:" , year))
   
   filename = paste("../../../../data/", file, sep="")
   dat = fread(filename)
