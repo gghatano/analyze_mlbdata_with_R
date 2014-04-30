@@ -34,4 +34,4 @@ for(file in files){
   dat_tmp = teamhit(file)
   dat = rbind(dat, dat_tmp)
 }
-dat %>% write.csv("teamhit.csv", quote = FALSE, row.names=FALSE)
+dat %>% write.csv("teamhit_all.csv", quote = FALSE, row.names=FALSE)
