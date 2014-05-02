@@ -9,16 +9,18 @@ library(RcppRoll)
 dat_5game_teamhit = 
   dat %>% group_by(team, year) %>% 
   arrange(gamedate) %>%
-  dplyr::summarise(hit_5game = c(roll_sum(hit, 5), rep(NA,4)), gamedate = gamedate, id = id) 
+  dplyr::summarise(hit_5game = c(roll_sum(hit, 5), rep(NA,4)), gamedate = gamedate, id = id, score = score) 
 
 dat_5game_teamhit %>% 
   group_by(add=FALSE) %>% 
   arrange(desc(hit_5game)) %>% 
   head(10) %>%
   select(id, team, hit_5game) %>% 
-  mutate(hit_5game = as.integer(hit_5game)) %>%
+  mutate(hit_5game = as.integer(hit_5game)) 
+%>%
   xtable %>% 
   print(type="html")
+stop()
 
 dat %>% 
   dplyr::filter(team =="PIT") %>% 
@@ -26,7 +28,7 @@ dat %>%
   arrange(gamedate) %>%
   dplyr::filter(gamedate>=192208050) %>%
   head(5) %>% 
-  select(id, team, hit) %>%
+  select(id, team, hit, score) %>%
   xtable %>% 
   print(type="html")
 
@@ -45,5 +47,8 @@ dat_opening5game %>%
 dat %>% 
   dplyr::filter(team=="SFN") %>% 
   dplyr::filter(year == 1990) %>% 
-  select(id, team, hit) %>% 
-  mutate(hit = as.integer(hit)) 
+  select(id, team, hit, score) %>% 
+  mutate(hit = as.integer(hit)) %>% 
+  head(5) %>%
+  xtable %>% 
+  print(type="html")
