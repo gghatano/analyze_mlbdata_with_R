@@ -11,17 +11,17 @@ dat_5game_teamhit =
   arrange(gamedate) %>%
   dplyr::summarise(hit_5game = c(roll_sum(hit, 5), rep(NA,4)), gamedate = gamedate, id = id, score = score) 
 
+# teamhit ranking in all 5 game
 dat_5game_teamhit %>% 
   group_by(add=FALSE) %>% 
   arrange(desc(hit_5game)) %>% 
   head(10) %>%
   select(id, team, hit_5game) %>% 
-  mutate(hit_5game = as.integer(hit_5game)) 
-%>%
+  mutate(hit_5game = as.integer(hit_5game)) %>%
   xtable %>% 
   print(type="html")
-stop()
 
+# teamhit ranking leader (PIT 1922)
 dat %>% 
   dplyr::filter(team =="PIT") %>% 
   dplyr::filter(year=="1922") %>%
@@ -32,18 +32,21 @@ dat %>%
   xtable %>% 
   print(type="html")
 
+# teamhit ranking in opening 5 game
 dat_opening5game = 
   dat_5game_teamhit %>% 
   group_by(team, year) %>% 
   arrange(gamedate) %>% 
   dplyr::summarise(hit_5game = head(hit_5game,1), gamedate = head(gamedate,1))
 
+# teamhit ranking in opening 5 game
 dat_opening5game %>% 
   group_by(add=FALSE) %>% 
   arrange(desc(hit_5game)) %>% 
   select(team, year, hit_5game) %>%
   mutate(hit_5game= as.integer(hit_5game)) 
 
+# teamhit ranking in opening 5 game: SFN 1990
 dat %>% 
   dplyr::filter(team=="SFN") %>% 
   dplyr::filter(year == 1990) %>% 

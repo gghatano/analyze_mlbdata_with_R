@@ -1,8 +1,6 @@
-#library(xts)
 library(data.table)
 library(dplyr)
 library(magrittr)
-## calculate the number of hit in each game
 
 teamhit = function(file = "all2013.csv"){
   year = substr(file, 4, 7)
@@ -21,12 +19,15 @@ teamhit = function(file = "all2013.csv"){
     dplyr::summarise(hit = sum(hit), year = year, 
                      away_score = max(away_score),
                      home_score = max(home_score)) %>% 
-    mutate(team = ifelse(h_a==1, home, away)) %>% 
-    mutate(score = ifelse(home == team, home_score, away_score)) %>%
+    mutate(team = ifelse(h_a==1, home, away)) %>%
+    mutate(opponent=ifelse(h_a ==1, away, home)) %>%
+    mutate(score_team = ifelse(home == team, home_score, away_score)) %>%
+    mutate(score_opponent = ifelse(home == team, away_score, home_score)) %>%
     group_by(add=FALSE) %>%
-    dplyr::select(id, hit, team, year, score) 
+    dplyr::select(id, team, hit, opponent, year, score_team, score_opponent) 
   return(dat_teamhit)
 }
+
 
 files = fread("../../../../data/files.txt", header=FALSE) %>% unlist
 dat = data.table()
@@ -38,3 +39,4 @@ for(file in files){
 
 dat %>% write.csv("teamhit.csv", quote = FALSE, row.names=FALSE)
 dat
+
