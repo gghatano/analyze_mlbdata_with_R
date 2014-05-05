@@ -22,6 +22,12 @@ retrosheetからデータをダウンロードして, パースして整形し�
 batting_data/game_analysis/
 で, ダウンロードしたデータを集計して遊んでいます. 
 
+
+### pitching_data 
+
+投手についてデータをいじって遊びます
+
+
 ### rChart 
 
 rChartでかっこ良く可視化がしたいです
