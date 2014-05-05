@@ -1,0 +1,86 @@
+
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R は、自由なソフトウェアであり、「完全に無保証」です。 
+一定の条件に従えば、自由にこれを再配布することができます。 
+配布条件の詳細に関しては、'license()' あるいは 'licence()' と入力してください。 
+
+R は多くの貢献者による共同プロジェクトです。 
+詳しくは 'contributors()' と入力してください。 
+また、R や R のパッケージを出版物で引用する際の形式については 
+'citation()' と入力してください。 
+
+'demo()' と入力すればデモをみることができます。 
+'help()' とすればオンラインヘルプが出ます。 
+'help.start()' で HTML ブラウザによるヘルプがみられます。 
+'q()' と入力すれば R を終了します。 
+
+> library(data.table)
+> library(dplyr)
+
+ 次のパッケージを付け加えます: ‘dplyr’ 
+
+ 以下のオブジェクトはマスクされています (from ‘package:data.table’) : 
+
+     last 
+
+ 以下のオブジェクトはマスクされています (from ‘package:stats’) : 
+
+     filter, lag 
+
+ 以下のオブジェクトはマスクされています (from ‘package:base’) : 
+
+     intersect, setdiff, setequal, union 
+
+> library(magrittr)
+> 
+> teamhit = function(file = "all2013.csv"){
++   year = substr(file, 4, 7)
++   filename = paste("../../../../data/", file, sep="")
++   dat = fread(filename)
++   name = fread("../names.csv", header=FALSE) %>% unlist
++   dat1 = dat %>% setnames(name) %>% 
++     dplyr::select(GAME_ID, AWAY_TEAM_ID, BAT_HOME_ID, H_FL, 
++                   AWAY_SCORE_CT, HOME_SCORE_CT)
++   
++   dat_teamhit = dat1 %>% 
++     setnames(c("id", "away", "h_a", "h_fl", "away_score", "home_score")) %>% 
++     mutate(home= substr(id, 1,3)) %>% 
++     mutate(hit = ifelse(h_fl > 0, 1, 0)) %>% 
++     group_by(id, home, away, h_a) %>% 
++     dplyr::summarise(hit = sum(hit), year = year, 
++                      away_score = max(away_score),
++                      home_score = max(home_score)) %>% 
++     mutate(team = ifelse(h_a==1, home, away)) %>%
++     mutate(opponent=ifelse(h_a ==1, away, home)) %>%
++     mutate(score_team = ifelse(home == team, home_score, away_score)) %>%
++     mutate(score_opponent = ifelse(home == team, away_score, home_score)) %>%
++     group_by(add=FALSE) %>%
++     dplyr::select(id, team, hit, opponent, year, score_team, score_opponent) 
++   return(dat_teamhit)
++ }
+> 
+> 
+> files = fread("../../../../data/files.txt", header=FALSE) %>% unlist
+> dat = data.table()
+> for(file in files){
++   print(paste("file:", file))
++   dat_tmp = teamhit(file)
++   dat = rbind(dat, dat_tmp)
++ }
+[1] "file: all1922.csv"
+[1] "file: all1927.csv"
+[1] "file: all1931.csv"
+[1] "file: all1934.csv"
+[1] "file: all1935.csv"
+[1] "file: all1938.csv"
+[1] "file: all1939.csv"
+[1] "file: all1940.csv"
+[1] "file: all1941.csv"
+[1] "file: all1942.csv"
+[1] "file: all1943.csv"
+[1] "file: all1944.csv"
+
+ 実行が停止されました 
