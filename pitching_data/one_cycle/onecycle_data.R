@@ -63,5 +63,11 @@ dat_cycle =
          atbat, atbat_all, 
          hit, hit_all) %>% 
   dplyr::filter(outs_all >=  300)
+# id and fullname
+dat_fullname = fread("../../batting_data/fullname.csv") %>% setnames(c("PIT_ID", "name"))
+# append fullname 
+dat_cycle = 
+  dat_cycle %>% 
+  inner_join(dat_fullname, by = "PIT_ID")
 
-dat_cycle
+dat_cycle %>% write.csv("pitch_cycle.csv", quote = FALSE, row.names = FALSE)
