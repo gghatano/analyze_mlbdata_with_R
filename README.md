@@ -25,7 +25,7 @@ batting_data/game_analysis/
 
 ### pitching_data 
 
-投手についてデータをいじって遊びます
+投手についてのデータをいじって遊びます
 
 
 ### rChart 
