@@ -71,12 +71,19 @@ dat_ko_diff %>%
   print(type="html")
 
 # 奪三振率比較プロット
-ggplot(dat_ko_diff) + 
-  geom_point(aes(x=first, y = not_first), size = 3) +
+gp_kbb = 
+  ggplot(dat_ko_diff) + 
+  geom_point(aes(x=first, y = not_first, col = name), size = 6) +
   xlim(2.5, 12) + ylim(2.5,12) + 
   stat_function(fun = function(x) x, linetype="dashed") + 
   ggtitle("KO_RATE (first cycle)") + 
-  ggsave("ko_rate.png")
+  theme(legend.position="none")
+  #ggsave("ko_rate.png")
+
+library(plotly)
+p = plotly("gghatano", "su64cdad4h")
+p$ggplotly(gp_kbb)
+
 
 # K_BB比較
 dat_kbb = 
