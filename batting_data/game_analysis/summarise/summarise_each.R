@@ -11,12 +11,13 @@ dat = fread("../../../../data/all2013.csv")
 names = fread("../names.csv", header=FALSE) %>% unlist
 dat %>% setnames(names)
 
-
+# select the HIT flag and ATBAT flag
 dat_bat = 
 dat %>% select(BAT_ID, H_FL, AB_FL) %>% 
 mutate(AB_FL = ifelse(AB_FL == "T", 1, 0)) %>% 
 mutate(H_FL = ifelse(H_FL > 0, 1, 0))
 
+# calculate the average by using summarise_each
 dat_bat %>% 
 group_by(BAT_ID) %>% 
 summarise_each(funs(sum)) %>% 
