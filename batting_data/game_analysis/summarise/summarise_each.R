@@ -13,15 +13,15 @@ dat %>% setnames(names)
 
 # select the HIT flag and ATBAT flag
 dat_bat = 
-dat %>% select(BAT_ID, H_FL, AB_FL) %>% 
-mutate(AB_FL = ifelse(AB_FL == "T", 1, 0)) %>% 
-mutate(H_FL = ifelse(H_FL > 0, 1, 0))
+  dat %>% select(BAT_ID, H_FL, AB_FL) %>% 
+  mutate(AB_FL = ifelse(AB_FL == "T", 1, 0)) %>% 
+  mutate(H_FL = ifelse(H_FL > 0, 1, 0))
 
 # calculate the average by using summarise_each
 dat_bat %>% 
-group_by(BAT_ID) %>% 
-summarise_each(funs(sum)) %>% 
-dplyr::filter(AB_FL != 0) %>% 
-mutate(average = H_FL / AB_FL) %>% 
-setnames(c("batter", "hit", "atbat", "average")) %>% 
-arrange(desc(hit))
+  group_by(BAT_ID) %>% 
+  summarise_each(funs(sum)) %>% 
+  dplyr::filter(AB_FL != 0) %>% 
+  mutate(average = H_FL / AB_FL) %>% 
+  setnames(c("batter", "hit", "atbat", "average")) %>% 
+  arrange(desc(hit))
