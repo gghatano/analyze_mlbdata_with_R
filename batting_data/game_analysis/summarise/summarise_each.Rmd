@@ -1,0 +1,17 @@
+dplyrのsummarise_eachを使う
+========================================================
+
+```{r}
+library(data.table)
+library(dplyr)
+
+dat = fread("../dat2013_04.csv")
+dat
+```
+
+You can also embed plots, for example:
+
+```{r fig.width=7, fig.height=6}
+plot(cars)
+```
+
