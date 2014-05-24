@@ -1,0 +1,100 @@
+dplyr::doを使う
+========================================================
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE}
+opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE)
+```
+
+dplyrに新たに実装されたらしいdo関数を使います. 
+
+group_byしてできたグループごとに関数適用した結果を見たいときに使えばいいのでしょうか. 
+
+...でも, dplyr::summariseでもいいですよね.
+結果がsingle valueではない時に使うといいんでしょうかね? 
+
+とりあえず, vignetteをなぞってみます.
+
+
+## mtcarsデータで実験.
+車のデータで遊びます.
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  do(head(., 2))
+```
+cyl数で分けられたdata.tableにhead(2)した結果がつながってますね. 
+
+ピリオドは自分自身. 
+
+次. 
+各cylごとに, データに線形回帰を施した結果を見たい時. 
+group_by(cyl)してからlmをすると, 
+lmの結果が入ったS3クラスのデータ(?)が返ってきます. 
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  do(mod = lm(mpg ~ disp, data = .)) 
+```
+data.tableでは, S3クラスのデータ(?)を持てません.
+代わりに, list的なものになっているのですよね多分.
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  do(mod = lm(mpg ~ disp, data = .)) %>%
+  class
+```
+tbl_dfってなんだろう. 分かりません. listみたいなものでしょう.
+
+modにはcyl数で分けたデータごとにlmした結果(S3クラス)が入っているはず. 
+
+例えば決定係数を取り出してみます. 
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  do(mod = lm(mpg ~ disp, data = .)) %>% 
+  dplyr::summarise(cyl = cyl, rsq = summary(mod)$r.squared)
+```
+できてますね. 次に, 係数を取り出してみます. 
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  do(mod = lm(mpg ~ disp, data = .)) %>% 
+  do(data.frame(cyl = .$cyl, var = names(coef(.$mod)), coef = coef(.$mod))) 
+```
+なるほど. 
+
+## 野球データで
+
+2013年4月のメジャーリーグの打席結果データを使って遊びます.
+
+
+```{r}
+dat = fread("../dat2013_04.csv")
+head(dat)
+```
+
+打者ごとに, ヒットを打つor打たないの系列に対して連検定(tseries::runs.test)を実行. 
+
+各打席にヒットを打つかどうかについて, ランダム性を検定してみます. 
+
+```{r}
+library(tseries)
+runstest_res = 
+  dat %>% 
+  dplyr::filter(AB_FL == "TRUE") %>% ## 四死球は除いて
+  mutate(HIT = as.factor(ifelse(H_FL > 0, "HIT", "NOHIT"))) %>%  ##ヒットを打ったかどうか
+  group_by(BAT_ID) %>% ## 各打者ごとに
+  do(res = runs.test(HIT))
+runstest_res
+```
+
+P値が小さいと, ランダムじゃない, つまり打席結果に時系列性があるんじゃないか...ということを考えています.
+
+次に, 検定の結果が入ったS3クラスから, p.valueを取り出したいです.
+```{r}
+runstest_res %>%
+  summarise(runstest_res, pval= res$p.value)
+```
+あれ...???? 分からん...
+
+
+

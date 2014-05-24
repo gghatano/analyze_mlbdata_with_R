@@ -181,7 +181,16 @@ hljs.initHighlightingOnLoad();
 <body>
 <h1>dplyrのsummarise_eachを使う</h1>
 
-<p>2013年4月のMLB全打席結果データを利用します.</p>
+<h2>データ読み込み</h2>
+
+<p>2013年4月のMLB全打席結果データを利用して, 
+dplyr::summarise_eachの練習をします.</p>
+
+<p>データとコードは, 
+<a href="https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/batting_data/game_analysis/summarise">https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/batting_data/game_analysis/summarise</a>
+にあります. </p>
+
+<p>まずはデータの読み込み. 2013年4月の打席結果データ.csvをfread.</p>
 
 <pre><code class="r">library(data.table)
 library(dplyr)
@@ -189,7 +198,9 @@ library(xtable)
 dat = fread(&quot;../dat2013_04.csv&quot;)
 </code></pre>
 
-<p>4月の打率, 長打率, 投球数を集計する. </p>
+<h2>集計</h2>
+
+<p>4月の打率, 長打率, 投球数を集計します. </p>
 
 <p>ヒット数,塁打数, 投球数の合計を, 打数で割り算すればいいのですが, 
 全て同じ操作なので, 新機能であるsummarise_eachを使って簡単に処理できるはず.</p>
@@ -233,7 +244,7 @@ dat_april %&gt;%
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
 
-<!-- Sat May 24 13:13:56 2014 -->
+<!-- Sat May 24 13:26:50 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> name </TH> <TH> average </TH>  </TR>
@@ -262,7 +273,7 @@ dat_april %&gt;%
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
 
-<!-- Sat May 24 13:13:56 2014 -->
+<!-- Sat May 24 13:26:51 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> name </TH> <TH> SLG </TH>  </TR>
@@ -291,7 +302,7 @@ dat_april %&gt;%
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
 
-<!-- Sat May 24 13:13:56 2014 -->
+<!-- Sat May 24 13:26:51 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> name </TH> <TH> pitches </TH>  </TR>
@@ -306,6 +317,8 @@ dat_april %&gt;%
   <TR> <TD align="right"> 9 </TD> <TD> Joey Votto </TD> <TD align="right"> 5.93 </TD> </TR>
   <TR> <TD align="right"> 10 </TD> <TD> Nick Swisher </TD> <TD align="right"> 5.93 </TD> </TR>
    </TABLE>
+
+<h2>グラフ</h2>
 
 <p>投げさせた球数と打率の関係.</p>
 

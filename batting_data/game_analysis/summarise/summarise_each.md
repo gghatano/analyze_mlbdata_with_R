@@ -2,7 +2,16 @@ dplyrのsummarise_eachを使う
 ========================================================
 
 
-2013年4月のMLB全打席結果データを利用します.
+
+## データ読み込み
+2013年4月のMLB全打席結果データを利用して, 
+dplyr::summarise_eachの練習をします.
+
+データとコードは, 
+https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/batting_data/game_analysis/summarise
+にあります. 
+
+まずはデータの読み込み. 2013年4月の打席結果データ.csvをfread.
 
 ```r
 library(data.table)
@@ -12,7 +21,9 @@ dat = fread("../dat2013_04.csv")
 ```
 
 
-4月の打率, 長打率, 投球数を集計する. 
+
+## 集計
+4月の打率, 長打率, 投球数を集計します. 
 
 ヒット数,塁打数, 投球数の合計を, 打数で割り算すればいいのですが, 
 全て同じ操作なので, 新機能であるsummarise_eachを使って簡単に処理できるはず.
@@ -58,7 +69,7 @@ dat_april %>%
 ```
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-<!-- Sat May 24 13:13:56 2014 -->
+<!-- Sat May 24 13:26:50 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> name </TH> <TH> average </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Carlos Santana </TD> <TD align="right"> 0.39 </TD> </TR>
@@ -88,7 +99,7 @@ dat_april %>%
 ```
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-<!-- Sat May 24 13:13:56 2014 -->
+<!-- Sat May 24 13:26:51 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> name </TH> <TH> SLG </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Justin Upton </TD> <TD align="right"> 0.73 </TD> </TR>
@@ -118,7 +129,7 @@ dat_april %>%
 ```
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-<!-- Sat May 24 13:13:56 2014 -->
+<!-- Sat May 24 13:26:51 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> name </TH> <TH> pitches </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Billy Butler </TD> <TD align="right"> 6.53 </TD> </TR>
@@ -133,6 +144,8 @@ dat_april %>%
   <TR> <TD align="right"> 10 </TD> <TD> Nick Swisher </TD> <TD align="right"> 5.93 </TD> </TR>
    </TABLE>
 
+
+## グラフ
 
 投げさせた球数と打率の関係.
 

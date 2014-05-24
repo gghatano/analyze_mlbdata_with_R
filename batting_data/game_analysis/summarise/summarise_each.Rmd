@@ -3,7 +3,16 @@ dplyrのsummarise_eachを使う
 ```{r global_option, echo=FALSE, error=FALSE, warning=FALSE}
 opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE)
 ```
-2013年4月のMLB全打席結果データを利用します.
+
+## データ読み込み
+2013年4月のMLB全打席結果データを利用して, 
+dplyr::summarise_eachの練習をします.
+
+データとコードは, 
+https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/batting_data/game_analysis/summarise
+にあります. 
+
+まずはデータの読み込み. 2013年4月の打席結果データ.csvをfread.
 ```{r, tidy=FALSE, warning=FALSE}
 library(data.table)
 library(dplyr)
@@ -11,7 +20,9 @@ library(xtable)
 dat = fread("../dat2013_04.csv")
 ```
 
-4月の打率, 長打率, 投球数を集計する. 
+
+## 集計
+4月の打率, 長打率, 投球数を集計します. 
 
 ヒット数,塁打数, 投球数の合計を, 打数で割り算すればいいのですが, 
 全て同じ操作なので, 新機能であるsummarise_eachを使って簡単に処理できるはず.
@@ -66,6 +77,8 @@ dat_april %>%
   head(10) %>%
   xtable %>% print(type="html")
 ```
+
+## グラフ
 
 投げさせた球数と打率の関係.
 
