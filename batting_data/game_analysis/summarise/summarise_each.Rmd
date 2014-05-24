@@ -1,0 +1,95 @@
+dplyrのsummarise_eachを使う
+========================================================
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE}
+opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE)
+```
+2013年4月のMLB全打席結果データを利用します.
+```{r, tidy=FALSE, warning=FALSE}
+library(data.table)
+library(dplyr)
+library(xtable)
+dat = fread("../dat2013_04.csv")
+```
+
+4月の打率, 長打率, 投球数を集計する. 
+
+ヒット数,塁打数, 投球数の合計を, 打数で割り算すればいいのですが, 
+全て同じ操作なので, 新機能であるsummarise_eachを使って簡単に処理できるはず.
+```{r, tidy=FALSE}
+dat_april = 
+  dat %>% 
+  select(BAT_ID, AB_FL, H_FL, PITCH_SEQ_TX) %>% ## 打席フラグ, ヒットフラグ, 投球結果のデータを利用. 
+  mutate(pitches = nchar(PITCH_SEQ_TX), HIT_FL = ifelse(H_FL > 0, 1, 0)) %>% ## 球数と, HITorNOTのデータを作成
+  select(-PITCH_SEQ_TX) %>% ## もういらない
+  group_by(BAT_ID) %>% ## 打者ごとに
+  summarise_each(funs(sum)) %>% ## 塁打数, ヒット数, 投球数を打数で割り算する.
+  dplyr::filter(AB_FL > 50) %>%
+  mutate_each(funs(./AB_FL), vars = H_FL:HIT_FL) %>% 
+  select(BAT_ID, vars1:vars3) %>% 
+  setnames(c("retroID", "SLG", "pitches", "average"))
+
+dat_april %>% head
+```
+あとは, retroIDとフルネームを対応させて表示するだけ. 
+
+## 4月の打率ランキング. 
+```{r, tidy=FALSE, results='asis'}
+fullname= fread("../../fullname.csv")
+dat_april %>% 
+  inner_join(fullname, by = "retroID") %>%
+  select(name, average) %>% 
+  arrange(desc(average))%>% 
+  head(10) %>%
+  xtable %>% print(type="html")
+```
+
+
+## 4月の長打率ランキング. 
+```{r, tidy=FALSE, results='asis'}
+fullname= fread("../../fullname.csv")
+dat_april %>% 
+  inner_join(fullname, by = "retroID") %>%
+  select(name, SLG) %>% 
+  arrange(desc(SLG))%>% 
+  head(10) %>%
+  xtable %>% print(type="html")
+```
+
+
+## 4月の平均投球数ランキング. 
+```{r, tidy=FALSE, results='asis'}
+fullname= fread("../../fullname.csv")
+dat_april %>% 
+  inner_join(fullname, by = "retroID") %>%
+  select(name, pitches) %>% 
+  arrange(desc(pitches))%>% 
+  head(10) %>%
+  xtable %>% print(type="html")
+```
+
+投げさせた球数と打率の関係.
+
+```{r, results='asis'}
+dat_april %>% 
+  ggplot() + 
+  geom_point(aes(x=average, y = pitches)) + 
+  ggtitle("average vs pitches")
+```
+関係なさそう.
+
+球数と長打率は? 
+
+```{r, results='asis'}
+dat_april %>% 
+  ggplot() + 
+  geom_point(aes(x=SLG, y = pitches)) + 
+  ggtitle("SLG vs pitches")
+```
+
+
+```{r, results='asis'}
+dat_april %>% 
+  ggplot() + 
+  geom_point(aes(x=SLG, y = average)) + 
+  ggtitle("average vs SLG")
+```
