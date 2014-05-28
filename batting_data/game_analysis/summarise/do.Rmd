@@ -65,7 +65,8 @@ mtcars %>%
 ## 野球データで
 
 2013年4月のメジャーリーグの打席結果データを使って遊びます.
-
+コードとデータはここにあります. do.Rmdを実行します.
+https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/batting_data/game_analysis/summarise
 
 ```{r}
 dat = fread("../dat2013_04.csv")
@@ -95,6 +96,3 @@ runstest_res %>%
   summarise(runstest_res, pval= res$p.value)
 ```
 あれ...???? 分からん...
-
-
-

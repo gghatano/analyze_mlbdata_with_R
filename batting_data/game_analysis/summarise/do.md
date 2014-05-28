@@ -123,7 +123,8 @@ mtcars %>%
 ## 野球データで
 
 2013年4月のメジャーリーグの打席結果データを使って遊びます.
-
+コードとデータはここにあります. do.Rmdを実行します.
+https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/batting_data/game_analysis/summarise
 
 
 ```r
@@ -296,8 +297,8 @@ runstest_res
 
 
 P値が小さいと, ランダムじゃない, つまり打席結果に時系列性があるんじゃないか...ということを考えています.
-p.valueを取り出したいです.
 
+次に, 検定の結果が入ったS3クラスから, p.valueを取り出したいです.
 
 ```r
 runstest_res %>%
@@ -313,4 +314,3 @@ runstest_res %>%
 ```
 
 あれ...???? 分からん...
-

@@ -1,0 +1,73 @@
+5月31日 TokyoR 
+========================================================
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE, results='asis'}
+opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE, results='asis')
+```
+
+## 野球のデータ解析: 打撃データの確認
+
+retroSheetからダウンロードしてパースしたデータを利用します.
+githubには, 2013年4月のデータがアップロードされています.
+
+2013年全体の打撃結果データは大きすぎて, アップロードできません. 
+```{r}
+library(data.table)
+library(dplyr)
+library(magrittr)
+
+# 打撃結果が入ったデータファイル
+dat = fread("all2013.csv")
+# 列名のデータです.
+colname = fread("../../batting_data/names.csv", header = FALSE) %>% unlist
+
+dat %>% setnames(colname)
+# ID と フルネームのデータです
+fullname = fread("../../batting_data/fullname.csv")
+```
+
+## 打率の集計
+
+打率の計算をしてみます. 
+ヒット数を打席数で割り算すればいいです.
+
+打席イベントかどうかを表す, AB_FL(TRUEなら打席)という列があります.
+ヒットかどうかは, H_FL(何塁打を打ったか)という列にあります. 
+
+打者(BAT_ID)ごとに, 打席数とヒット数を集計します.
+
+```{r}
+dat %>% 
+  select(BAT_ID, AB_FL, H_FL) %>%
+  dplyr::filter(AB_FL == "T") %>% ## 打席イベントを抽出  
+  mutate(HIT = ifelse(H_FL > 0, 1, 0)) %>%       ## ヒットを打ったかどうか
+  group_by(BAT_ID) %>%               ## 打者ごとに
+  summarise_each(funs(sum)) %>%      ## 総和を集計する
+  select(-H_FL) %>% 
+  setnames(c("retroID", "atbat", "hit")) %>%
+  inner_join(fullname, by = "retroID") %>%  ## IDとフルネームを対応
+  select(-retroID) %>% 
+  mutate(average = hit / atbat) %>%  ## 打率の計算
+  select(name, hit, atbat, average) %>% 
+  arrange(desc(atbat)) %>%           ## 並べ替え
+  head(10) %>% 
+  xtable %>% 
+  print(type="html")
+```
+
+## 得点圏打率の計算
+
+もっと条件のついた形で打率を計算したいと思います. 
+例えば,　得点圏打率. 
+
+ランナー状況別に打率を集計してみます. 
+
+```{r}
+dat %>% 
+  dplyr::filter(AB_FL == "TRUE") %>% 
+  mutate(runner = 100*(BASE1_RUN_ID!="")+10*(BASE2_RUN_ID!="")+1*(BASE3_RUN_ID!="")) %>% 
+  mutate(HIT = (H_FL > 0)) %>% 
+  select(BAT_ID, runner, HIT) %>%
+  group_by(BAT_ID, runner) %>% 
+  summarise(HIT = sum(HIT))
+```
+

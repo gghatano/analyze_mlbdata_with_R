@@ -290,7 +290,9 @@ lmの結果が入ったS3クラスのデータ(?)が返ってきます. </p>
 
 <h2>野球データで</h2>
 
-<p>2013年4月のメジャーリーグの打席結果データを使って遊びます.</p>
+<p>2013年4月のメジャーリーグの打席結果データを使って遊びます.
+コードとデータはここにあります. do.Rmdを実行します.
+<a href="https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/batting_data/game_analysis/summarise">https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/batting_data/game_analysis/summarise</a></p>
 
 <pre><code class="r">dat = fread(&quot;../dat2013_04.csv&quot;)
 head(dat)
@@ -454,8 +456,9 @@ runstest_res
 ## ..      ...        ...
 </code></pre>
 
-<p>P値が小さいと, ランダムじゃない, つまり打席結果に時系列性があるんじゃないか&hellip;ということを考えています.
-p.valueを取り出したいです.</p>
+<p>P値が小さいと, ランダムじゃない, つまり打席結果に時系列性があるんじゃないか&hellip;ということを考えています.</p>
+
+<p>次に, 検定の結果が入ったS3クラスから, p.valueを取り出したいです.</p>
 
 <pre><code class="r">runstest_res %&gt;%
   summarise(runstest_res, pval= res$p.value)
