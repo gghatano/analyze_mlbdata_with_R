@@ -15,7 +15,7 @@ or untar chadwick-0.6.3.tar.gz
 
 Execute the following commands.
 ----------------------------------------
-tar -xvf chadwick-0.6.3.tar.gz
+tar -zxvf chadwick-0.6.3.tar.gz
 cd chadwick-0.6.3
 ./configure
 make
