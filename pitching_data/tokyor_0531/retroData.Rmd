@@ -1,57 +1,78 @@
-5月31日 TokyoR 
+5月31日 TokyoR 打撃結果データの利用例 
 ========================================================
-```{r global_option, echo=FALSE, error=FALSE, warning=FALSE, results='asis'}
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE, results='markup'}
 opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE, results='asis')
 ```
 
 ## 野球のデータ解析: 打撃データの確認
 
 retroSheetからダウンロードしてパースしたデータを利用します.
-githubには, 2013年4月のデータがアップロードされています.
+githubに, 打撃結果のデータファイルをアップロードしてあります.
 
-2013年全体の打撃結果データは大きすぎて, アップロードできません. 
+https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/pitching_data/tokyor_0531
+
+2013年主要打者100人の打撃結果のデータファイル: mainBatter.csvを使ってみることで, 
+データの中身を確認してみます.
+
 ```{r}
 library(data.table)
 library(dplyr)
 library(magrittr)
+library(xtable)
 
 # 打撃結果が入ったデータファイル
-dat = fread("all2013.csv")
-# 列名のデータです.
-colname = fread("../../batting_data/names.csv", header = FALSE) %>% unlist
-
-dat %>% setnames(colname)
+dat = fread("mainBatter.csv")
 # ID と フルネームのデータです
 fullname = fread("../../batting_data/fullname.csv")
+
+# 1打席の状況を, 97種のデータで表現しています
+dat %>% names %>% length
 ```
+
+各打席の結果は, 97個のデータによって表現されています.
+各列の意味は, http://www.retrosheet.org/datause.txt ここに書いてありますが,
+これを読むのは大変です. 
+
+以下では, 
+データを使って遊びながら,
+列の意味の説明を部分的に行いたいと思います.
 
 ## 打率の集計
 
-打率の計算をしてみます. 
-ヒット数を打席数で割り算すればいいです.
+データを利用して, 打率の計算をしてみます. 
+打者ごとに, ヒット数を打席数で割り算すれば打率になります.
 
-打席イベントかどうかを表す, AB_FL(TRUEなら打席)という列があります.
-ヒットかどうかは, H_FL(何塁打を打ったか)という列にあります. 
+利用するデータ列. 
 
-打者(BAT_ID)ごとに, 打席数とヒット数を集計します.
+打者の名前は, BAT_IDという列に入っています.
+
+打席イベントかどうかを表す, AB_{FL} (TRUEなら打席)という列があります.
+AB_FLが TRUEのところだけ使います. FALSEの場合は, 四死球や盗塁を表します. 
+
+また, ヒットかどうかは, H_FL(何塁打を打ったか)という列にあります.
+H_FLが2なら2塁打です. 
+
+ここだけ使えば,　打率が計算できますね.
+
+打者名(BAT_ID)ごとに, 打席数とヒット数を集計します.
 
 ```{r}
-dat %>% 
-  select(BAT_ID, AB_FL, H_FL) %>%
-  dplyr::filter(AB_FL == "T") %>% ## 打席イベントを抽出  
-  mutate(HIT = ifelse(H_FL > 0, 1, 0)) %>%       ## ヒットを打ったかどうか
-  group_by(BAT_ID) %>%               ## 打者ごとに
-  summarise_each(funs(sum)) %>%      ## 総和を集計する
-  select(-H_FL) %>% 
-  setnames(c("retroID", "atbat", "hit")) %>%
-  inner_join(fullname, by = "retroID") %>%  ## IDとフルネームを対応
-  select(-retroID) %>% 
-  mutate(average = hit / atbat) %>%  ## 打率の計算
-  select(name, hit, atbat, average) %>% 
-  arrange(desc(atbat)) %>%           ## 並べ替え
+dat_average = 
+  dat %>% 
+  select(BAT_ID, AB_FL, H_FL) %>%   ## この3列だけ使います
+  mutate(HIT = (H_FL) > 0) %>%      ## ヒットかどうかだけ分かればいいです
+  group_by(BAT_ID) %>% 
+  summarise_each(funs(sum)) %>% 
+  setnames(c("retroID", "atbat", "bases", "hit")) %>% 
+  mutate(average = hit / atbat) %>% 
+  inner_join(fullname, by = "retroID") %>% 
+  select(name, atbat, hit, average) 
+
+dat_average %>% 
+  arrange(desc(average)) %>% 
   head(10) %>% 
-  xtable %>% 
-  print(type="html")
+  setnames(c("名前", "打席", "安打", "打率")) %>% 
+  xtable(digits = 4) %>% print(type="html")
 ```
 
 ## 得点圏打率の計算
@@ -60,14 +81,106 @@ dat %>%
 例えば,　得点圏打率. 
 
 ランナー状況別に打率を集計してみます. 
+1塁ランナーが誰, 2塁ランナーは誰...といったデータの列があります. 
 
+BASE1_RUN_IDが空欄かどうかを見て, ランナー状況をチェックして, group_byします.
 ```{r}
-dat %>% 
-  dplyr::filter(AB_FL == "TRUE") %>% 
-  mutate(runner = 100*(BASE1_RUN_ID!="")+10*(BASE2_RUN_ID!="")+1*(BASE3_RUN_ID!="")) %>% 
+dat_runner = 
+  dat %>% 
+  dplyr::filter(AB_FL == TRUE) %>% 
+  mutate(runner = 100*(BASE3_RUN_ID!="")+10*(BASE2_RUN_ID!="")+1*(BASE1_RUN_ID!="")) %>% 
   mutate(HIT = (H_FL > 0)) %>% 
-  select(BAT_ID, runner, HIT) %>%
+  select(BAT_ID, runner, AB_FL, HIT) %>%
   group_by(BAT_ID, runner) %>% 
-  summarise(HIT = sum(HIT))
+  summarise(ATBAT = sum(AB_FL), HIT = sum(HIT)) %>% 
+  setnames(c("retroID", "runner", "atbat", "hit"))  %>% 
+  group_by(add=FALSE) %>%
+  inner_join(fullname, by = "retroID") %>%
+  select(name, runner, atbat, hit) %>% 
+  mutate(runner = as.integer(runner)) %>% 
+  mutate(average = hit / atbat) 
+
+dat_runner %>% 
+  dplyr::filter(name == "Mike Trout") %>% 
+  xtable %>% print("html")
+```
+runnerの表示が101なら, ランナー1,3塁を意味するようにしました.
+0ならランナー無し, 111なら満塁です. 
+ちゃんとランナー状況別に打率が集計できています.
+
+
+次に, 得点圏打率と非得点圏打率を集計してみます. 
+ランナーが2塁以上にいれば, 得点圏です.得点チャンスですね. 
+ランナー状況を見て, チャンスかどうかのフラグを作ってgroup_byすればいいです.
+```{r}
+dat_scoring = 
+  dat_runner %>% 
+  mutate(scoring = (runner >= 10)) %>% 
+  select(-average, -runner) %>% 
+  group_by(name, scoring) %>%
+  summarise_each(funs(sum)) %>% 
+  mutate(average = hit / atbat)
+
+dat_scoring %>% 
+  head() %>%
+  xtable(digits=4) %>% print("html")
 ```
 
+### 得点圏打率(全体平均)
+```{r}
+dat_scoring %>% 
+  group_by(scoring, add = FALSE) %>%
+  summarise(atbat = sum(atbat), hit = sum(hit)) %>% 
+  mutate(average = hit / atbat) %>% 
+  xtable(digits = 4) %>% print("html")
+```
+得点圏打率と非得点圏打率が集計できました.
+
+全体の平均を見ると, 
+チャンスの場面では, 打率が高くなるみたいです.
+ランナーが居ることで, 投球がやりづらくなりそうです.
+また, ランナー1塁ならファーストがベースに張り付かないといけません. 
+ヒットゾーンは広がりそうです.
+ある程度妥当な結果でしょう. 
+
+## チャンスになると急変する打者ランキング
+
+得点圏, 非得点圏打率の差をとることで, チャンスになると急に強くなったり弱くなったりする打者をチェックしてみます.
+```{r}
+dat_scoring_diff = 
+  dat_scoring %>% 
+  select(name, scoring, average) %>% 
+  reshape(timevar = "scoring", idvar = "name", direction = "wide") %>% 
+  setnames(c("name", "not_scoring", "scoring")) %>% 
+  mutate(average_diff = scoring - not_scoring)
+```
+
+### チャンスになると強くなる打者ランキング
+```{r}
+dat_scoring_diff %>% 
+  arrange(desc(average_diff)) %>% 
+  head(5) %>% 
+  xtable(digits=4) %>% print("html")
+```
+
+### チャンスになると弱くなる打者ランキング
+```{r}
+dat_scoring_diff %>% 
+  arrange(average_diff) %>% 
+  head(5) %>%
+  xtable(digits=4) %>% print("html")
+```
+
+
+## おまけ dplyr::doでランナー状況別打率ランキング
+
+折角なので, 状況別に打率ランキングを出してみます.
+runnnerの内容でgroupを作って, dplyr::doを使い, それぞれのランナー状況に対してランキングを作ればいいです. 
+```{r}
+dat_runner %>% 
+  group_by(runner) %>% 
+  do(arrange(., desc(average))) %>%
+  do(head(.,3)) %>% 
+  xtable(digits = 4) %>% print("html")
+```
+dplyr::doはこうやって使うのですね. 
