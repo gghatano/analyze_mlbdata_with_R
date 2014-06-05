@@ -1,0 +1,107 @@
+ランナーの状況とホームラン
+========================================================
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE, results='markup'}
+opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE, results='asis')
+```
+
+ランナー状況とホームランの関係が気になりました. 
+
+調べてみました.
+
+コードはgithubにあげてあります. 
+
+https://github.com/gghatano/analyze_mlbdata_with_R
+
+ランナー状況ごとに, ホームラン率を計算してみます.
+まずはデータの読み込み. 適当な所に, retrosheetからダウンロードしたデータを置いて読み込みます. 
+
+```{r}
+library(dplyr)
+library(data.table)
+library(magrittr)
+library(xtable)
+dat = fread("../../../data/all2013.csv")
+name = fread("../../batting_data/names.csv", header = FALSE) %>% unlist
+dat %>% setnames(name)
+```
+
+ランナーの人数ごとに, ホームランの本数を集計してみます.
+```{r}
+dat_hr_runner = 
+  dat %>% 
+  dplyr::filter(AB_FL == "T") %>%
+  mutate(runners = (BASE1_RUN_ID != "") + (BASE2_RUN_ID != "") + (BASE3_RUN_ID != "")) %>% 
+  mutate(HR_FL = (EVENT_CD == 23)) %>%
+  group_by(runners) %>% 
+  dplyr::summarise(atbats = n(), hrs = sum(HR_FL)) %>% 
+  mutate(runners = as.integer(runners)) 
+
+dat_hr_runner %>%
+  xtable(digits = 4) %>% print("html")
+```
+
+ホームラン率を見ます. 
+```{r}
+dat_hr_runner %>% 
+  dplyr::mutate(hr_rate = hrs / atbats) %>%
+  xtable(digits = 4) %>% print("html")
+```
+ランナー0人のホームラン率が, ちょっと高いですね.
+なんででしょうか. 
+
+
+もう少し細かく見てみます. 
+ランナー状況, つまりどの塁が埋まっているか...という状況ごとに, ホームランの本数を見てみます. 
+
+
+```{r}
+dat_runner_123 = 
+  dat %>% 
+  dplyr::filter(AB_FL == "T") %>% 
+  mutate(runners = (BASE1_RUN_ID != "")*1 + (BASE2_RUN_ID != "") * 10 + (BASE3_RUN_ID != "")*100) %>%
+  mutate(runners = as.integer(runners)) %>%
+  mutate(HR_FL = (EVENT_CD == 23)) %>% 
+  group_by(runners) %>% 
+  dplyr::summarise(atbat = n(), hrs = sum(HR_FL))
+
+dat_runner_123 %>%
+  xtable(digits = 4) %>% print("html")
+```
+
+できてますね. ホームラン率を計算してみます. 
+
+```{r}
+dat_runner_123 %>% 
+  mutate(hr_rate = hrs / atbat) %>%
+  xtable(digits = 4) %>% print("html")
+```
+
+ほほう. 
+ランナー2,3塁打とホームランが出にくい. 
+
+95％信頼区間も出しますか.
+```{r}
+dat_hr_123_conf = 
+  dat_runner_123 %>% 
+  group_by(runners) %>% 
+  summarise(hr_rate = hrs / atbat, 
+         (binom.test(hrs, atbat))$conf.int[1], 
+         (binom.test(hrs, atbat))$conf.int[2]) %>% 
+  setnames(c("runners", "hr_rate", "hr_rate_low", "hr_rate_high"))
+dat_hr_123_conf %>%
+  xtable(digits = 4) %>% print("html")
+```
+
+折角なので, 可視化しましょう. 
+```{r}
+dat_hr_123_conf %>% 
+  mutate(runners = as.factor(runners)) %>%
+  ggplot(aes(x = runners)) +
+  geom_point(aes(y = hr_rate), size = 5) + 
+  geom_errorbar(aes(ymin = hr_rate_low, ymax = hr_rate_high)) + 
+  ggtitle("HR-rate in each runner-situation (with Confidence Interval)")
+```
+
+以上です. 
+
+

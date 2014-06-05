@@ -1,0 +1,79 @@
+期待打点の集計
+========================================================
+```{r global_option, echo=FALSE, error=FALSE, warning=FALSE, results='asis' }
+opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE, results='asis')
+```
+勝負強さが知りたいです. 点をとってくれる打者を評価したいです.
+勝負強さの指標である得点圏打率には, 打点が反映されていません. 
+しかし,　生の打点の数字は, 打順に依存します.
+勝負強くない打者でも, チャンスの場面でたくさん打席が回ってくれば, 勝手に打点が上がっていきます. 
+
+
+ここで, ランナー状況, アウトカウント別に, 打点の期待値を計算してみました. 
+
+たとえば,
+
+「1アウト2, 3塁で迎えた打席では何点生まれるのか」
+
+などの集計を行った, ということです. 
+
+そして, 各バッターが, 各打席で期待打点をどれくらい上回ったか...という計算を行うことによって,
+得点能力が分かりませんかね? 
+
+ちょっとやってみます. まだ途中ですけど. 
+
+データ読み込み. 2013年の全打席結果.
+```{r}
+library(data.table)
+library(dplyr)
+library(xtable)
+
+year = 2013
+file = paste("../../../../data/all", year, ".csv", sep="")
+dat = fread(file)
+names = fread("../names.csv", header = FALSE) %>% unlist
+dat %>% setnames(names)
+```
+
+ランナー状況を確認. "100"なら, ランナー3塁です. 
+各バッターについて, アウトカウントとランナー状況別, 打席数と挙げた打点を集計.
+```{r}
+dat_rbi = 
+  dat %>% 
+  #dplyr::filter(AB_FL == "T") %>% 
+  mutate(runner = (BASE1_RUN_ID != "")*1 + (BASE2_RUN_ID != "")*10 + (BASE3_RUN_ID != "")*100) %>% 
+  mutate(runner = as.integer(runner)) %>%
+  select(BAT_ID, OUTS_CT, runner, RBI_CT) %>%
+  group_by(BAT_ID, OUTS_CT, runner) %>% 
+  dplyr::summarise(atbat = n(), RBI = sum(RBI_CT)) 
+
+dat_rbi %>% head %>% xtable %>% print("html")
+```
+まずは全体平均. 
+ランナー状況ごとに打点を計算. 
+```{r}
+dat_rbi_all = 
+  dat_rbi %>%
+  group_by(runner, OUTS_CT) %>%
+  dplyr::summarise(atbat = sum(atbat), RBI = sum(RBI)) %>% 
+  mutate(RBI_mean = RBI / atbat) 
+
+dat_rbi_all %>% xtable(digits = 4) %>% print("html")
+```
+
+なるほど. ためしに満塁だけ注目.
+```{r}
+dat_rbi_all %>%
+  dplyr::filter(runner == 111) %>%
+  xtable(digits = 4) %>% print("html")
+```
+
+0アウト満塁だと, 1打席で0.708点. 
+1アウト満塁だと, 1打席で0.766点ですか. 
+0アウト満塁よりも, 1アウト満塁のほうが, 平均打点が高いみたいです.
+
+ちょっと感覚と合いません. 
+1アウトなら, ゲッツーで終わっちゃいますもんね. 
+0アウトなら, ゲッツーの間に1点は入ります. 
+
+つづきます. 
