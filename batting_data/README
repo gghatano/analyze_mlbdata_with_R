@@ -48,7 +48,7 @@ The following is the example code of R
 -----------------------------------------
 library(data.table)
 data = fread("all2010")
-names = fread("names.csv")
+names = fread("names.csv", header = FALSE)
 
 setnames(data, unlist(names))
 -----------------------------------------
