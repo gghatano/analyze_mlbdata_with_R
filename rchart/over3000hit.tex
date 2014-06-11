@@ -1,0 +1,827 @@
+\documentclass[]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\section{rChartsでレジェンドプレーヤーの成績を可視化したい}\label{rchartsux3067ux30ecux30b8ux30a7ux30f3ux30c9ux30d7ux30ecux30fcux30e4ux30fcux306eux6210ux7e3eux3092ux53efux8996ux5316ux3057ux305fux3044}
+
+Lahmanのデータベースを使って, 歴代の打者成績推移をrChartsで可視化します.
+
+データは http://seanlahman.com/files/database/lahman-csv\_2014-02-14.zip
+でダウンロードできます.
+
+解凍したら, Batting.csvとMaster.csvを使います.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(rCharts)}
+\KeywordTok{library}\NormalTok{(RPostgreSQL)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(magrittr)}
+\KeywordTok{library}\NormalTok{(xtable)}
+\CommentTok{# 各打者のシーズン記録のまとめデータ: Batting.csv}
+\NormalTok{dat =}\StringTok{ }\KeywordTok{fread}\NormalTok{(}\StringTok{"Batting.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+データの中身はこんな感じです.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(dat) %>%}\StringTok{ }\KeywordTok{xtable}\NormalTok{() %>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{type=}\StringTok{"html"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+playerID
+
+yearID
+
+stint
+
+teamID
+
+lgID
+
+G
+
+G\_batting
+
+AB
+
+R
+
+H
+
+X2B
+
+X3B
+
+HR
+
+RBI
+
+SB
+
+CS
+
+BB
+
+SO
+
+IBB
+
+HBP
+
+SH
+
+SF
+
+GIDP
+
+G\_old
+
+1
+
+aardsda01
+
+2004
+
+1
+
+SFN
+
+NL
+
+11
+
+11
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+11
+
+2
+
+aardsda01
+
+2006
+
+1
+
+CHN
+
+NL
+
+45
+
+43
+
+2
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+1
+
+0
+
+0
+
+45
+
+3
+
+aardsda01
+
+2007
+
+1
+
+CHA
+
+AL
+
+25
+
+2
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+2
+
+4
+
+aardsda01
+
+2008
+
+1
+
+BOS
+
+AL
+
+47
+
+5
+
+1
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+1
+
+0
+
+0
+
+0
+
+0
+
+0
+
+5
+
+5
+
+aardsda01
+
+2009
+
+1
+
+SEA
+
+AL
+
+73
+
+3
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+6
+
+aardsda01
+
+2010
+
+1
+
+SEA
+
+AL
+
+53
+
+4
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\CommentTok{# 選手をidで扱うのは淋しいので, フルネームを調べます}
+\CommentTok{# フルネームはMaster.csvから作ります.}
+\NormalTok{fullname_and_id =}\StringTok{ }
+\StringTok{  }\KeywordTok{fread}\NormalTok{(}\StringTok{"Master.csv"}\NormalTok{) %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{fullname =} \KeywordTok{paste}\NormalTok{(nameFirst, nameLast, }\DataTypeTok{sep=}\StringTok{" "}\NormalTok{)) %>%}\StringTok{ }
+\StringTok{  }\NormalTok{dplyr::}\KeywordTok{select}\NormalTok{(lahman40ID, fullname) %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{setnames}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"playerID"}\NormalTok{, }\StringTok{"fullname"}\NormalTok{))}
+
+\CommentTok{# 2012年までに3000本安打を超えている選手で遊びます}
+\NormalTok{bat_over_3000 =}\StringTok{ }
+\StringTok{  }\NormalTok{dat %>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(playerID) %>%}\StringTok{ }
+\StringTok{  }\NormalTok{dplyr::}\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{HIT =} \KeywordTok{sum}\NormalTok{(H)) %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(HIT >=}\StringTok{ }\DecValTok{3000}\NormalTok{) %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(playerID)}
+
+\CommentTok{# フルネームとIDを統合}
+\NormalTok{batters =}\StringTok{ }\NormalTok{bat_over_3000 %>%}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(fullname_and_id, }\DataTypeTok{by=}\StringTok{"playerID"}\NormalTok{)}
+
+\CommentTok{# 3000本打った選手の成績まとめ}
+\NormalTok{batters_data =}\StringTok{ }\NormalTok{batters %>%}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(dat, }\DataTypeTok{by =} \StringTok{"playerID"}\NormalTok{)}
+
+\CommentTok{# シーズン中に移籍すると, データが別の行になります. }
+\CommentTok{# 欲しいのは年度別の成績なので, 年度が同じなら成績はマージします}
+\CommentTok{# 移籍はなかったことにします.}
+\NormalTok{batters_data_hit =}\StringTok{ }
+\StringTok{  }\NormalTok{batters_data %>%}
+\StringTok{  }\NormalTok{dplyr::}\KeywordTok{select}\NormalTok{(fullname, yearID, G, AB, H, HR, SO) %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(fullname, yearID) %>%}
+\StringTok{  }\NormalTok{dplyr::}\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{game =} \KeywordTok{sum}\NormalTok{(G), }\DataTypeTok{atbat =} \KeywordTok{sum}\NormalTok{(AB), }\DataTypeTok{hit =} \KeywordTok{sum}\NormalTok{(H), }\DataTypeTok{homerun =} \KeywordTok{sum}\NormalTok{(HR), }\DataTypeTok{so =} \KeywordTok{sum}\NormalTok{(SO))}
+
+\CommentTok{# デビューの年をチェックします}
+\NormalTok{start =}\StringTok{ }\NormalTok{batters_data_hit %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(fullname) %>%}\StringTok{ }
+\StringTok{  }\NormalTok{dplyr::}\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{start =} \KeywordTok{min}\NormalTok{(yearID)) }
+
+\CommentTok{# 最近の選手かどうか. 1975以降かどうかで場合分け}
+\NormalTok{batters_data_hit =}\StringTok{ }
+\StringTok{  }\NormalTok{batters_data_hit %>%}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(start, }\DataTypeTok{by=}\StringTok{"fullname"}\NormalTok{) %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{recent =} \KeywordTok{ifelse}\NormalTok{(start >}\StringTok{ }\DecValTok{1970}\NormalTok{, }\StringTok{"recent"}\NormalTok{, }\StringTok{"old"}\NormalTok{)) }
+
+\CommentTok{# できたデータ}
+\KeywordTok{head}\NormalTok{(batters_data_hit) %>%}\StringTok{ }\KeywordTok{xtable}\NormalTok{() %>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{type=}\StringTok{"html"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+fullname
+
+yearID
+
+game
+
+atbat
+
+hit
+
+homerun
+
+so
+
+start
+
+recent
+
+1
+
+Al Kaline
+
+1953
+
+30
+
+28
+
+7
+
+1
+
+5
+
+1953
+
+old
+
+2
+
+Al Kaline
+
+1954
+
+138
+
+504
+
+139
+
+4
+
+45
+
+1953
+
+old
+
+3
+
+Al Kaline
+
+1955
+
+152
+
+588
+
+200
+
+27
+
+57
+
+1953
+
+old
+
+4
+
+Al Kaline
+
+1956
+
+153
+
+617
+
+194
+
+27
+
+55
+
+1953
+
+old
+
+5
+
+Al Kaline
+
+1957
+
+149
+
+577
+
+170
+
+23
+
+38
+
+1953
+
+old
+
+6
+
+Al Kaline
+
+1958
+
+146
+
+543
+
+170
+
+16
+
+47
+
+1953
+
+old
+
+通算成績の積み上げの様子を見てみます.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# ひたすらcumsumします}
+\NormalTok{career_data =}
+\StringTok{  }\NormalTok{batters_data_hit %>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(fullname) %>%}
+\StringTok{  }\NormalTok{dplyr::}\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{yearID =} \NormalTok{yearID, }
+                   \DataTypeTok{careerHIT=} \KeywordTok{cumsum}\NormalTok{(hit),}
+                   \DataTypeTok{careerHR =} \KeywordTok{cumsum}\NormalTok{(homerun), }
+                   \DataTypeTok{careerSO =} \KeywordTok{cumsum}\NormalTok{(so), }
+                   \DataTypeTok{careerGAME=}\KeywordTok{cumsum}\NormalTok{(game), }
+                   \DataTypeTok{recent =} \NormalTok{recent}
+                   \NormalTok{)}
+\CommentTok{# できたデータ}
+\KeywordTok{head}\NormalTok{(career_data) %>%}\StringTok{ }\KeywordTok{xtable}\NormalTok{() %>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{type=}\StringTok{"html"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+fullname
+
+yearID
+
+careerHIT
+
+careerHR
+
+careerSO
+
+careerGAME
+
+recent
+
+1
+
+Al Kaline
+
+1953
+
+7
+
+1
+
+5
+
+30
+
+old
+
+2
+
+Al Kaline
+
+1954
+
+146
+
+5
+
+50
+
+168
+
+old
+
+3
+
+Al Kaline
+
+1955
+
+346
+
+32
+
+107
+
+320
+
+old
+
+4
+
+Al Kaline
+
+1956
+
+540
+
+59
+
+162
+
+473
+
+old
+
+5
+
+Al Kaline
+
+1957
+
+710
+
+82
+
+200
+
+622
+
+old
+
+6
+
+Al Kaline
+
+1958
+
+880
+
+98
+
+247
+
+768
+
+old
+
+\begin{Shaded}
+\begin{Highlighting}[]
+
+\CommentTok{# hPlotで可視化してみる}
+\NormalTok{hp2 =}\StringTok{ }\KeywordTok{hPlot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{career_data, }\DataTypeTok{x=}\StringTok{"yearID"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"careerHIT"}\NormalTok{, }\DataTypeTok{group =} \StringTok{"fullname"}\NormalTok{, }\DataTypeTok{type=}\StringTok{"line"}\NormalTok{)                  }
+\NormalTok{hp2$}\KeywordTok{chart}\NormalTok{(}\DataTypeTok{forceY =} \StringTok{"#![0]!#"}\NormalTok{)}
+\NormalTok{hp2$}\KeywordTok{show}\NormalTok{(}\StringTok{"iframesrc"}\NormalTok{, }\DataTypeTok{cdn =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+これは通算ヒット数の積み上げの様子です. 1970年代以降に,
+レジェンドプレーヤーが固まっているように見えますね.
+
+割と最近の選手の成績だけ見てみると,
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data_recent =}\StringTok{ }\NormalTok{career_data %>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(recent ==}\StringTok{ "recent"}\NormalTok{) }
+\NormalTok{hp =}\StringTok{ }\KeywordTok{hPlot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{data_recent, }\DataTypeTok{x=}\StringTok{"yearID"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"careerHIT"}\NormalTok{, }\DataTypeTok{group=}\StringTok{"fullname"}\NormalTok{, }\DataTypeTok{type=}\StringTok{"line"}\NormalTok{) }
+\NormalTok{hp$}\KeywordTok{show}\NormalTok{(}\StringTok{"iframesrc"}\NormalTok{, }\DataTypeTok{cdn =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+こんな感じです.
+
+ホームラン数も見たいです.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hp2 =}\StringTok{ }\KeywordTok{hPlot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{career_data, }\DataTypeTok{x=}\StringTok{"yearID"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"careerHR"}\NormalTok{, }\DataTypeTok{group =} \StringTok{"fullname"}\NormalTok{, }\DataTypeTok{type=}\StringTok{"line"}\NormalTok{)                  }
+\NormalTok{hp2$}\KeywordTok{chart}\NormalTok{(}\DataTypeTok{forceY =} \StringTok{"#![0]!#"}\NormalTok{)}
+\NormalTok{hp2$}\KeywordTok{show}\NormalTok{(}\StringTok{"iframesrc"}\NormalTok{, }\DataTypeTok{cdn =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+1940年台に何かが起きていることが分かります. 優秀な打者が増えていますし,
+ホームランの数も劇的に増えています.
+
+三振の数も見ます.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hp2 =}\StringTok{ }\KeywordTok{hPlot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{career_data, }\DataTypeTok{x=}\StringTok{"yearID"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"careerSO"}\NormalTok{, }\DataTypeTok{group =} \StringTok{"fullname"}\NormalTok{, }\DataTypeTok{type=}\StringTok{"line"}\NormalTok{)                  }
+\NormalTok{hp2$}\KeywordTok{chart}\NormalTok{(}\DataTypeTok{forceY =} \StringTok{"#![0]!#"}\NormalTok{)}
+\NormalTok{hp2$}\KeywordTok{show}\NormalTok{(}\StringTok{"iframesrc"}\NormalTok{, }\DataTypeTok{cdn =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+古いデータには欠損があるみたいですね. 最近の選手だけ見ます
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hp =}\StringTok{ }\KeywordTok{hPlot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{data_recent, }\DataTypeTok{x=}\StringTok{"yearID"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"careerSO"}\NormalTok{, }\DataTypeTok{group=}\StringTok{"fullname"}\NormalTok{, }\DataTypeTok{type=}\StringTok{"line"}\NormalTok{) }
+\NormalTok{hp$}\KeywordTok{show}\NormalTok{(}\StringTok{"iframesrc"}\NormalTok{, }\DataTypeTok{cdn =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+一人半端ない人がいますね\ldots{}
+
+トニー・グウィン.
+http://ja.wikipedia.org/wiki/\%E3\%83\%88\%E3\%83\%8B\%E3\%83\%BC\%E3\%83\%BB\%E3\%82\%B0\%E3\%82\%A6\%E3\%82\%A3\%E3\%83\%B3
+
+``通算の打数/三振比率21.4という数字はバッティングスタイルを比較されるイチロー(約10)と比べても倍以上高い''
+
+ひいい
+
+以上です.
+
+\end{document}

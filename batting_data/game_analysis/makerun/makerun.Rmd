@@ -1,27 +1,37 @@
-期待打点の集計
+1打席で生成する打点の平均値
 ========================================================
 ```{r global_option, echo=FALSE, error=FALSE, warning=FALSE, results='asis' }
 opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE, results='asis')
 ```
+
+## 勝負強さとは
+
 勝負強さが知りたいです. 点をとってくれる打者を評価したいです.
-勝負強さの指標である得点圏打率には, 打点が反映されていません. 
-しかし,　生の打点の数字は, 打順に依存します.
+
+勝負強さの指標としては, 得点圏打率があげられると思います. 
+
+しかし, 得点圏打率には, 打点が反映されていません. 
+また, 生の打点の数字は, 打順に依存します.
 勝負強くない打者でも, チャンスの場面でたくさん打席が回ってくれば, 勝手に打点が上がっていきます. 
 
+新しい指標が必要だと思っています. 
 
-ここで, ランナー状況, アウトカウント別に, 打点の期待値を計算してみました. 
+## 期待打点
+
+なので, ランナー状況, アウトカウント別に, 打点の期待値を計算してみました. 
 
 たとえば,
 
-「1アウト2, 3塁で迎えた打席では何点生まれるのか」
+「1アウト2, 3塁で迎えた打席では何点生まれることが期待できるか」
 
 などの集計を行った, ということです. 
 
 そして, 各バッターが, 各打席で期待打点をどれくらい上回ったか...という計算を行うことによって,
 得点能力が分かりませんかね? 
 
-ちょっとやってみます. まだ途中ですけど. 
+ちょっとやってみます. 
 
+## 集計
 データ読み込み. 2013年の全打席結果.
 ```{r}
 library(data.table)
@@ -33,15 +43,17 @@ file = paste("../../../../data/all", year, ".csv", sep="")
 dat = fread(file)
 names = fread("../names.csv", header = FALSE) %>% unlist
 dat %>% setnames(names)
+
+dat
 ```
 
 ランナー状況を確認. "100"なら, ランナー3塁です. 
-各バッターについて, アウトカウントとランナー状況別, 打席数と挙げた打点を集計.
+各バッターについて, アウトカウントとランナー状況別, 打席数と挙げた打点(RBI)を集計.
 ```{r}
 dat_rbi = 
   dat %>% 
   #dplyr::filter(AB_FL == "T") %>% 
-  mutate(runner = (BASE1_RUN_ID != "")*1 + (BASE2_RUN_ID != "")*10 + (BASE3_RUN_ID != "")*100) %>% 
+  mutate(runner = (BASE3_RUN_ID != "")*100 + (BASE2_RUN_ID != "")*10 + (BASE1_RUN_ID != "")*1) %>% 
   mutate(runner = as.integer(runner)) %>%
   select(BAT_ID, OUTS_CT, runner, RBI_CT) %>%
   group_by(BAT_ID, OUTS_CT, runner) %>% 
@@ -49,8 +61,8 @@ dat_rbi =
 
 dat_rbi %>% head %>% xtable %>% print("html")
 ```
-まずは全体平均. 
-ランナー状況ごとに打点を計算. 
+まずは全バッターで平均をとります. 
+ランナー状況ごとにあげた打点を集計.
 ```{r}
 dat_rbi_all = 
   dat_rbi %>%
@@ -76,4 +88,62 @@ dat_rbi_all %>%
 1アウトなら, ゲッツーで終わっちゃいますもんね. 
 0アウトなら, ゲッツーの間に1点は入ります. 
 
-つづきます. 
+
+## 本当に差があるといっていいのか?
+
+本当に1アウト満塁のほうが平均打点が高いのか... について検定します. 
+
+```{r}
+dat_rbi_atbat = 
+  dat %>% 
+  #dplyr::filter(AB_FL == "T") %>% 
+  mutate(runner = (BASE1_RUN_ID != "")*1 + (BASE2_RUN_ID != "")*10 + (BASE3_RUN_ID != "")*100) %>% 
+  mutate(runner = as.integer(runner)) %>%
+  select(BAT_ID, OUTS_CT, runner, RBI_CT) %>%
+  group_by(OUTS_CT, runner, RBI_CT, add = FALSE) %>% 
+  dplyr::summarise(atbat = n())
+
+dat_rbi_atbat_fullbase = 
+  dat_rbi_atbat %>% 
+  dplyr::filter(runner == 111, OUTS_CT < 2)
+dat_rbi_atbat_fullbase %>% 
+  xtable %>% print("html")
+```
+
+0アウト, 1アウトで得られた打点ベクトルを作って, 
+wilcox.testをかけてみます. 平均の差があるかどうか. 
+```{r}
+noout_fullbase = 
+  dat_rbi_atbat_fullbase %>%
+  dplyr::filter(OUTS_CT == 0) %>% 
+  do(vec = rep(RBI_CT, atbat)) %>% 
+  dplyr::summarise(vec = vec) %>% 
+  unlist 
+oneout_fullbase = 
+  dat_rbi_atbat_fullbase %>%
+  dplyr::filter(OUTS_CT == 1) %>% 
+  do(vec = rep(RBI_CT, atbat)) %>% 
+  dplyr::summarise(vec = vec) %>% 
+  unlist
+
+noout_fullbase %>% table %>% xtable %>% print("html")
+oneout_fullbase %>% table %>% xtable %>% print("html")
+```
+ここのコードがダサいですね...
+
+次. ウィルコックスの順位和検定をかけます.
+```{r results='markup'}
+wilcox.test(noout_fullbase, oneout_fullbase, conf.int = TRUE)
+```
+0アウト満塁と1アウト満塁. 
+平均に差がない, という帰無仮説を棄却できませんでした(p-valueは0.18).
+
+ありがとうございました.
+
+## 今後の予定
+打者ごとに期待打点をどの程度上回ったか,についてはまだ計算していません. 
+次にやります. 
+
+また, 今は2013年のデータだけを使っていますが, 
+他の年のデータも合併したものでチェックしてもいい気がします.
+

@@ -1,0 +1,462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+</head>
+<body>
+<h1 id="mlb-scouting-report-fastball-count-2013">MLB Scouting Report: Fastball-Count (2013)</h1>
+<p>Fastball-count is the pitching-count such that the fastball is often thrown.</p>
+<p>Now, visualize the fastball-count of some pitchers by using R and pitch-f/x data.</p>
+<p>The code and data can be obtained from github (fastball.Rmd)</p>
+<p>https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/rchart</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(data.table)
+<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(rCharts)
+<span class="kw">library</span>(xtable)
+
+
+<span class="co"># select the column used for this document</span>
+col_used =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;pitch_type&quot;</span>, <span class="st">&quot;type&quot;</span>, <span class="st">&quot;count&quot;</span>, <span class="st">&quot;pitcher_name&quot;</span>, <span class="st">&quot;sv_id&quot;</span>)
+<span class="co"># dat = fread(paste(getwd(), &quot;/pitch_fx/2013.csv&quot;, sep=&quot;&quot;), </span>
+<span class="co">#             select = col_used, showProgress=FALSE) </span>
+dat =<span class="st"> </span><span class="kw">fread</span>(<span class="st">&quot;pitchfx_data_for_plot.csv&quot;</span>)
+
+<span class="co"># remove the row includes &quot;NA</span>
+<span class="co"># remove the row of Pre-Season Game</span>
+data =<span class="st"> </span>dat %&gt;%<span class="st"> </span><span class="kw">filter</span>(pitch_type!=<span class="st">&quot;NA&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">substr</span>(sv_id, <span class="dv">4</span>,<span class="dv">4</span>)) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(month &gt;=<span class="st"> </span><span class="dv">4</span>)
+
+fastball =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;FF&quot;</span>, <span class="st">&quot;FT&quot;</span>, <span class="st">&quot;FC&quot;</span>, <span class="st">&quot;FS&quot;</span>)
+
+<span class="co"># check the fastball-ratio on each Ball/Strike count</span>
+data_fast =<span class="st"> </span>data %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">FAST_FL =</span> <span class="kw">ifelse</span>(pitch_type %in%<span class="st"> </span>fastball, <span class="st">&quot;T&quot;</span>, <span class="st">&quot;F&quot;</span>)) 
+
+<span class="co"># check the data-table</span>
+<span class="co"># data_fast %&gt;% head %&gt;% xtable %&gt;% print(type=&quot;html&quot;)</span>
+data_fast %&gt;%<span class="st"> </span>head %&gt;%<span class="st"> </span><span class="kw">kable</span>(<span class="dt">format=</span><span class="st">&quot;html&quot;</span>)</code></pre>
+<table>
+ <thead>
+  <tr>
+   <th> 
+pitch_type
+</th>
+   <th> 
+sv_id
+</th>
+   <th> 
+type
+</th>
+   <th> 
+count
+</th>
+   <th> 
+pitcher_name
+</th>
+   <th> 
+month
+</th>
+   <th> 
+FAST_FL
+</th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td> 
+FF
+</td>
+   <td> 
+130401_131510
+</td>
+   <td> 
+S
+</td>
+   <td> 
+0-0
+</td>
+   <td> 
+Clayton Kershaw
+</td>
+   <td> 
+4
+</td>
+   <td> 
+T
+</td>
+  </tr>
+  <tr>
+   <td> 
+CU
+</td>
+   <td> 
+130401_131526
+</td>
+   <td> 
+X
+</td>
+   <td> 
+0-1
+</td>
+   <td> 
+Clayton Kershaw
+</td>
+   <td> 
+4
+</td>
+   <td> 
+F
+</td>
+  </tr>
+  <tr>
+   <td> 
+FF
+</td>
+   <td> 
+130401_131606
+</td>
+   <td> 
+B
+</td>
+   <td> 
+0-0
+</td>
+   <td> 
+Clayton Kershaw
+</td>
+   <td> 
+4
+</td>
+   <td> 
+T
+</td>
+  </tr>
+  <tr>
+   <td> 
+FF
+</td>
+   <td> 
+130401_131619
+</td>
+   <td> 
+S
+</td>
+   <td> 
+1-0
+</td>
+   <td> 
+Clayton Kershaw
+</td>
+   <td> 
+4
+</td>
+   <td> 
+T
+</td>
+  </tr>
+  <tr>
+   <td> 
+CU
+</td>
+   <td> 
+130401_131652
+</td>
+   <td> 
+B
+</td>
+   <td> 
+1-1
+</td>
+   <td> 
+Clayton Kershaw
+</td>
+   <td> 
+4
+</td>
+   <td> 
+F
+</td>
+  </tr>
+  <tr>
+   <td> 
+FF
+</td>
+   <td> 
+130401_131712
+</td>
+   <td> 
+B
+</td>
+   <td> 
+2-1
+</td>
+   <td> 
+Clayton Kershaw
+</td>
+   <td> 
+4
+</td>
+   <td> 
+T
+</td>
+  </tr>
+</tbody>
+</table>
+
+
+
+<h3 id="section">------------------------------------------------------------------</h3>
+<p>Function &quot;fast_rate&quot; calculates the pitcher's fastball-ratio of each Ball/Strike count and visualizes them</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># output the fastball-ratio badata_plotlot of &quot;pitcher&quot;</span>
+<span class="co"># default : &quot;Hiroki Kuroda&quot;</span>
+fast_rate =<span class="st"> </span>function(<span class="dt">pitcher =</span> <span class="st">&quot;Hiroki Kuroda&quot;</span>){
+  <span class="co"># calculate fastball/non-fastball ratio </span>
+  data_count =<span class="st"> </span>data_fast %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(pitcher_name ==<span class="st"> </span>pitcher) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(count) %&gt;%<span class="st"> </span>
+<span class="st">    </span>dplyr::<span class="kw">summarise</span>(<span class="dt">fast =</span> <span class="kw">sum</span>(FAST_FL ==<span class="st"> &quot;T&quot;</span>), 
+                     <span class="dt">non_fast =</span> <span class="kw">sum</span>(FAST_FL ==<span class="st"> &quot;F&quot;</span>)) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">FAST =</span> fast /<span class="st"> </span>(fast+non_fast), 
+           <span class="dt">non_FAST =</span> non_fast /<span class="st"> </span>(fast+non_fast)) %&gt;%<span class="st"> </span>
+<span class="st">    </span>dplyr::<span class="kw">select</span>(count, FAST, non_FAST) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">melt</span>(<span class="dt">id.var =</span> <span class="st">&quot;count&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">setnames</span>(<span class="kw">c</span>(<span class="st">&quot;count&quot;</span>, <span class="st">&quot;pitch&quot;</span>, <span class="st">&quot;freq&quot;</span>)) %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">count =</span> <span class="kw">paste</span>(count))
+  
+  <span class="co"># make plot by using ggplot2</span>
+  gp =<span class="st"> </span><span class="kw">ggplot</span>(data_count, <span class="kw">aes</span>(<span class="dt">x =</span> count,  <span class="dt">y=</span>freq, <span class="dt">fill=</span>pitch)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;count&quot;</span>) +<span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;frequency&quot;</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Fastball-ratio&quot;</span>) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">20</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>))
+  <span class="co"># make plot by using polychart.js</span>
+  rp =<span class="st"> </span><span class="kw">rPlot</span>(freq~count, <span class="dt">data =</span> data_count, <span class="dt">color=</span><span class="st">&quot;pitch&quot;</span>, <span class="dt">type=</span><span class="st">&quot;bar&quot;</span>) 
+    
+  <span class="kw">return</span>(rp)
+}
+  </code></pre>
+<h3 id="fastball-ratio-of-hiroki-kuroda-nyy.">Fastball-ratio of Hiroki Kuroda (NYY).</h3>
+<pre class="sourceCode r"><code class="sourceCode r">plot =<span class="st"> </span><span class="kw">fast_rate</span>(<span class="st">&quot;Hiroki Kuroda&quot;</span>)
+plot$<span class="kw">show</span>(<span class="st">&quot;iframesrc&quot;</span>, <span class="dt">cdn =</span> <span class="ot">TRUE</span>)</code></pre>
+<iframe srcdoc='
+&lt;!doctype HTML&gt;
+&lt;meta charset = &#039;utf-8&#039;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    
+    &lt;script src=&#039;http://ramnathv.github.io/rCharts/libraries/widgets/polycharts/js/polychart2.standalone.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    
+    &lt;style&gt;
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    &lt;/style&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#039;chart11eb26daf83f&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    
+    &lt;script type=&#039;text/javascript&#039;&gt;
+    var chartParams = {
+ &quot;dom&quot;: &quot;chart11eb26daf83f&quot;,
+&quot;width&quot;:    800,
+&quot;height&quot;:    400,
+&quot;layers&quot;: [
+ {
+ &quot;x&quot;: &quot;count&quot;,
+&quot;y&quot;: &quot;freq&quot;,
+&quot;data&quot;: {
+ &quot;count&quot;: [ &quot;0-0&quot;, &quot;0-1&quot;, &quot;0-2&quot;, &quot;1-0&quot;, &quot;1-1&quot;, &quot;1-2&quot;, &quot;2-0&quot;, &quot;2-1&quot;, &quot;2-2&quot;, &quot;3-0&quot;, &quot;3-1&quot;, &quot;3-2&quot;, &quot;0-0&quot;, &quot;0-1&quot;, &quot;0-2&quot;, &quot;1-0&quot;, &quot;1-1&quot;, &quot;1-2&quot;, &quot;2-0&quot;, &quot;2-1&quot;, &quot;2-2&quot;, &quot;3-0&quot;, &quot;3-1&quot;, &quot;3-2&quot; ],
+&quot;pitch&quot;: [ &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot; ],
+&quot;freq&quot;: [ 0.17032, 0.36019, 0.50336, 0.2082, 0.32402, 0.48026, 0.15888, 0.14035, 0.32886, 0.18182, 0.076923, 0.18978, 0.82968, 0.63981, 0.49664, 0.7918, 0.67598, 0.51974, 0.84112, 0.85965, 0.67114, 0.81818, 0.92308, 0.81022 ] 
+},
+&quot;facet&quot;: null,
+&quot;color&quot;: &quot;pitch&quot;,
+&quot;type&quot;: &quot;bar&quot; 
+} 
+],
+&quot;facet&quot;: [],
+&quot;guides&quot;: [],
+&quot;coord&quot;: [],
+&quot;id&quot;: &quot;chart11eb26daf83f&quot; 
+}
+    _.each(chartParams.layers, function(el){
+        el.data = polyjs.data(el.data)
+    })
+    var graph_chart11eb26daf83f = polyjs.chart(chartParams);
+&lt;/script&gt;
+    
+  &lt;/body&gt;
+&lt;/html&gt;
+' scrolling='no' seamless class='rChart 
+polycharts
+ '
+id=iframe-
+chart11eb26daf83f
+></iframe>
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+<pre class="sourceCode r"><code class="sourceCode r"></code></pre>
+<h3 id="fastball-ratio-of-yu-darvish-tex.">Fastball-ratio of Yu Darvish (TEX).</h3>
+<pre class="sourceCode r"><code class="sourceCode r">plot =<span class="st"> </span><span class="kw">fast_rate</span>(<span class="st">&quot;Yu Darvish&quot;</span>)
+plot$<span class="kw">show</span>(<span class="st">&quot;iframesrc&quot;</span>, <span class="dt">cdn =</span> <span class="ot">TRUE</span>)</code></pre>
+<iframe srcdoc='
+&lt;!doctype HTML&gt;
+&lt;meta charset = &#039;utf-8&#039;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    
+    &lt;script src=&#039;http://ramnathv.github.io/rCharts/libraries/widgets/polycharts/js/polychart2.standalone.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    
+    &lt;style&gt;
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    &lt;/style&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#039;chart11eb2a286052&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    
+    &lt;script type=&#039;text/javascript&#039;&gt;
+    var chartParams = {
+ &quot;dom&quot;: &quot;chart11eb2a286052&quot;,
+&quot;width&quot;:    800,
+&quot;height&quot;:    400,
+&quot;layers&quot;: [
+ {
+ &quot;x&quot;: &quot;count&quot;,
+&quot;y&quot;: &quot;freq&quot;,
+&quot;data&quot;: {
+ &quot;count&quot;: [ &quot;0-0&quot;, &quot;0-1&quot;, &quot;0-2&quot;, &quot;1-0&quot;, &quot;1-1&quot;, &quot;1-2&quot;, &quot;2-0&quot;, &quot;2-1&quot;, &quot;2-2&quot;, &quot;3-0&quot;, &quot;3-1&quot;, &quot;3-2&quot;, &quot;0-0&quot;, &quot;0-1&quot;, &quot;0-2&quot;, &quot;1-0&quot;, &quot;1-1&quot;, &quot;1-2&quot;, &quot;2-0&quot;, &quot;2-1&quot;, &quot;2-2&quot;, &quot;3-0&quot;, &quot;3-1&quot;, &quot;3-2&quot; ],
+&quot;pitch&quot;: [ &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot; ],
+&quot;freq&quot;: [ 0.7331, 0.65714, 0.58929, 0.64722, 0.60504, 0.50746,   0.75, 0.45366, 0.29773, 0.97727, 0.76923, 0.20144, 0.2669, 0.34286, 0.41071, 0.35278, 0.39496, 0.49254,   0.25, 0.54634, 0.70227, 0.022727, 0.23077, 0.79856 ] 
+},
+&quot;facet&quot;: null,
+&quot;color&quot;: &quot;pitch&quot;,
+&quot;type&quot;: &quot;bar&quot; 
+} 
+],
+&quot;facet&quot;: [],
+&quot;guides&quot;: [],
+&quot;coord&quot;: [],
+&quot;id&quot;: &quot;chart11eb2a286052&quot; 
+}
+    _.each(chartParams.layers, function(el){
+        el.data = polyjs.data(el.data)
+    })
+    var graph_chart11eb2a286052 = polyjs.chart(chartParams);
+&lt;/script&gt;
+    
+  &lt;/body&gt;
+&lt;/html&gt;
+' scrolling='no' seamless class='rChart 
+polycharts
+ '
+id=iframe-
+chart11eb2a286052
+></iframe>
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+
+<h3 id="fastball-ratio-of-clayton-kershaw-lad.">Fastball-ratio of Clayton Kershaw (LAD).</h3>
+<pre class="sourceCode r"><code class="sourceCode r">plot =<span class="st"> </span><span class="kw">fast_rate</span>(<span class="st">&quot;Clayton Kershaw&quot;</span>)
+plot$<span class="kw">show</span>(<span class="st">&quot;iframesrc&quot;</span>, <span class="dt">cdn =</span> <span class="ot">TRUE</span>)</code></pre>
+<iframe srcdoc='
+&lt;!doctype HTML&gt;
+&lt;meta charset = &#039;utf-8&#039;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    
+    &lt;script src=&#039;http://ramnathv.github.io/rCharts/libraries/widgets/polycharts/js/polychart2.standalone.js&#039; type=&#039;text/javascript&#039;&gt;&lt;/script&gt;
+    
+    &lt;style&gt;
+    .rChart {
+      display: block;
+      margin-left: auto; 
+      margin-right: auto;
+      width: 800px;
+      height: 400px;
+    }  
+    &lt;/style&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#039;chart11eb7fecdc26&#039; class=&#039;rChart polycharts&#039;&gt;&lt;/div&gt;  
+    
+    &lt;script type=&#039;text/javascript&#039;&gt;
+    var chartParams = {
+ &quot;dom&quot;: &quot;chart11eb7fecdc26&quot;,
+&quot;width&quot;:    800,
+&quot;height&quot;:    400,
+&quot;layers&quot;: [
+ {
+ &quot;x&quot;: &quot;count&quot;,
+&quot;y&quot;: &quot;freq&quot;,
+&quot;data&quot;: {
+ &quot;count&quot;: [ &quot;0-0&quot;, &quot;0-1&quot;, &quot;0-2&quot;, &quot;1-0&quot;, &quot;1-1&quot;, &quot;1-2&quot;, &quot;2-0&quot;, &quot;2-1&quot;, &quot;2-2&quot;, &quot;3-0&quot;, &quot;3-1&quot;, &quot;3-2&quot;, &quot;0-0&quot;, &quot;0-1&quot;, &quot;0-2&quot;, &quot;1-0&quot;, &quot;1-1&quot;, &quot;1-2&quot;, &quot;2-0&quot;, &quot;2-1&quot;, &quot;2-2&quot;, &quot;3-0&quot;, &quot;3-1&quot;, &quot;3-2&quot; ],
+&quot;pitch&quot;: [ &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot;, &quot;non_FAST&quot; ],
+&quot;freq&quot;: [ 0.80199, 0.50429, 0.43284, 0.69497, 0.44762, 0.29444, 0.96296, 0.63699, 0.45614, 0.95833, 0.95082, 0.71523, 0.19801, 0.49571, 0.56716, 0.30503, 0.55238, 0.70556, 0.037037, 0.36301, 0.54386, 0.041667, 0.04918, 0.28477 ] 
+},
+&quot;facet&quot;: null,
+&quot;color&quot;: &quot;pitch&quot;,
+&quot;type&quot;: &quot;bar&quot; 
+} 
+],
+&quot;facet&quot;: [],
+&quot;guides&quot;: [],
+&quot;coord&quot;: [],
+&quot;id&quot;: &quot;chart11eb7fecdc26&quot; 
+}
+    _.each(chartParams.layers, function(el){
+        el.data = polyjs.data(el.data)
+    })
+    var graph_chart11eb7fecdc26 = polyjs.chart(chartParams);
+&lt;/script&gt;
+    
+  &lt;/body&gt;
+&lt;/html&gt;
+' scrolling='no' seamless class='rChart 
+polycharts
+ '
+id=iframe-
+chart11eb7fecdc26
+></iframe>
+<style>iframe.rChart{ width: 100%; height: 400px;}</style>
+
+<pre class="sourceCode r"><code class="sourceCode r"></code></pre>
+</body>
+</html>
