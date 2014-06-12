@@ -10,6 +10,8 @@
 
 ランナーを出してからのゲッツーはダメです. 三者が凡退して三者凡退ですからね.  
 
+# データ
+
 データの読み込み. 2013年のメジャーリーグのデータを利用します. 
 
 ```r
@@ -29,6 +31,7 @@ name = fread("../names.csv", header =FALSE)
 dat %>% setnames(unlist(name))
 ```
 
+# 集計
 各試合位, 各イニングごとに, 打席に立った打者と,得点を集計します. 
 
 
@@ -142,6 +145,9 @@ dat_sanbon_score
 ## Variables not shown: sanbon (lgl), after_sanbon (lgl), score (dbl)
 ```
 
+
+# 集計結果
+
 平均点を出しましょう. 1回の攻撃で何点獲ってくれるか.
 
 ```r
@@ -203,7 +209,3 @@ dat_sanbon_score %>%
 
 
 以上です. 
-
-
-
-
