@@ -3,6 +3,8 @@
 
 Rでメジャーリーグのデータ解析をします.
 
+解析結果はこちら
+
 http://gg-hogehoge.hatenablog.com
 
 ディレクトリがたくさんあります. 
