@@ -31,19 +31,13 @@ dat %>% setnames(unlist(name))
 
 まずは, イニング別得点.
 ```{r}
-
-## 得点推移からイニングスコア計算する用のdiff
-diff0 = function(x){
-  return(diff(c(0,x)))
-}
-
 dat_inningscore = 
   dat %>% 
   group_by(GAME_ID, INN_CT, BAT_HOME_ID) %>% 
   dplyr::summarise(HOME_SCORE_CT = max(HOME_SCORE_CT), 
                    AWAY_SCORE_CT = max(AWAY_SCORE_CT)) %>% 
   group_by(GAME_ID) %>% 
-  dplyr::mutate(away = diff0(AWAY_SCORE_CT), home = diff0(HOME_SCORE_CT))
+  dplyr::mutate(away = diff(c(0,AWAY_SCORE_CT)), home = diff(c(0,HOME_SCORE_CT)))
 dat_inningscore %>% head(9)
 ```
 

@@ -23,7 +23,7 @@ dat = fread("../../../../data/all2013.csv")
 ```
 
 ```
-## Read 78.6% of 190907 rowsRead 190907 rows and 97 (of 97) columns from 0.076 GB file in 00:00:03
+## Read 94.3% of 190907 rowsRead 190907 rows and 97 (of 97) columns from 0.076 GB file in 00:00:03
 ```
 
 ```r

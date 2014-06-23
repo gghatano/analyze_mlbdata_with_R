@@ -22,7 +22,7 @@ dat = fread("../../../../data/all2013.csv")
 ```
 
 ```
-## Read 99.5% of 190907 rowsRead 190907 rows and 97 (of 97) columns from 0.076 GB file in 00:00:03
+## Read 83.8% of 190907 rowsRead 190907 rows and 97 (of 97) columns from 0.076 GB file in 00:00:03
 ```
 
 ```r
@@ -38,18 +38,13 @@ dat %>% setnames(unlist(name))
 まずは, イニング別得点.
 
 ```r
-## 得点推移からイニングスコア計算する用のdiff
-diff0 = function(x){
-  return(diff(c(0,x)))
-}
-
 dat_inningscore = 
   dat %>% 
   group_by(GAME_ID, INN_CT, BAT_HOME_ID) %>% 
   dplyr::summarise(HOME_SCORE_CT = max(HOME_SCORE_CT), 
                    AWAY_SCORE_CT = max(AWAY_SCORE_CT)) %>% 
   group_by(GAME_ID) %>% 
-  dplyr::mutate(away = diff0(AWAY_SCORE_CT), home = diff0(HOME_SCORE_CT))
+  dplyr::mutate(away = diff(c(0,AWAY_SCORE_CT)), home = diff(c(0,HOME_SCORE_CT)))
 dat_inningscore %>% head(9)
 ```
 
