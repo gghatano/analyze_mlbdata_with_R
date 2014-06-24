@@ -970,11 +970,13 @@ library(dplyr)
 
 <pre><code class="r">library(reshape2)
 library(xtable)
-dat = fread(&quot;../../../../data/all2013.csv&quot;)
+year = 2013
+file = paste(&quot;../../../../data/all&quot;, year, &quot;.csv&quot;, sep=&quot;&quot;)
+dat = fread(file)
 </code></pre>
 
 <pre><code>## 
-Read 99.5% of 190907 rows
+Read 94.3% of 190907 rows
 Read 190907 rows and 97 (of 97) columns from 0.076 GB file in 00:00:03
 </code></pre>
 
@@ -982,21 +984,22 @@ Read 190907 rows and 97 (of 97) columns from 0.076 GB file in 00:00:03
 dat %&gt;% setnames(name)
 </code></pre>
 
-<p>試合別に, home/awayのどちらが勝ったかを調べる. </p>
+<p>試合別に, home/awayのどちらが勝ったかを調べる. 
+とりあえず引き分けはホームの負けとしておく.</p>
 
 <pre><code class="r">dat_win = 
   dat %&gt;% 
   group_by(GAME_ID) %&gt;%
-  dplyr::summarise(home = tail(HOME_SCORE_CT,1), 
-                   away = tail(AWAY_SCORE_CT,1)) %&gt;% 
-  mutate(home_win = ifelse(home &gt; away, 1,0)) %&gt;% 
-  select(GAME_ID, home_win)
+  dplyr::summarise(HOME_SCORE = tail(HOME_SCORE_CT,1), 
+                   AWAY_SCORE = tail(AWAY_SCORE_CT,1)) %&gt;% 
+  mutate(HOME_WIN = ifelse(HOME_SCORE&gt;AWAY_SCORE, 1, 0) )%&gt;% 
+  select(GAME_ID, HOME_WIN)
 dat_win
 </code></pre>
 
 <pre><code>## Source: local data table [2,431 x 2]
 ## 
-##         GAME_ID home_win
+##         GAME_ID HOME_WIN
 ## 1  ANA201304090        0
 ## 2  ANA201304100        0
 ## 3  ANA201304110        0
@@ -1014,26 +1017,76 @@ dat_win
 
 <pre><code class="r">dat_select_for_wp = 
   dat %&gt;% 
-  mutate(runners = (BASE3_RUN_ID!=&quot;&quot;)*100 + (BASE2_RUN_ID!=&quot;&quot;)*10 + (BASE1_RUN_ID!=&quot;&quot;)*1) %&gt;% 
-  mutate(home_away = HOME_SCORE_CT - AWAY_SCORE_CT) %&gt;% 
-  select(GAME_ID, INN_CT, BAT_HOME_ID, OUTS_CT, runners, home_away)
+  mutate(RUNNERS= (BASE3_RUN_ID!=&quot;&quot;)*100 + (BASE2_RUN_ID!=&quot;&quot;)*10 + (BASE1_RUN_ID!=&quot;&quot;)*1) %&gt;% 
+  mutate(HOME_AWAY = HOME_SCORE_CT - AWAY_SCORE_CT) %&gt;% 
+  select(GAME_ID, INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY)
 
-dat_for_wp
+dat_select_for_wp
 </code></pre>
 
-<pre><code>## Error: オブジェクト &#39;dat_for_wp&#39; がありません
+<pre><code>##              GAME_ID INN_CT BAT_HOME_ID OUTS_CT RUNNERS HOME_AWAY
+##      1: ANA201304090      1           0       0       0         0
+##      2: ANA201304090      1           0       1       0         0
+##      3: ANA201304090      1           0       2       0         0
+##      4: ANA201304090      1           0       2       1         0
+##      5: ANA201304090      1           0       2      11         0
+##     ---                                                          
+## 190903: WAS201309222      9           1       0       0         0
+## 190904: WAS201309222      9           1       0      10         0
+## 190905: WAS201309222      9           1       1      10         0
+## 190906: WAS201309222      9           1       1      11         0
+## 190907: WAS201309222      9           1       1     110         0
 </code></pre>
 
 <p>結合する. </p>
 
 <pre><code class="r">dat_for_wp =
-  dat_select_for_wp %&gt;% 
-  dplyr::inner_join(dat_win, by = &quot;GAME_ID&quot;) %&gt;% 
-  group_by(INN_CT, BAT_HOME_ID, OUTS_CT, runners, home_away) %&gt;%
-  dplyr::summarise(home_wins = sum(home_win), games = n()) %&gt;%
-  mutate(home_loses = games - home_wins)
+  dat_select_for_wp%&gt;% 
+  merge(dat_win, by = &quot;GAME_ID&quot;) %&gt;%
+  group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %&gt;%
+  dplyr::summarise(HOME_LOSES = sum(HOME_WIN), GAMES = n()) %&gt;%
+  mutate(HOME_WINS = GAMES - HOME_LOSES) %&gt;% 
+  mutate(year = year)
+dat_for_wp
+</code></pre>
 
-## ホームゲームアドバンテージ
+<pre><code>## Source: local data table [7,853 x 9]
+## Groups: INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS
+## 
+##    INN_CT BAT_HOME_ID OUTS_CT RUNNERS HOME_AWAY HOME_LOSES GAMES HOME_WINS
+## 1       1           0       0       0        -5          0     1         1
+## 2       1           0       0       0        -4          1     6         5
+## 3       1           0       0       0        -3          1     4         3
+## 4       1           0       0       0        -2          6    16        10
+## 5       1           0       0       0        -1         11    48        37
+## 6       1           0       0       0         0       1069  2432      1363
+## 7       1           0       0       1        -5          0     1         1
+## 8       1           0       0       1        -4          1     1         0
+## 9       1           0       0       1        -2          1     8         7
+## 10      1           0       0       1        -1          7    21        14
+## ..    ...         ...     ...     ...       ...        ...   ...       ...
+## Variables not shown: year (dbl)
+</code></pre>
+
+<pre><code class="r">## ホームゲームアドバンテージ
+dat_for_wp %&gt;% 
+  dplyr::filter(INN_CT == 1 &amp; OUTS_CT == 0 &amp; RUNNERS == 0 &amp; HOME_AWAY==0 &amp; BAT_HOME_ID == 0) %&gt;% 
+  dplyr::mutate(HOME_WIN_RATE = HOME_WINS/GAMES, AWAY_WIN_RATE = HOME_LOSES/GAMES)
+</code></pre>
+
+<pre><code>## Source: local data table [1 x 11]
+## Groups: INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS
+## 
+##   INN_CT BAT_HOME_ID OUTS_CT RUNNERS HOME_AWAY HOME_LOSES GAMES HOME_WINS
+## 1      1           0       0       0         0       1069  2432      1363
+## Variables not shown: year (dbl), HOME_WIN_RATE (dbl), AWAY_WIN_RATE (dbl)
+</code></pre>
+
+<pre><code class="r">## データのサイズ
+dat_for_wp %&gt;% dim
+</code></pre>
+
+<pre><code>## [1] 7853    9
 </code></pre>
 
 </body>
