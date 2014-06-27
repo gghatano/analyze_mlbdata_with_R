@@ -10,6 +10,7 @@ library(data.table)
 library(dplyr)
 library(reshape2)
 library(xtable)
+
 year = 2013
 file = paste("../../../../data/all", year, ".csv", sep="")
 dat = fread(file)
@@ -60,7 +61,9 @@ dat_for_wp %>%
 
 ## データのサイズ
 dat_for_wp %>% dim
+outputFileName = paste("data_for_wp_",year,".csv", sep="")
+write.table(file=outputFileName, x = dat_for_wp, 
+            row.names=FALSE, quote=FALSE)
 ```
-
 
 

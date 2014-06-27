@@ -3,15 +3,14 @@
 Download the data of batting result of MLB from retrosheet.org and transform to CSV file for easy handling.
 
 Raw retrosheet-data is difficult to handle. 
-By using the parsing software: cwevent, 
-well-featured .csv data is generated. 
-To obtain this software, download it the following website:
+By using the parsing software: cwevent, well-featured .csv data is generated. 
+To obtain this software, download it through the following website:
 http://chadwick.sourceforge.net/doc/index.html, 
-or untar chadwick-0.6.3.tar.gz 
+or untar chadwick-0.6.3.tar.gz in this directory.
 
 ### How to use
 
-1. Build the parsing software.
+1. Build the parsing software: cwevent.
 
 Execute the following commands.
 ----------------------------------------
@@ -42,7 +41,7 @@ If you execute the command above, you can obtain all2010.csv, which include
 the data table about all the event in all the game in MLB 2010 season.
 
 The meaning of the column is shown in names.csv. 
-Please combine names.csv and all2010.csv. 
+When you use the data, please combine names.csv and all2010.csv. 
 The following is the example code of R
 
 -----------------------------------------
@@ -75,7 +74,7 @@ Make sure that /usr/local/lib is in your LD_LIBRARY_PATH
 
 Precisely how you do this depends on your shell,
 
-First, check that it's not set (it usually isn't these days)
+First, check whether the LD_LIBRARY_PATH is not set (it usually isn't these days):
 
 echo $LD_LIBRARY_PATH
 
@@ -83,4 +82,6 @@ If it is unset and you're running bash then:
 
 export LD_LIBRARY_PATH=/usr/local/lib
 
+
+reference:
 http://sourceforge.net/p/chadwick/mailman/chadwick-users/
