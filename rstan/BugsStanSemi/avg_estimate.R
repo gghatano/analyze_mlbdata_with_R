@@ -7,11 +7,12 @@ library(ggplot2)
 library(reshape2)
 
 # dat_A20: batting result of first 20 games
-data = fread("dat_before_A20.csv")
+dat = fread("kubo_data.csv")
 sample_size = data$FULLNAME %>% length() 
-hit = data$HITS
+hit = data$HIT
 atbat = data$ATBAT
 
+dat
 # make list for argument 
 data_list = list(N = sample_size, 
                  hit = hit, 
@@ -58,8 +59,9 @@ stan_res = stan(model_code=model_code, data = data_list, iter = 10000)
 ## stan_res_param : estimated value of q_i
 ## stan_res_sigma : estimated value of sigma 
 stan_res_param = as.array(stan_res)[,1,(sample_size+3):(2*sample_size + 2)] 
-stan_res_sigma = as.array(stan_res)[,1,91] 
+stan_res_sigma = as.array(stan_res)[,1,sample_size+1] 
 
+stan_res_param 
 ## Example: make plot of q1
 q1 = stan_res_param[,1]
 qplot(q1, geom="density")
@@ -67,6 +69,7 @@ qplot(stan_res_sigma, geom="density")
 q1 = as.data.frame(q1) 
 
 # histogram of posterior of q1
+
 ggplot(q1) + 
   geom_histogram(aes(x=q1), fill="white", stat="bin", color="black", binwidth=0.01) +
   ggtitle("Histogram of q_1") + 
@@ -90,7 +93,8 @@ stan_res_param_high5 = stan_res_param %>% apply(2, function(x) quantile(x, 0.95)
 stan_res_df = data.frame(median = stan_res_param_median, 
                          low5 = stan_res_param_low5, 
                          high5 = stan_res_param_low5, 
-                         true = data$SEASON_AVG)
+                         true = dat$AVG_SEASON)
+stan_res_df
 
 ## make plot: median vs true value
 ggplot(data = stan_res_df, aes(x=true)) + 
@@ -99,32 +103,35 @@ ggplot(data = stan_res_df, aes(x=true)) +
 
 
 ## join the original dataframe with result of stan 
-data_stan = cbind(data, stan_res_param_median)
-setnames(data_stan, c("BAT_ID", "SEASON_AVG", "ATBAT", "HITS", "MLE", "FULLNAME", "MCMC"))
+
+dat = fread("kubo_data.csv")
+data_stan = cbind(dat, stan_res_param_median)
+data_stan %>% setnames(c("FULLNAME", "ATBAT", "HIT", "MLE", "AVG_SEASON", "MCMC"))
 write.csv(data_stan, "avg_stan.csv", row.names=FALSE, quote=FALSE)
+data_stan
+data
 
 ## make plot of the result of estimation by MLE
-ggplot(data = data_stan , aes(x=SEASON_AVG, y=MLE)) + 
+ggplot(data = data_stan , aes(x=AVG_SEASON, y=MLE)) + 
   geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed") + 
   ggtitle("ESTIMATE SEASON_AVG with MLE") +
   ggsave("MLE.pdf")
 
 ## make plot of the result of estimation by MCMC
-ggplot(data = data_stan , aes(x=SEASON_AVG, y=MCMC)) + 
+ggplot(data = data_stan , aes(x=AVG_SEASON, y=MCMC)) + 
   geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed") + 
   ggtitle("ESTIMATE SEASON_AVG with MCMC") + 
   ggsave("BHM.pdf")
 
-
 ## compare MCMC vs MLE 
 data_stan %>% 
-  dplyr::select(FULLNAME, MLE, SEASON_AVG, MCMC) %>% 
-  reshape2::melt(id.var=c("FULLNAME", "SEASON_AVG")) %>% 
-  ggplot(aes(x=SEASON_AVG, y=value, colour=variable)) + geom_point(size=4, alpha=0.8) +
-  stat_function(fun=function(x) x, linetype="dashed") +
+  dplyr::select(FULLNAME, MLE, AVG_SEASON, MCMC) %>% 
+  reshape2::melt(id.var=c("FULLNAME", "AVG_SEASON")) %>% 
+  ggplot(aes(x=AVG_SEASON, y=value, colour=variable)) + geom_point(size=8, alpha=1.0) +
+  stat_function(fun=function(x) x, linetype="dashed", size=3, color="black") +
   ylab("AVG") + 
   ggtitle("Estimate SEASON_AVG with BHM") +
   ggsave("BHMvsMLE.pdf")
 
-# check the result
+ # check the result
 data_stan
