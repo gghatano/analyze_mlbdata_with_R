@@ -8,9 +8,9 @@ library(reshape2)
 
 # dat_A20: batting result of first 20 games
 dat = fread("kubo_data.csv")
-sample_size = data$FULLNAME %>% length() 
-hit = data$HIT
-atbat = data$ATBAT
+sample_size = dat$FULLNAME %>% length() 
+hit = dat$HIT
+atbat = dat$ATBAT
 
 dat
 # make list for argument 

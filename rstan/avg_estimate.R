@@ -2,15 +2,14 @@
 library(rstan)
 library(data.table)
 library(dplyr)
-library(magrittr)
 library(ggplot2)
 library(reshape2)
 
 # dat_A20: batting result of first 20 games
-data = fread("dat_before_A20.csv")
-sample_size = data$FULLNAME %>% length() 
-hit = data$HITS
-atbat = data$ATBAT
+dat = fread("d.csv")
+sample_size = dat$FULLNAME %>% length() 
+hit = dat$HITS
+atbat = dat$ATBAT
 
 # make list for argument 
 data_list = list(N = sample_size, 
@@ -35,7 +34,7 @@ transformed parameters{
   }
 }
 model{
-  sigma ~ uniform(0.1, 10) ; // 無情報事前分布
+  sigma ~ uniform(0.0, 10) ; // 無情報事前分布
   a ~ normal(0, 10000); // 無情報事前分布
   b ~ normal(0, sigma); // bの事前分布
   for(n in 1:N){
@@ -128,3 +127,19 @@ data_stan %>%
 
 # check the result
 data_stan
+
+
+## SKILLの正規性の検定
+dat= 
+  data_stan %>% 
+  select(SEASON_AVG) %>% 
+  mutate(SKILL = log(SEASON_AVG/(1-SEASON_AVG))) 
+
+skill = 
+  data_stan_skill %>% 
+  select(SKILL) %>% 
+  unlist
+mean(skill)
+var(skill)
+skill %>% shapiro.test
+s
