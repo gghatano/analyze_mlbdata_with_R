@@ -1,8 +1,8 @@
 ---
-title       : Predicting Batting Average with Hierarchical Bayes Model
+title       : 階層ベイズモデルで打率推定
 subtitle    : 
-author      : Takuma Hatano
-job         : Mathematical Informatics 3rd Lab, M2
+author      : gg_hatano
+job         : Mathematical Informatics, M2
 framework   : io2012      # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : monokai     
@@ -12,6 +12,26 @@ mode        : selfcontained # {standalone, draft}
 
 
 
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.002.png' />
+</div>
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.003.png' />
+</div>
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.004.png' />
+</div>
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.005.png' />
+</div>
+
+---
 ## Outline 
 
 ### 1. Problem: Predict the full-season Batting Average 
@@ -31,7 +51,7 @@ mode        : selfcontained # {standalone, draft}
 
 ### Predict the __full-season__ AVG from data of __first 20 days of 2013 season (~ 4/20)__ 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 08:48:22 2014 -->
+<!-- Fri Jul 11 09:44:57 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ATBAT </TH> <TH> HITS </TH> <TH> AVG </TH> <TH> AVG_SEASON </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right">  52 </TD> <TD align="right">   6 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
@@ -66,7 +86,7 @@ http://www.retrosheet.org/boxesetc/2013/Y_2013.htm
 <br>
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 08:48:22 2014 -->
+<!-- Fri Jul 11 09:44:57 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ATBAT </TH> <TH> HITS </TH> <TH> AVG </TH> <TH> AVG_SEASON </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right">  52 </TD> <TD align="right">   6 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
@@ -160,7 +180,7 @@ $$\begin{align*}
 *** =right
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 08:48:22 2014 -->
+<!-- Fri Jul 11 09:44:57 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> AVG </TH> <TH> MLE </TH> <TH> AVG_SEASON </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
@@ -187,7 +207,7 @@ $$\begin{align*}
 *** =right
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 08:48:23 2014 -->
+<!-- Fri Jul 11 09:44:57 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> AVG </TH> <TH> MLE </TH> <TH> AVG_SEASON </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
@@ -206,6 +226,64 @@ $$\begin{align*}
 
 ---
 
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.015.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.016.png' />
+</div>
+
+
+---
+
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.017.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.018.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.019.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.020.png' />
+</div>
+
+
+---
+
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.021.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.022.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.023.png' />
+</div>
+
+
+
+
+---
 
 ## Outline 
 
@@ -272,9 +350,9 @@ $a$, $b$: hyper parameter ...
 
 ## Bayesian Estimation 
 
-The Posterior of parameter $q_i$: 
+The Posterior of parameter $r_i$: 
 $$\begin{align*}
-\mathrm{P}(q_i | D) &\propto \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b), \\
+\mathrm{P}(r_i | D) &\propto \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b), \\
 r_i &\sim \mathcal{N}(a,b).
 \end{align*}$$
 
@@ -324,7 +402,31 @@ The Posterior of parameter $q_i$:
 $$\begin{align*}
 \mathrm{P}(q_i | D) &\propto \mathrm{P}(D|q_i)\mathrm{P}(q_i)\\
                     &= \mathrm{P}(D|r_i)\mathrm{P}(r_i)\\
-                    &= \int \mathrm{P}(D|r_i)\mathrm{P}(r_i|a,b)\mathrm{P}(a)\mathrm{P}(b) ~ \mathrm{d}a\mathrm{d}b.
+                    &= \int \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b)\mathrm{P}(a)\mathrm{P}(b) ~ \mathrm{d}a\mathrm{d}b.
+\end{align*}$$
+
+where
+
+$$\begin{align*}
+& n_i \sim \mathcal{Binom}(N_i, q_i),\\
+& q_i = \frac{1}{1 + \mathrm{e}^{-r_i}}, ~ r_i \sim \mathcal{N} (a,b),\\
+& a \sim \mathcal{N}(0,100^2), ~ b \sim \mathcal{U}(0,100).
+\end{align*}$$
+
+~
+
+
+---
+
+## Hierarchical Bayes Model
+
+### Summary: 
+
+The Posterior of parameter $q_i$: 
+$$\begin{align*}
+\mathrm{P}(q_i | D) &\propto \mathrm{P}(D|q_i)\mathrm{P}(q_i)\\
+                    &= \mathrm{P}(D|r_i)\mathrm{P}(r_i)\\
+                    &= \int \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b)\mathrm{P}(a)\mathrm{P}(b) ~ \mathrm{d}a\mathrm{d}b.
 \end{align*}$$
 
 where
@@ -359,20 +461,20 @@ Random Sampling $\sim \mathrm{P}(q_1 | D) \propto \int \mathrm{P}(D|r_1)\mathrm{
 *** =left
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 08:48:23 2014 -->
+<!-- Fri Jul 11 09:44:58 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ESTIMATED_AVG </TH> <TH> AVG_SEASON </TH>  </TR>
-  <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.22 </TD> <TD align="right"> 0.23 </TD> </TR>
-  <TR> <TD align="right"> 2 </TD> <TD> Elvis Andrus </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.23 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> Elvis Andrus </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.27 </TD> </TR>
   <TR> <TD align="right"> 3 </TD> <TD> Norichika Aoki </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.29 </TD> </TR>
   <TR> <TD align="right"> 4 </TD> <TD> Erick Aybar </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.27 </TD> </TR>
-  <TR> <TD align="right"> 5 </TD> <TD> Darwin Barney </TD> <TD align="right"> 0.26 </TD> <TD align="right"> 0.21 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> Darwin Barney </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.21 </TD> </TR>
   <TR> <TD align="right"> 6 </TD> <TD> Adrian Beltre </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.32 </TD> </TR>
   <TR> <TD align="right"> 7 </TD> <TD> Carlos Beltran </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.30 </TD> </TR>
-  <TR> <TD align="right"> 8 </TD> <TD> Michael Bourn </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.26 </TD> </TR>
+  <TR> <TD align="right"> 8 </TD> <TD> Michael Bourn </TD> <TD align="right"> 0.29 </TD> <TD align="right"> 0.26 </TD> </TR>
   <TR> <TD align="right"> 9 </TD> <TD> Michael Brantley </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.28 </TD> </TR>
-  <TR> <TD align="right"> 10 </TD> <TD> Jay Bruce </TD> <TD align="right"> 0.29 </TD> <TD align="right"> 0.26 </TD> </TR>
-  <TR> <TD align="right"> 11 </TD> <TD> Billy Butler </TD> <TD align="right"> 0.26 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 10 </TD> <TD> Jay Bruce </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.26 </TD> </TR>
+  <TR> <TD align="right"> 11 </TD> <TD> Billy Butler </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.29 </TD> </TR>
    </TABLE>
 
 *** =right
@@ -463,6 +565,7 @@ $$\begin{align*}
 
 
 *** =right
+ここをちゃんと区間に書きなおした方がいい
 
 <img src="figure/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="\textwidth" style="display: block; margin: auto;" />
 

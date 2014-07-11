@@ -1,8 +1,8 @@
 ---
-title       : Predicting Batting Average with Hierarchical Bayes Model
+title       : 階層ベイズモデルで打率推定
 subtitle    : 
-author      : Takuma Hatano
-job         : Mathematical Informatics 3rd Lab, M2
+author      : gg_hatano
+job         : Mathematical Informatics, M2
 framework   : io2012      # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : monokai     
@@ -14,6 +14,26 @@ mode        : selfcontained # {standalone, draft}
 opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE)
 ```
 
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.002.png' />
+</div>
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.003.png' />
+</div>
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.004.png' />
+</div>
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.005.png' />
+</div>
+
+---
 ## Outline 
 
 ### 1. Problem: Predict the full-season Batting Average 
@@ -36,9 +56,7 @@ opts_chunk$set(tidy=FALSE, message=FALSE, warning=FALSE)
 library(data.table)
 library(ggplot2)
 library(dplyr)
-#library(RPostgreSQL)
 library(magrittr)
-#library(rCharts)
 library(xtable)
 dat_m_april = fread("dat_before_A20.csv")
 dat_m_april %>% head(10) %>% 
@@ -209,6 +227,64 @@ dat_for_plot %>% mutate(MLE = AVG) %>%
 
 ---
 
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.015.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.016.png' />
+</div>
+
+
+---
+
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.017.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.018.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.019.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.020.png' />
+</div>
+
+
+---
+
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.021.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.022.png' />
+</div>
+
+
+---
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.023.png' />
+</div>
+
+
+
+
+---
 
 ## Outline 
 
@@ -275,9 +351,9 @@ $a$, $b$: hyper parameter ...
 
 ## Bayesian Estimation 
 
-The Posterior of parameter $q_i$: 
+The Posterior of parameter $r_i$: 
 $$\begin{align*}
-\mathrm{P}(q_i | D) &\propto \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b), \\
+\mathrm{P}(r_i | D) &\propto \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b), \\
 r_i &\sim \mathcal{N}(a,b).
 \end{align*}$$
 
@@ -327,7 +403,31 @@ The Posterior of parameter $q_i$:
 $$\begin{align*}
 \mathrm{P}(q_i | D) &\propto \mathrm{P}(D|q_i)\mathrm{P}(q_i)\\
                     &= \mathrm{P}(D|r_i)\mathrm{P}(r_i)\\
-                    &= \int \mathrm{P}(D|r_i)\mathrm{P}(r_i|a,b)\mathrm{P}(a)\mathrm{P}(b) ~ \mathrm{d}a\mathrm{d}b.
+                    &= \int \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b)\mathrm{P}(a)\mathrm{P}(b) ~ \mathrm{d}a\mathrm{d}b.
+\end{align*}$$
+
+where
+
+$$\begin{align*}
+& n_i \sim \mathcal{Binom}(N_i, q_i),\\
+& q_i = \frac{1}{1 + \mathrm{e}^{-r_i}}, ~ r_i \sim \mathcal{N} (a,b),\\
+& a \sim \mathcal{N}(0,100^2), ~ b \sim \mathcal{U}(0,100).
+\end{align*}$$
+
+~
+
+
+---
+
+## Hierarchical Bayes Model
+
+### Summary: 
+
+The Posterior of parameter $q_i$: 
+$$\begin{align*}
+\mathrm{P}(q_i | D) &\propto \mathrm{P}(D|q_i)\mathrm{P}(q_i)\\
+                    &= \mathrm{P}(D|r_i)\mathrm{P}(r_i)\\
+                    &= \int \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b)\mathrm{P}(a)\mathrm{P}(b) ~ \mathrm{d}a\mathrm{d}b.
 \end{align*}$$
 
 where
@@ -477,11 +577,15 @@ $$\text{Mean Absolute Error} = \frac{1}{N}\sum\limits \left| q_i - q_{\text{seas
 ```{r echo=FALSE, results='asis', out.width='\\textwidth', fig.align='center'}
 library(reshape2)
 data_stan = fread("avg_stan.csv")
+MLE_MAE = 
+  data_stan %>% 
+  mutate(MLE_ERROR = abs(AVG_SEASON - MLE)) %>% 
+  summarise(mean(MLE_ERROR))
 data_stan %>% 
   dplyr::select(FULLNAME, MLE, AVG_SEASON, MCMC) %>% 
   ggplot(aes(y=AVG_SEASON, x=MLE)) + geom_point(size=4) +
   stat_function(fun=function(x) x, linetype="dashed") +
-  ylab("AVG_SEASON") + ggtitle("MLE: MAE = 0.050") + 
+  ylab("AVG_SEASON") + ggtitle(paste("MLE: MAE = ", round(MLE_MAE, 4))) + 
   xlab("Estimated AVG") +
   xlim(0.1,0.4) + ylim(0.1,0.4) +
   theme(plot.title=element_text(size=26, face="bold")) +
@@ -499,11 +603,16 @@ N = dim(data_stan)[1]
 ```{r echo=FALSE, results='asis', out.width='\\textwidth', fig.align='center'}
 library(reshape2)
 data_stan = fread("avg_stan.csv")
+
+HBM_MAE = 
+  data_stan %>% 
+  mutate(HBM_ERROR = abs(AVG_SEASON - MCMC)) %>% 
+  summarise(mean(HBM_ERROR))
 data_stan %>% 
   dplyr::select(FULLNAME, MLE, AVG_SEASON, MCMC) %>% 
   ggplot(aes(y=AVG_SEASON, x=MCMC)) + geom_point(size=4) +
   stat_function(fun=function(x) x, linetype="dashed") +
-  ylab("AVG_SEASON") + ggtitle("HBM: MAE = 0.022") + 
+  ylab("AVG_SEASON") + ggtitle(paste("HBM: MAE = ", round(HBM_MAE, 4))) + 
   xlab("Estimated AVG") +
   xlim(0.1,0.4) + ylim(0.1,0.4) +
   theme(plot.title=element_text(size=26, face="bold")) +
@@ -644,11 +753,5 @@ df %>% melt() %>%
 * Hierarchical Bayesian Model
  * Gelman, Andrew. "Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper)." Bayesian analysis 1.3 (2006): 515-534.
 
-
----
-
-## Announce
-
-### I got the promise of job offer! 
 
 ---
