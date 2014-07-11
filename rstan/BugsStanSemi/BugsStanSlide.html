@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>階層ベイズモデルで打率推定</title>
+  <title>階層ベイズで野球データ解析</title>
   <meta charset="utf-8">
-  <meta name="description" content="階層ベイズモデルで打率推定">
+  <meta name="description" content="階層ベイズで野球データ解析">
   <meta name="author" content="gg_hatano">
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,8 +33,8 @@
     <!-- LOGO SLIDE -->
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
-    <h1>階層ベイズモデルで打率推定</h1>
-    <h2></h2>
+    <h1>階層ベイズで野球データ解析</h1>
+    <h2>打率を推定したい</h2>
     <p>gg_hatano<br/>Mathematical Informatics, M2</p>
   </hgroup>
   <article></article>  
@@ -87,15 +87,15 @@
     <h2>Outline</h2>
   </hgroup>
   <article data-timings="">
-    <h3>1. Problem: Predict the full-season Batting Average</h3>
+    <h3>1. 問題設定: シーズン打率を推定したい</h3>
 
 <p><br></p>
 
-<h3>2. Predict Batting Average with Maximum Likelihood Estimation</h3>
+<h3>2. 最尤推定で打率推定</h3>
 
 <p><br></p>
 
-<h3>3. Predict Batting Average with Hierarchical Bayes Model</h3>
+<h3>3. 階層ベイズモデルで打率推定</h3>
 
   </article>
   <!-- Presenter Notes -->
@@ -103,14 +103,14 @@
 
 <slide class="" id="slide-6" style="background:;">
   <hgroup>
-    <h2>Problem</h2>
+    <h2>問題設定</h2>
   </hgroup>
   <article data-timings="">
-    <h3>Predict the <strong>full-season</strong> AVG from data of <strong>first 20 days of 2013 season (~ 4/20)</strong></h3>
+    <h3>2013年メジャーリーグ, 4月20日までのデータ</h3>
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
 
-<!-- Fri Jul 11 09:44:57 2014 -->
+<!-- Fri Jul 11 13:55:07 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ATBAT </TH> <TH> HITS </TH> <TH> AVG </TH> <TH> AVG_SEASON </TH>  </TR>
@@ -126,7 +126,7 @@
   <TR> <TD align="right"> 10 </TD> <TD> Jay Bruce </TD> <TD align="right">  71 </TD> <TD align="right">  21 </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.26 </TD> </TR>
    </TABLE>
 
-<p>Data : Major League Baseball games (2013) ... Open Data</p>
+<p>Data : Major League Baseball Games (2013) ... Open Data</p>
 
 <p><a href="http://www.retrosheet.org/boxesetc/2013/Y_2013.htm">http://www.retrosheet.org/boxesetc/2013/Y_2013.htm</a></p>
 
@@ -136,22 +136,22 @@
 
 <slide class="" id="slide-7" style="background:;">
   <hgroup>
-    <h2>Words</h2>
+    <h2>用語</h2>
   </hgroup>
   <article data-timings="">
-    <h3>ATBAT : number of trial</h3>
+    <h3>ATBAT : 試行回数</h3>
 
-<h3>HIT :  number of success</h3>
+<h3>HIT :  成功数</h3>
 
-<h3>AVG : success rate</h3>
+<h3>AVG : 打率</h3>
 
-<h3>batter: 89 batters (over 500 atbats)</h3>
+<h3>batter: 89人 (500打席以上)</h3>
 
 <p><br></p>
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
 
-<!-- Fri Jul 11 09:44:57 2014 -->
+<!-- Fri Jul 11 13:55:07 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ATBAT </TH> <TH> HITS </TH> <TH> AVG </TH> <TH> AVG_SEASON </TH>  </TR>
@@ -168,18 +168,18 @@
 
 <slide class="" id="slide-8" style="background:;">
   <hgroup>
-    <h2>Outline</h2>
+    <h2>目次</h2>
   </hgroup>
   <article data-timings="">
-    <h3>1. Problem: Predict the full-season Batting Average</h3>
+    <h3>1. 問題設定: シーズン打率を推定したい</h3>
 
 <p><br></p>
 
-<h3>2. Predict Batting Average with Maximum Likelihood Estimation</h3>
+<h3>2. 最尤推定で打率推定</h3>
 
 <p><br></p>
 
-<h3>3. Predict Batting Average with Hierarchical Bayes Model</h3>
+<h3>3. 階層ベイズモデルで打率推定</h3>
 
   </article>
   <!-- Presenter Notes -->
@@ -187,26 +187,26 @@
 
 <slide class="" id="slide-9" style="background:;">
   <hgroup>
-    <h2>Randomness</h2>
+    <h2>打席結果にランダム性を仮定</h2>
   </hgroup>
   <article data-timings="">
     <p><br></p>
 
-<p>Ex. Batting Result of Ichiro (April,2013)</p>
+<p>Ex. イチローの打席結果 (April,2013)</p>
 
 <p>HIT, OUT, OUT, HIT, OUT, HIT, OUT, OUT , OUT, ... </p>
 
 <p><br></p>
 
-<p>\(n\) hits / \(N\) atbats \(\to\) Likelihood \(\mathrm{L}(q)\): </p>
+<p>\(n\) 安打数 / \(N\) 打席数 \(\to\) 尤度 \(\mathrm{L}(q)\): </p>
 
 <p>\[\begin{align*}
  \mathrm{L}(q) &= \binom{N}{n}q^n (1-q)^{N-n}.
 \end{align*}\]</p>
 
-<p>where \(q\) is the true Batting Average.</p>
+<p>where \(q\) : 真の打率</p>
 
-<p>\(\to\) Predict Batting Average</p>
+<p>\(\to\) 真の打率を予測したい</p>
 
   </article>
   <!-- Presenter Notes -->
@@ -214,19 +214,19 @@
 
 <slide class="" id="slide-10" style="background:;">
   <hgroup>
-    <h2>Maximum Likelihood Estimation</h2>
+    <h2>最尤推定</h2>
   </hgroup>
   <article data-timings="">
     
 <div style='float:left;width:48%;' class='centered'>
-  <p>Likelihood \(\mathrm{L}(q)\):
+  <p>尤度: \(\mathrm{L}(q)\):
 \[\begin{align*}
  \mathrm{L}(q) = \binom{N}{n}q^n (1-q)^{N-n}.
 \end{align*}\]</p>
 
 <p><br></p>
 
-<p>Estimated parameter value \(\hat{q}\):</p>
+<p>最尤推定量 \(\hat{q}\):</p>
 
 <p>\[\begin{align*}
  \hat{q} = \mathrm{argmax} ~ \mathrm{L}(q)
@@ -243,19 +243,19 @@
 
 <slide class="" id="slide-11" style="background:;">
   <hgroup>
-    <h2>Maximum Likelihood Estimation</h2>
+    <h2>打率を最尤推定</h2>
   </hgroup>
   <article data-timings="">
     
 <div style='float:left;width:48%;' class='centered'>
-  <p>Likelihood \(\mathrm{L}(q)\):
+  <p>尤度 \(\mathrm{L}(q)\):
 \[\begin{align*}
  \mathrm{L}(q) = \binom{N}{n}q^n (1-q)^{N-n}.
 \end{align*}\]</p>
 
 <p><br></p>
 
-<p>Solve
+<p>尤度を最大化するパラメータ...
 \[\begin{align*}
 \frac{\partial}{\partial q_i} \log \mathrm{L}(q_i) &= 0, \\
   \frac{n_i}{q_i} - \frac{N_i-n_i}{1-q_i} &= 0, \\ 
@@ -266,7 +266,7 @@
 <div style='float:right;width:48%;'>
   <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
 
-<!-- Fri Jul 11 09:44:57 2014 -->
+<!-- Fri Jul 11 13:55:07 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> AVG </TH> <TH> MLE </TH> <TH> AVG_SEASON </TH>  </TR>
@@ -289,7 +289,7 @@
 
 <slide class="" id="slide-12" style="background:;">
   <hgroup>
-    <h2>Maximum Likelihood Estimation</h2>
+    <h2>打率を最尤推定</h2>
   </hgroup>
   <article data-timings="">
     
@@ -300,7 +300,7 @@
 <div style='float:right;width:48%;'>
   <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
 
-<!-- Fri Jul 11 09:44:57 2014 -->
+<!-- Fri Jul 11 13:55:08 2014 -->
 
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> AVG </TH> <TH> MLE </TH> <TH> AVG_SEASON </TH>  </TR>
@@ -316,7 +316,7 @@
   <TR> <TD align="right"> 10 </TD> <TD> Jay Bruce </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.26 </TD> </TR>
    </TABLE>
 
-<h3>... How can we Shrink the value to mean?</h3>
+<h3>... 推定量の散らばりを抑えたい</h3>
 
 </div>
   </article>
@@ -415,22 +415,18 @@
 
 <slide class="" id="slide-22" style="background:;">
   <hgroup>
-    <h2>Outline</h2>
+    <h2>目次</h2>
   </hgroup>
   <article data-timings="">
-    <h3>1. Problem: Predict the full-season Batting Average</h3>
+    <h3>1. 問題設定: シーズン打率を推定したい</h3>
 
 <p><br></p>
 
-<h3>2. Test the ramdomness of the time series of Batting Results</h3>
+<h3>2. 最尤推定で打率推定</h3>
 
 <p><br></p>
 
-<h3>3. Predict Batting Average with Maximum Likelihood Estimation</h3>
-
-<p><br></p>
-
-<h3>4. Predict Batting Average with Hierarchical Bayes Model</h3>
+<h3>3. 階層ベイズモデルで打率推定</h3>
 
   </article>
   <!-- Presenter Notes -->
@@ -438,22 +434,22 @@
 
 <slide class="" id="slide-23" style="background:;">
   <hgroup>
-    <h2>Bayesian Estimation</h2>
+    <h2>ベイズ推定</h2>
   </hgroup>
   <article data-timings="">
     <ul>
-<li><p>Prior and Posterior distribution...</p>
+<li><p>事前分布, 事後分布...</p>
 
 <ul>
-<li>\(P(D)\) : Prob. we obtain data \(D\).</li>
-<li>\(P(q_i)\) : Prior of parameter \(q_i\).</li>
-<li>\(P(q_i | D)\) : Posterior.</li>
+<li>\(P(D)\) : 打席結果$D$が得られる確率</li>
+<li>\(P(q_i)\) : $q_i$の事前分布.</li>
+<li>\(P(q_i | D)\) : $q_i$の事後分布.</li>
 </ul></li>
 </ul>
 
 <p><br></p>
 
-<h3>Bayesian Formula :</h3>
+<h3>ベイズの公式</h3>
 
 <p>\[\begin{align*}
  \mathrm{P}(q_i ~ | ~ D) &= \frac{\mathrm{P}(D~|~q_i) \mathrm{P}(q_i)}{\mathrm{P}(D)} \\
@@ -462,7 +458,7 @@
 
 <p><br></p>
 
-<p>Set the Prior \(\mathrm{P}(q_i)\) which reflects <strong>&quot;shrink to mean&quot;</strong>.</p>
+<p>\(\mathrm{P}(q_i)\)  ... <strong>&quot;平均周りに縮小&quot;</strong> させるような事前分布にしたい.</p>
 
   </article>
   <!-- Presenter Notes -->
@@ -470,23 +466,23 @@
 
 <slide class="" id="slide-24" style="background:;">
   <hgroup>
-    <h2>Bayesian Estimation</h2>
+    <h2>ベイズ推定</h2>
   </hgroup>
   <article data-timings="">
-    <p>The Posterior of parameter \(q_i\): 
+    <p>\(q_i\) 事後分布: 
 \[\begin{align*}
 \mathrm{P}(q_i | D) \propto \mathrm{P}(D|q_i)\mathrm{P}(q_i).\\
 \end{align*}\]</p>
 
-<p>Transform \(q_i \left(\in [0,1]\right)\) to \(r_i \left(\in [-\infty, \infty]\right)\) </p>
+<p>打率 \(q_i\) \(\to\) 打者スキル \(r_i\) </p>
 
 <p>\[ q_i = \frac{1}{1 + \mathrm{e}^{-r_i}}.\]</p>
 
-<p>\(r_i\) ... Batting skill : normal distribution.</p>
+<p>\(r_i\) ... 打者スキル. 正規分布に従うと仮定. </p>
 
 <p>\[ r_i \sim \mathcal{N}(a,b).\]</p>
 
-<p>\(a\), \(b\): hyper parameter ...</p>
+<p>\(a\), \(b\): 事前分布のパラメータ... どうやって決める?</p>
 
   </article>
   <!-- Presenter Notes -->
@@ -494,24 +490,24 @@
 
 <slide class="" id="slide-25" style="background:;">
   <hgroup>
-    <h2>Bayesian Estimation</h2>
+    <h2>ベイズ推定</h2>
   </hgroup>
   <article data-timings="">
-    <p>The Posterior of parameter \(r_i\): 
+    <p>$r_i$の事後分布: 
 \[\begin{align*}
 \mathrm{P}(r_i | D) &\propto \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b), \\
 r_i &\sim \mathcal{N}(a,b).
 \end{align*}\]</p>
 
-<p>How parameter \(a\), \(b\) is obtained? </p>
+<p>事前分布のパラメータ\(a\), \(b\) ... どうやって決める?</p>
 
 <p><br></p>
 
-<p>From <strong>2012</strong> MLB Data ... \(a = ~~~\), \(b = ~~~\)  ?</p>
+<p><strong>2012</strong> 年のデータを使う?  .. \(a = ~~~\), \(b = ~~~\)  ?</p>
 
 <p><br></p>
 
-<p>What can we do only with <strong>2013</strong> data?</p>
+<p><strong>2013</strong> 年のデータだけで何とかしたい</p>
 
   </article>
   <!-- Presenter Notes -->
@@ -519,23 +515,23 @@ r_i &\sim \mathcal{N}(a,b).
 
 <slide class="" id="slide-26" style="background:;">
   <hgroup>
-    <h2>Hierarchical Bayes Model</h2>
+    <h2>階層ベイズモデル</h2>
   </hgroup>
   <article data-timings="">
-    <p>The Posterior of parameter \(q_i\): 
+    <p>$r_i$の事後分布: \(P(D|r_i)\)
 \[\begin{align*}
 \mathrm{P}(q_i | D) \propto \mathrm{P}(D|q_i)\mathrm{P}(q_i).\\
 \end{align*}\]</p>
 
-<p>Transform</p>
+<p>パラメータの変換</p>
 
 <p>\[ q_i = \frac{1}{1 + \mathrm{e}^{-r_i}}.\]</p>
 
-<p>\(r_i\) : Batting skill \(\sim\) normal distribution.</p>
+<p>\(r_i\) : 打者スキル \(\sim\) 正規分布</p>
 
 <p>\[ r_i \sim \mathcal{N}(a,b).\]</p>
 
-<h3>Non-informative prior distribution</h3>
+<h3>無情報事前分布</h3>
 
 <p>\[\begin{align*}
 a &\sim \mathcal{N}(0, 100^2), \\
@@ -548,12 +544,12 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-27" style="background:;">
   <hgroup>
-    <h2>Hierarchical Bayes Model</h2>
+    <h2>階層ベイズモデル</h2>
   </hgroup>
   <article data-timings="">
-    <h3>Summary:</h3>
+    <h3>モデル まとめ</h3>
 
-<p>The Posterior of parameter \(q_i\): 
+<p>$q_i$の事後分布: 
 \[\begin{align*}
 \mathrm{P}(q_i | D) &\propto \mathrm{P}(D|q_i)\mathrm{P}(q_i)\\
                     &= \mathrm{P}(D|r_i)\mathrm{P}(r_i)\\
@@ -576,12 +572,12 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-28" style="background:;">
   <hgroup>
-    <h2>Hierarchical Bayes Model</h2>
+    <h2>階層ベイズモデル</h2>
   </hgroup>
   <article data-timings="">
-    <h3>Summary:</h3>
+    <h3>モデル まとめ</h3>
 
-<p>The Posterior of parameter \(q_i\): 
+<p>$q_i$の事後分布: 
 \[\begin{align*}
 \mathrm{P}(q_i | D) &\propto \mathrm{P}(D|q_i)\mathrm{P}(q_i)\\
                     &= \mathrm{P}(D|r_i)\mathrm{P}(r_i)\\
@@ -596,7 +592,7 @@ b &\sim \mathcal{U}(0, 100).
 & a \sim \mathcal{N}(0,100^2), ~ b \sim \mathcal{U}(0,100).
 \end{align*}\]</p>
 
-<p class='..'>\(\mathrm{P}(q_i|D)\) : analytic calculation is difficult ... \(\to\) <strong>Marcov-Chain-Monte-Carlo sampling</strong></p>
+<p class='..'>\(\mathrm{P}(q_i|D)\) : 分布を解析的に計算するのは難しい ... \(\to\) <strong>StanでMCMCサンプリング</strong></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -604,10 +600,10 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-29" style="background:;">
   <hgroup>
-    <h2>Result</h2>
+    <h2>結果</h2>
   </hgroup>
   <article data-timings="">
-    <p>Random Sampling \(\sim \mathrm{P}(q_1 | D) \propto \int \mathrm{P}(D|r_1)\mathrm{P}(r_1|a,b)\mathrm{P}(a)\mathrm{P}(b) \mathrm{d}a\mathrm{d}b.\)</p>
+    <p>サンプリング \(\sim \mathrm{P}(q_1 | D) \propto \int \mathrm{P}(D|r_1)\mathrm{P}(r_1|a,b)\mathrm{P}(a)\mathrm{P}(b) \mathrm{d}a\mathrm{d}b.\)</p>
 
 <p><img src="figure/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="\textwidth" style="display: block; margin: auto;" /></p>
 
@@ -617,15 +613,15 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-30" style="background:;">
   <hgroup>
-    <h2>Result</h2>
+    <h2>結果</h2>
   </hgroup>
   <article data-timings="">
-    <p>Random Sampling \(\sim \mathrm{P}(q_1 | D) \propto \int \mathrm{P}(D|r_1)\mathrm{P}(r_1|a,b)\mathrm{P}(a)\mathrm{P}(b) \mathrm{d}a\mathrm{d}b.\)</p>
+    <p>サンプリング \(\sim \mathrm{P}(q_1 | D) \propto \int \mathrm{P}(D|r_1)\mathrm{P}(r_1|a,b)\mathrm{P}(a)\mathrm{P}(b) \mathrm{d}a\mathrm{d}b.\)</p>
 
 <p><img src="figure/unnamed-chunk-8.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="\textwidth" style="display: block; margin: auto;" />
 --- &amp;twocol</p>
 
-<h2>Result</h2>
+<h2>結果</h2>
 
   </article>
   <!-- Presenter Notes -->
@@ -633,7 +629,7 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-31" style="background:;">
   <hgroup>
-    <h2>Result</h2>
+    <h2>結果</h2>
   </hgroup>
   <article data-timings="">
     
@@ -651,7 +647,7 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-32" style="background:;">
   <hgroup>
-    <h2>Result</h2>
+    <h2>結果</h2>
   </hgroup>
   <article data-timings="">
     <!-- ```{r echo=FALSE, results='asis', out.width='\\textwidth', fig.align='center'} -->
@@ -664,7 +660,7 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-33" style="background:;">
   <hgroup>
-    <h2>Result</h2>
+    <h2>結果</h2>
   </hgroup>
   <article data-timings="">
     <p>\[\text{Mean Absolute Error} = \frac{1}{N}\sum\limits \left| q_i - q_{\text{season}}\right|\]</p>
@@ -683,17 +679,17 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-34" style="background:;">
   <hgroup>
-    <h2>Application</h2>
+    <h2>応用</h2>
   </hgroup>
   <article data-timings="">
     
 <div style='float:left;width:48%;' class='centered'>
   <ul>
-<li><p>Pinch-hitter selection </p>
+<li><p>代打起用問題</p>
 
 <ul>
-<li>Batter A : 2 hits / 7 atbats</li>
-<li>Batter B : 20 hits / 70 atbats</li>
+<li>打者 A : 2安打 / 7打数</li>
+<li>打者 B : 20安打 / 70打数</li>
 </ul></li>
 </ul>
 
@@ -706,10 +702,10 @@ b &\sim \mathcal{U}(0, 100).
 <p><br></p>
 
 <ul>
-<li>Multi-Armed Bandit Problem
+<li>多腕バンディット問題に?
 
 <ul>
-<li> Higher <strong>Upper-Confidence-Bound</strong> batter</li>
+<li> <strong>Upper-Confidence-Bound</strong> </li>
 </ul></li>
 </ul>
 
@@ -730,11 +726,11 @@ b &\sim \mathcal{U}(0, 100).
     
 <div style='float:left;width:48%;' class='centered'>
   <ul>
-<li><p>Pinch-hitter selection </p>
+<li><p>代打起用問題</p>
 
 <ul>
-<li>batter A : 2 hits / 7 atbats</li>
-<li>batter B : 20 hits / 70 atbats</li>
+<li>打者 A : 2安打/ 7打数</li>
+<li>打者 B : 20安打 / 70打数</li>
 </ul></li>
 </ul>
 
@@ -747,18 +743,16 @@ b &\sim \mathcal{U}(0, 100).
 <p><br></p>
 
 <ul>
-<li>Multi-Armed Bandit Problem 
+<li>多腕バンディット問題
 
 <ul>
-<li>Higher <strong>Upper-Credible-Bound</strong> batter?</li>
+<li><strong>Upper-Credible-Bound</strong> </li>
 </ul></li>
 </ul>
 
 </div>
 <div style='float:right;width:48%;'>
-  <p>ここをちゃんと区間に書きなおした方がいい</p>
-
-<p><img src="figure/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="\textwidth" style="display: block; margin: auto;" /></p>
+  <p><img src="figure/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="\textwidth" style="display: block; margin: auto;" /></p>
 
 </div>
   </article>
@@ -767,22 +761,18 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-36" style="background:;">
   <hgroup>
-    <h2>Summary</h2>
+    <h2>まとめ</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li><p>Testing Randomness by Surrogate data method</p>
+    <p>~</p>
 
 <ul>
-<li>Hit/Out series \(=\) Coin-Tossing?</li>
-<li>most of batters has randomness</li>
-</ul></li>
-<li><p>Estimating AVG by Hierarchical Bayes model </p>
+<li>階層ベイズモデルで打率の推定をしました
 
 <ul>
-<li>HBM is better than MLE in terms of MAE</li>
-<li>Application: Pinch hitter selection \(\sim\) Multi-Armed Bandit Problem</li>
-<li>Improve the model</li>
+<li>平均絶対誤差で精度を測ると, 最尤推定よりも良い</li>
+<li>応用先として, 代打起用問題を多腕バンディットのように扱える?</li>
+<li>モデルの改善がしたいです.</li>
 </ul></li>
 </ul>
 
@@ -792,59 +782,27 @@ b &\sim \mathcal{U}(0, 100).
 
 <slide class="" id="slide-37" style="background:;">
   <hgroup>
-    <h2>Future Work</h2>
+    <h2>参考文献</h2>
   </hgroup>
   <article data-timings="">
     <ul>
-<li>not-random batters</li>
-<li>Hyper parameter ... Empirical Bayes method</li>
-</ul>
+<li>Data
 
-<hr>
+<ul>
+<li>The information used here was obtained free of charge from and is copyrighted by Retrosheet.  Interested parties may contact Retrosheet at 20 Sunset Rd., Newark, DE 19711.</li>
+</ul></li>
+<li>Hierarchical Bayesian Model
+
+<ul>
+<li>最近のベイズモデルの進展と応用 (久保, 2009)</li>
+</ul></li>
+</ul>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-38" style="background:;">
-  <hgroup>
-    <h2>Reference</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
-<li><p>Data</p>
-
-<ul>
-<li>The information used here was obtained free of charge from and is copyrighted by Retrosheet.  Interested parties may contact Retrosheet at 20 Sunset Rd., Newark, DE 19711.</li>
-</ul></li>
-<li><p>Surrogate data method</p>
-
-<ul>
-<li>カオス時系列解析の基礎と応用, 合原一幸(編), 池口徴, 山田泰司, 小室元政(著), 産業図書(2000). </li>
-</ul></li>
-<li><p>Hierarchical Bayesian Model</p>
-
-<ul>
-<li>Gelman, Andrew. &quot;Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper).&quot; Bayesian analysis 1.3 (2006): 515-534.</li>
-</ul></li>
-</ul>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-39" style="background:;">
-  <hgroup>
-    <h2>Announce</h2>
-  </hgroup>
-  <article data-timings="">
-    <h3>I got the promise of job offer!</h3>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-40" style="background:;">
   <article data-timings="">
     
   </article>
@@ -887,43 +845,43 @@ b &\sim \mathcal{U}(0, 100).
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Problem'>
+        data-slide=6 title='問題設定'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Words'>
+        data-slide=7 title='用語'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Outline'>
+        data-slide=8 title='目次'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Randomness'>
+        data-slide=9 title='打席結果にランダム性を仮定'>
          9
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Maximum Likelihood Estimation'>
+        data-slide=10 title='最尤推定'>
          10
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Maximum Likelihood Estimation'>
+        data-slide=11 title='打率を最尤推定'>
          11
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='Maximum Likelihood Estimation'>
+        data-slide=12 title='打率を最尤推定'>
          12
       </a>
     </li>
@@ -983,79 +941,79 @@ b &\sim \mathcal{U}(0, 100).
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=22 title='Outline'>
+        data-slide=22 title='目次'>
          22
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=23 title='Bayesian Estimation'>
+        data-slide=23 title='ベイズ推定'>
          23
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='Bayesian Estimation'>
+        data-slide=24 title='ベイズ推定'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Bayesian Estimation'>
+        data-slide=25 title='ベイズ推定'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Hierarchical Bayes Model'>
+        data-slide=26 title='階層ベイズモデル'>
          26
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='Hierarchical Bayes Model'>
+        data-slide=27 title='階層ベイズモデル'>
          27
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Hierarchical Bayes Model'>
+        data-slide=28 title='階層ベイズモデル'>
          28
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='Result'>
+        data-slide=29 title='結果'>
          29
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='Result'>
+        data-slide=30 title='結果'>
          30
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='Result'>
+        data-slide=31 title='結果'>
          31
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Result'>
+        data-slide=32 title='結果'>
          32
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title='Result'>
+        data-slide=33 title='結果'>
          33
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='Application'>
+        data-slide=34 title='応用'>
          34
       </a>
     </li>
@@ -1067,32 +1025,20 @@ b &\sim \mathcal{U}(0, 100).
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=36 title='Summary'>
+        data-slide=36 title='まとめ'>
          36
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=37 title='Future Work'>
+        data-slide=37 title='参考文献'>
          37
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=38 title='Reference'>
+        data-slide=38 title=''>
          38
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=39 title='Announce'>
-         39
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=40 title=''>
-         40
       </a>
     </li>
   </ul>
