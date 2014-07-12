@@ -6,8 +6,8 @@ library(magrittr)
 library(ggplot2)
 library(reshape2)
 
-# dat_A20: batting result of first 20 games
-dat = fread("kubo_data.csv")
+# dat_berore_A20: batting result of first 20 games
+dat = fread("dat_before_A20.csv")
 sample_size = dat$FULLNAME %>% length() 
 hit = dat$HIT
 atbat = dat$ATBAT
@@ -36,7 +36,7 @@ transformed parameters{
   }
 }
 model{
-  sigma ~ uniform(0.1, 10) ; // 無情報事前分布
+  sigma ~ uniform(0, 100) ; // 無情報事前分布
   a ~ normal(0, 10000); // 無情報事前分布
   b ~ normal(0, sigma); // bの事前分布
   for(n in 1:N){

@@ -342,6 +342,15 @@ $a$, $b$: 事前分布のパラメータ... どうやって決める?
 
 ---
 
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/logit.png' />
+</div>
+
+図は[久保, 2009]より
+
+
+---
+
 ## ベイズ推定
 
 $r_i$の事後分布: 
@@ -467,7 +476,6 @@ ggplot(q1) +
 
 *** =left
 
-最尤推定で得られた推定値
 
 ```{r echo=FALSE, results='asis', out.width='\\textwidth', fig.align='center'}
 library(reshape2)
@@ -480,9 +488,10 @@ data_stan %>%
   print(type="html") 
 ```
 
+最尤推定で得られた推定値
+
 *** =right
 
-階層ベイズモデルで得られた事後分布の中央値
 
 ```{r echo=FALSE, results='asis', out.width='\\textwidth', fig.align='center'}
 library(reshape2)
@@ -503,6 +512,8 @@ data_stan %>%
   theme(axis.title.x=element_text(size=24, face="bold")) +
   theme(axis.title.y=element_text(size=24, face="bold"))
 ```
+
+階層ベイズモデルで得られた事後分布の中央値
 
 --- &twocol
 
@@ -676,7 +687,7 @@ ggplot(df, aes(variable)) +
 
 ---&twocol
 
-## Application
+## 応用
 
 
 *** =left
@@ -694,7 +705,7 @@ $$\begin{align*}
 <br>
 
 * 多腕バンディット問題
- * __Upper-Credible-Bound__ 
+ * __Upper-Credible-Bound??__ 
 
 
 
@@ -710,8 +721,8 @@ df_cred  =
                  bat1_lower = quantile(bat1, probs=0.05),
                  bat2_upper = quantile(bat2, probs=0.95), 
                  bat2_lower = quantile(bat2, probs=0.05), 
-                 bat1_median = quantile(bat1, probs=0.50), 
-                 bat2_median = quantile(bat2, probs=0.50))
+                 bat1_mean =  mean(bat1), 
+                 bat2_mean = mean(bat2))
 
 uppers = 
   df_cred %>%
@@ -721,19 +732,19 @@ lowers =
   df_cred %>%
   select(bat1_lower, bat2_lower) %>% 
   unlist
-medians = 
+means = 
   df_cred %>%
-  select(bat1_median, bat2_median) %>% 
+  select(bat1_mean, bat2_mean) %>% 
   unlist
 batters = c("bat1", "bat2")
 
 df = data.frame(batter = batters, 
                 low = lowers, 
                 high= uppers, 
-                median = medians)
+                mean = means)
 
 ggplot(df, aes(batters)) + 
-  geom_point(aes(x=batters, y=medians), size=10) + 
+  geom_point(aes(x=batters, y=means), size=10) + 
   geom_errorbar(ymin=lowers, ymax=uppers) + 
   ggtitle(("Credible Interval")) + 
   ylim(0.15,0.4) + 
@@ -753,10 +764,19 @@ ggplot(df, aes(batters)) +
  
  * 階層ベイズモデルで打率の推定をしました
   * 平均絶対誤差で精度を測ると, 最尤推定よりも良い
-  * 応用先として, 代打起用問題を多腕バンディットのように扱える?
-  * モデルの改善がしたいです.
+  * 平均周りに縮小しすぎに見える
+  * モデルの改善がしたい
+
+
+ * 改善のために... 
+  * 打者スキルの正規性という仮定は, そんなに悪くなさそう
+  * 打席結果を二項分布とする仮定も, そんなに悪くなさそう
+  * ハイパーパラメータの事前分布? 
+  * 助けて
+
 
 --- 
+
 
 ## 参考文献
 

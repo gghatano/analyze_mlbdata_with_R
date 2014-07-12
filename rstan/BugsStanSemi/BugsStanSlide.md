@@ -51,7 +51,7 @@ mode        : selfcontained # {standalone, draft}
 ### 2013年メジャーリーグ, 4月20日までのデータ
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 13:55:07 2014 -->
+<!-- Sat Jul 12 10:11:22 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ATBAT </TH> <TH> HITS </TH> <TH> AVG </TH> <TH> AVG_SEASON </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right">  52 </TD> <TD align="right">   6 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
@@ -85,7 +85,7 @@ http://www.retrosheet.org/boxesetc/2013/Y_2013.htm
 <br>
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 13:55:07 2014 -->
+<!-- Sat Jul 12 10:11:22 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ATBAT </TH> <TH> HITS </TH> <TH> AVG </TH> <TH> AVG_SEASON </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right">  52 </TD> <TD align="right">   6 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
@@ -179,7 +179,7 @@ $$\begin{align*}
 *** =right
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 13:55:07 2014 -->
+<!-- Sat Jul 12 10:11:22 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> AVG </TH> <TH> MLE </TH> <TH> AVG_SEASON </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
@@ -206,7 +206,7 @@ $$\begin{align*}
 *** =right
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 13:55:08 2014 -->
+<!-- Sat Jul 12 10:11:22 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> AVG </TH> <TH> MLE </TH> <TH> AVG_SEASON </TH>  </TR>
   <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
@@ -341,6 +341,15 @@ $a$, $b$: 事前分布のパラメータ... どうやって決める?
 
 ---
 
+<div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/logit.png' />
+</div>
+
+図は[久保, 2009]より
+
+
+---
+
 ## ベイズ推定
 
 $r_i$の事後分布: 
@@ -452,30 +461,32 @@ $$\begin{align*}
 
 *** =left
 
-最尤推定で得られた推定値
 
 <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
-<!-- Fri Jul 11 13:55:08 2014 -->
+<!-- Sat Jul 12 10:11:23 2014 -->
 <TABLE border=1>
 <TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ESTIMATED_AVG </TH> <TH> AVG_SEASON </TH>  </TR>
-  <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.23 </TD> </TR>
-  <TR> <TD align="right"> 2 </TD> <TD> Elvis Andrus </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.27 </TD> </TR>
-  <TR> <TD align="right"> 3 </TD> <TD> Norichika Aoki </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.29 </TD> </TR>
-  <TR> <TD align="right"> 4 </TD> <TD> Erick Aybar </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.27 </TD> </TR>
-  <TR> <TD align="right"> 5 </TD> <TD> Darwin Barney </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.21 </TD> </TR>
-  <TR> <TD align="right"> 6 </TD> <TD> Adrian Beltre </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.32 </TD> </TR>
-  <TR> <TD align="right"> 7 </TD> <TD> Carlos Beltran </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.30 </TD> </TR>
-  <TR> <TD align="right"> 8 </TD> <TD> Michael Bourn </TD> <TD align="right"> 0.29 </TD> <TD align="right"> 0.26 </TD> </TR>
-  <TR> <TD align="right"> 9 </TD> <TD> Michael Brantley </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.28 </TD> </TR>
-  <TR> <TD align="right"> 10 </TD> <TD> Jay Bruce </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.26 </TD> </TR>
-  <TR> <TD align="right"> 11 </TD> <TD> Billy Butler </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 1 </TD> <TD align="right">   1 </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD align="right">   2 </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.28 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD align="right">   3 </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.28 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD align="right">   4 </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD align="right">   5 </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD align="right">   6 </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 7 </TD> <TD align="right">   7 </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 8 </TD> <TD align="right">   8 </TD> <TD align="right"> 0.29 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 9 </TD> <TD align="right">   9 </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.30 </TD> </TR>
+  <TR> <TD align="right"> 10 </TD> <TD align="right">  10 </TD> <TD align="right"> 0.28 </TD> <TD align="right"> 0.30 </TD> </TR>
+  <TR> <TD align="right"> 11 </TD> <TD align="right">  11 </TD> <TD align="right"> 0.27 </TD> <TD align="right"> 0.30 </TD> </TR>
    </TABLE>
+
+最尤推定で得られた推定値
 
 *** =right
 
-階層ベイズモデルで得られた事後分布の中央値
 
 <img src="figure/unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="\textwidth" style="display: block; margin: auto;" />
+
+階層ベイズモデルで得られた事後分布の中央値
 
 --- &twocol
 
@@ -537,7 +548,7 @@ $$\begin{align*}
 
 ---&twocol
 
-## Application
+## 応用
 
 
 *** =left
@@ -555,7 +566,7 @@ $$\begin{align*}
 <br>
 
 * 多腕バンディット問題
- * __Upper-Credible-Bound__ 
+ * __Upper-Credible-Bound??__ 
 
 
 
@@ -571,10 +582,19 @@ $$\begin{align*}
  
  * 階層ベイズモデルで打率の推定をしました
   * 平均絶対誤差で精度を測ると, 最尤推定よりも良い
-  * 応用先として, 代打起用問題を多腕バンディットのように扱える?
-  * モデルの改善がしたいです.
+  * 平均周りに縮小しすぎに見える
+  * モデルの改善がしたい
+
+
+ * 改善のために... 
+  * 打者スキルの正規性という仮定は, そんなに悪くなさそう
+  * 打席結果を二項分布とする仮定も, そんなに悪くなさそう
+  * ハイパーパラメータの事前分布? 
+  * 助けて
+
 
 --- 
+
 
 ## 参考文献
 
