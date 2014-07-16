@@ -6,7 +6,7 @@ library(reshape2)
 library(xtable)
 
 ## データ読み込ませ
-years = 1938:2013
+years = 1939:2013
 for(year in years){
   ##year = 2013
   ##file = paste("../dat", year, "_04.csv", sep="")
