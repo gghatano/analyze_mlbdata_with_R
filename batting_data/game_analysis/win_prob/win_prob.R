@@ -5,17 +5,13 @@ library(dplyr)
 library(reshape2)
 library(xtable)
 
-## データ読み込ませ
-years = 1939:2013
+years = 2012:2013
 for(year in years){
-  ##year = 2013
-  ##file = paste("../dat", year, "_04.csv", sep="")
-  ## データがある場所を適宜
-  file = paste("../../all", year, ".csv", sep="")
+  # year = 2013
+  file = paste("../all", year, ".csv", sep="")
   dat = fread(file)
   name = fread("../names.csv", header=FALSE) %>% unlist
   dat %>% setnames(name)
-  
   
   ## ------------------------------------------------------------------------
   dat_win = 
@@ -44,8 +40,8 @@ for(year in years){
     dat_select_for_wp%>% 
     merge(dat_win, by = "GAME_ID") %>%
     group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>%
-    dplyr::summarise(HOME_LOSES = sum(HOME_WIN), GAMES = n()) %>%
-    mutate(HOME_WINS = GAMES - HOME_LOSES) %>% 
+    dplyr::summarise(HOME_WINS = sum(HOME_WIN), GAMES = n()) %>%
+    mutate(HOME_LOSES = GAMES - HOME_WINS) %>% 
     mutate(year = year)
   ## 10点差以上なら, 10点差とする.
   dat_for_wp %>% 
@@ -66,8 +62,10 @@ for(year in years){
   
   ## データのサイズ
   dat_for_wp %>% dim
-  outputFileName = paste("data_for_wp_",year,".csv", sep="")
+  outputFileName = paste("./data_for_wp/data_for_wp_",year,".csv", sep="")
   write.table(file=outputFileName, x = dat_for_wp, 
               row.names=FALSE, quote=FALSE)
 }
+
+
 

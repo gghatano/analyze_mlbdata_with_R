@@ -52,7 +52,8 @@ win_prob = function(INN_CT_ARG=1, BAT_HOME_ID_ARG=0, OUTS_CT_ARG=0, RUNNERS_ARG=
 win_prob(9, 0, 2, 0, 1)
 
 dat %>% 
-  filter(INN_CT == 8 & HOME_AWAY == 2)
+  filter(INN_CT == 8 & HOME_AWAY == 2) %>% 
+  mutate(win_prob = HOME_WINS / GAMES)
 ```
 
 
