@@ -5,25 +5,26 @@
 
 library(data.table)
 library(dplyr)
-# dat = fread("./data_for_wp/data_for_wp_1939.csv") %>% 
-#   select(-year)
+dat = fread("./data_for_wp/data_for_wp_2013.csv") %>% 
+  select(-year)
+
+#years = 2012:1939
+years = 2012:2011
+for(year in years){
+  dat2=fread(paste("data_for_wp/data_for_wp_", year, ".csv", sep="")) %>% select(-year)
+  dat = rbind(dat, dat2)
+  dat %>% 
+    group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>% 
+    summarise(HOME_LOSES = sum(HOME_LOSES), 
+              GAMES = sum(GAMES), 
+              HOME_WINS = sum(HOME_WINS)) -> dat
+}
+
 # 
-# years = 1939:2013
-# for(year in years){
-#   dat2=fread(paste("data_for_wp/data_for_wp_", year, ".csv", sep="")) %>% select(-year)
-#   dat = rbind(dat, dat2)
-#   dat %>% 
-#     group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>% 
-#     summarise(HOME_LOSES = sum(HOME_LOSES), 
-#               GAMES = sum(GAMES), 
-#               HOME_WINS = sum(HOME_WINS)) -> dat
-# }
 
-## 
-
-## データの保存
-# dat %>% 
-#   write.table("win_prob.csv", quote=FALSE, row.names=FALSE)
+# データの保存
+dat %>% 
+  write.table("win_prob.csv", quote=FALSE, row.names=FALSE)
 
 ## データの読み込み
 dat =fread("win_prob.csv")
@@ -68,8 +69,10 @@ win_prob = function(INN_CT_ARG=1, BAT_HOME_ID_ARG=0, OUTS_CT_ARG=0, RUNNERS_ARG=
 win_prob(INN_CT = 7, BAT_HOME_ID_ARG = 0, OUTS_CT_ARG = 0, RUNNERS_ARG = 0, HOME_AWAY_ARG = 0)
 
 dat %>% 
-  filter(INN_CT == 6, OUTS_CT == 0, HOME_AWAY == 0) %>% 
-  mutate(HOME_WIN_RATE = HOME_WINS / GAMES)
+  group_by(add=FALSE) %>%
+  filter(INN_CT == 1 & OUTS_CT == 0 & HOME_AWAY == 0) %>% 
+  mutate(HOME_WIN_RATE = HOME_WINS / GAMES) %>% 
+  mutate(AWAY_WIN_RATE = HOME_LOSES/ GAMES)
 ```
 
 
