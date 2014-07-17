@@ -1,0 +1,60 @@
+データの集計
+===
+
+```{r}
+
+library(data.table)
+library(dplyr)
+dat = fread("./data_for_wp/data_for_wp_1939.csv") %>% 
+  select(-year)
+
+years = 2011:2013
+for(year in years){
+  dat2=fread(paste("data_for_wp/data_for_wp_", year, ".csv", sep="")) %>% select(-year)
+  dat = rbind(dat, dat2)
+  dat %>% 
+    group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>% 
+    summarise(HOME_LOSES = sum(HOME_LOSES), 
+              GAMES = sum(GAMES), 
+              HOME_WINS = sum(HOME_WINS)) -> dat
+}
+
+## データの集計が間違っていました...
+## HomeとAWAYの得点が逆に...
+dat %>% 
+  mutate(HOME_AWAY = -HOME_AWAY) %>% 
+  write.table("win_prob.csv", quote=FALSE, row.names=FALSE)
+```
+
+勝率を返す関数を作ります.
+
+```{r}
+dat = fread("win_prob.csv")
+
+win_prob = function(INN_CT_ARG=1, BAT_HOME_ID_ARG=0, OUTS_CT_ARG=0, RUNNERS_ARG=0, HOME_AWAY_ARG=0){
+  dat_win_prob =
+    dat %>% 
+    filter(INN_CT == INN_CT_ARG, 
+           BAT_HOME_ID == BAT_HOME_ID_ARG, 
+           OUTS_CT == OUTS_CT_ARG, 
+           RUNNERS == RUNNERS_ARG, 
+           HOME_AWAY == HOME_AWAY_ARG)  
+    if(dim(dat_win_prob)[2]==0){
+      return("データがありません")
+    } else{
+      dat_win_prob %>% 
+        summarise(HOME_WINS/GAMES) %>% unlist %>% 
+        return
+    }
+    
+}
+## イニング, 裏表, アウト, ランナー状態, 点差を入力
+win_prob(9, 0, 2, 0, 1)
+
+dat %>% 
+  filter(INN_CT == 8 & HOME_AWAY == 2)
+```
+
+
+
+
