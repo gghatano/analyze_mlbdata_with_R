@@ -40,20 +40,9 @@ for(year in years){
     dat_select_for_wp%>% 
     merge(dat_win, by = "GAME_ID") %>%
     group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>%
-    dplyr::summarise(HOME_WINS = sum(HOME_WIN), GAMES = n()) %>%
-    mutate(HOME_LOSES = GAMES - HOME_WINS) %>% 
+    dplyr::summarise(HOME_WINS = sum(HOME_WIN==1), GAMES = n(), 
+                     HOME_LOSES= sum(HOME_LOSES==0)) %>%
     mutate(year = year)
-  ## 10点差以上なら, 10点差とする.
-  dat_for_wp %>% 
-    group_by(add=FALSE) %>%
-    mutate(HOME_AWAY = as.numeric(HOME_AWAY)) %>% 
-    mutate(HOME_AWAY = ifelse(HOME_AWAY>10, 10, HOME_AWAY)) %>%
-    mutate(HOME_AWAY = ifelse(HOME_AWAY<-10, -10, HOME_AWAY)) %>%
-    group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, year) %>%
-    dplyr::summarise(HOME_LOSES = sum(HOME_LOSES), 
-                     GAMES = sum(GAMES), 
-                     HOME_WINS = sum(HOME_WINS))
-    
   
   ## 実験::ホームゲームアドバンテージ
   dat_for_wp%>% 

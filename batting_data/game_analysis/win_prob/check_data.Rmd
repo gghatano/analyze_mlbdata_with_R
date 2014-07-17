@@ -5,32 +5,45 @@
 
 library(data.table)
 library(dplyr)
-dat = fread("./data_for_wp/data_for_wp_1939.csv") %>% 
-  select(-year)
+# dat = fread("./data_for_wp/data_for_wp_1939.csv") %>% 
+#   select(-year)
+# 
+# years = 1939:2013
+# for(year in years){
+#   dat2=fread(paste("data_for_wp/data_for_wp_", year, ".csv", sep="")) %>% select(-year)
+#   dat = rbind(dat, dat2)
+#   dat %>% 
+#     group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>% 
+#     summarise(HOME_LOSES = sum(HOME_LOSES), 
+#               GAMES = sum(GAMES), 
+#               HOME_WINS = sum(HOME_WINS)) -> dat
+# }
 
-years = 2011:2013
-for(year in years){
-  dat2=fread(paste("data_for_wp/data_for_wp_", year, ".csv", sep="")) %>% select(-year)
-  dat = rbind(dat, dat2)
+## 
+
+## データの保存
+# dat %>% 
+#   write.table("win_prob.csv", quote=FALSE, row.names=FALSE)
+
+## データの読み込み
+dat =fread("win_prob.csv")
+## 10点差以上なら, 10点差とする.
+dat = 
   dat %>% 
-    group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>% 
-    summarise(HOME_LOSES = sum(HOME_LOSES), 
-              GAMES = sum(GAMES), 
-              HOME_WINS = sum(HOME_WINS)) -> dat
-}
-
-## データの集計が間違っていました...
-## HomeとAWAYの得点が逆に...
-dat %>% 
-  mutate(HOME_AWAY = -HOME_AWAY) %>% 
-  write.table("win_prob.csv", quote=FALSE, row.names=FALSE)
+  group_by(add=FALSE) %>%
+  mutate(HOME_AWAY = as.numeric(HOME_AWAY)) %>% 
+  mutate(HOME_AWAY = ifelse(HOME_AWAY>10, 10, HOME_AWAY)) %>%
+  mutate(HOME_AWAY = ifelse(HOME_AWAY< -10, -10, HOME_AWAY)) %>%
+  mutate(HOME_AWAY = as.integer(HOME_AWAY)) %>%
+  group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>%
+  dplyr::summarise(HOME_LOSES = sum(HOME_LOSES), 
+                   GAMES = sum(GAMES), 
+                   HOME_WINS = sum(HOME_WINS))
 ```
 
 勝率を返す関数を作ります.
-
 ```{r}
-dat = fread("win_prob.csv")
-
+## 試合状況を入力すると, ホームの勝率を返す関数win_prob
 win_prob = function(INN_CT_ARG=1, BAT_HOME_ID_ARG=0, OUTS_CT_ARG=0, RUNNERS_ARG=0, HOME_AWAY_ARG=0){
   dat_win_prob =
     dat %>% 
@@ -39,21 +52,24 @@ win_prob = function(INN_CT_ARG=1, BAT_HOME_ID_ARG=0, OUTS_CT_ARG=0, RUNNERS_ARG=
            OUTS_CT == OUTS_CT_ARG, 
            RUNNERS == RUNNERS_ARG, 
            HOME_AWAY == HOME_AWAY_ARG)  
+  
     if(dim(dat_win_prob)[2]==0){
       return("データがありません")
     } else{
       dat_win_prob %>% 
-        summarise(HOME_WINS/GAMES) %>% unlist %>% 
+        group_by(add=FALSE) %>%
+        dplyr::summarise(HOME_WINS/GAMES) %>% unlist %>% 
         return
     }
     
 }
+
 ## イニング, 裏表, アウト, ランナー状態, 点差を入力
-win_prob(9, 0, 2, 0, 1)
+win_prob(INN_CT = 7, BAT_HOME_ID_ARG = 0, OUTS_CT_ARG = 0, RUNNERS_ARG = 0, HOME_AWAY_ARG = 0)
 
 dat %>% 
-  filter(INN_CT == 8 & HOME_AWAY == 2) %>% 
-  mutate(win_prob = HOME_WINS / GAMES)
+  filter(INN_CT == 6, OUTS_CT == 0, HOME_AWAY == 0) %>% 
+  mutate(HOME_WIN_RATE = HOME_WINS / GAMES)
 ```
 
 
