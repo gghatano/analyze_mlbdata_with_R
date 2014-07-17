@@ -1,4 +1,4 @@
-for year in `seq 1938 1949`
+for year in `seq 1938 2013`
   do
     ./download_battingdata.sh $year
   done

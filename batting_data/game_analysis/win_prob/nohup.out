@@ -365,3 +365,109 @@ R は多くの貢献者による共同プロジェクトです。
 + }
 > 
 > 
+
+R version 3.1.0 (2014-04-10) -- "Spring Dance"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R は、自由なソフトウェアであり、「完全に無保証」です。 
+ 一定の条件に従えば、自由にこれを再配布することができます。 
+ 配布条件の詳細に関しては、'license()' あるいは 'licence()' と入力してください。 
+
+R は多くの貢献者による共同プロジェクトです。 
+ 詳しくは 'contributors()' と入力してください。 
+ また、R や R のパッケージを出版物で引用する際の形式については 
+ 'citation()' と入力してください。 
+
+ 'demo()' と入力すればデモをみることができます。 
+ 'help()' とすればオンラインヘルプが出ます。 
+ 'help.start()' で HTML ブラウザによるヘルプがみられます。 
+ 'q()' と入力すれば R を終了します。 
+
+> 
+> ## ------------------------------------------------------------------------
+> library(data.table)
+> library(dplyr)
+
+ 次のパッケージを付け加えます: ‘dplyr’ 
+
+ 以下のオブジェクトはマスクされています (from ‘package:data.table’) : 
+
+     last 
+
+ 以下のオブジェクトはマスクされています (from ‘package:stats’) : 
+
+     filter, lag 
+
+ 以下のオブジェクトはマスクされています (from ‘package:base’) : 
+
+     intersect, setdiff, setequal, union 
+
+> library(reshape2)
+> library(xtable)
+> 
+> years = 1939:2013
+> for(year in years){
++   # year = 2013
++   file = paste("../../all", year, ".csv", sep="")
++   dat = fread(file)
++   name = fread("../names.csv", header=FALSE) %>% unlist
++   dat %>% setnames(name)
++   
++   ## ------------------------------------------------------------------------
++   dat_win = 
++     dat %>% 
++     group_by(GAME_ID) %>%
++     dplyr::summarise(HOME_SCORE = tail(HOME_SCORE_CT,1), 
++                      AWAY_SCORE = tail(AWAY_SCORE_CT,1)) %>% 
++     mutate(HOME_WIN = ifelse(HOME_SCORE>AWAY_SCORE, 1, 0) )%>% 
++     select(GAME_ID, HOME_WIN)
++   dat_win
++   
++   
++   ## ------------------------------------------------------------------------
++   dat_select_for_wp = 
++     dat %>% 
++     mutate(RUNNERS= (BASE3_RUN_ID!="")*100 + (BASE2_RUN_ID!="")*10 + (BASE1_RUN_ID!="")*1) %>% 
++     mutate(HOME_AWAY = HOME_SCORE_CT - AWAY_SCORE_CT) %>% 
++     select(GAME_ID, INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY)
++   
++   dat_select_for_wp
++   
++   
++   ## ------------------------------------------------------------------------
++   ## 試合状況と, その試合の勝ち負けとを要約する
++   dat_for_wp =
++     dat_select_for_wp%>% 
++     merge(dat_win, by = "GAME_ID") %>%
++     group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>%
++     dplyr::summarise(HOME_WINS = sum(HOME_WIN), GAMES = n()) %>%
++     mutate(HOME_LOSES = GAMES - HOME_WINS) %>% 
++     mutate(year = year)
++   ## 10点差以上なら, 10点差とする.
++   dat_for_wp %>% 
++     group_by(add=FALSE) %>%
++     mutate(HOME_AWAY = as.numeric(HOME_AWAY)) %>% 
++     mutate(HOME_AWAY = ifelse(HOME_AWAY>10, 10, HOME_AWAY)) %>%
++     mutate(HOME_AWAY = ifelse(HOME_AWAY<-10, -10, HOME_AWAY)) %>%
++     group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, year) %>%
++     dplyr::summarise(HOME_LOSES = sum(HOME_LOSES), 
++                      GAMES = sum(GAMES), 
++                      HOME_WINS = sum(HOME_WINS))
++     
++   
++   ## 実験::ホームゲームアドバンテージ
++   dat_for_wp%>% 
++     dplyr::filter(INN_CT == 1 & OUTS_CT == 0 & RUNNERS == 0 & HOME_AWAY==0 & BAT_HOME_ID == 0) %>% 
++     dplyr::mutate(HOME_WIN_RATE = HOME_WINS/GAMES, AWAY_WIN_RATE = HOME_LOSES/GAMES)
++   
++   ## データのサイズ
++   dat_for_wp %>% dim
++   outputFileName = paste("./data_for_wp/data_for_wp_",year,".csv", sep="")
++   write.table(file=outputFileName, x = dat_for_wp, 
++               row.names=FALSE, quote=FALSE)
++ }
+> 
+> 
+> 
+> 

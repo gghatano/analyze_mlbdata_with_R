@@ -5,10 +5,10 @@ library(dplyr)
 library(reshape2)
 library(xtable)
 
-years = 2012:2013
+years = 1939:2013
 for(year in years){
   # year = 2013
-  file = paste("../all", year, ".csv", sep="")
+  file = paste("../../all", year, ".csv", sep="")
   dat = fread(file)
   name = fread("../names.csv", header=FALSE) %>% unlist
   dat %>% setnames(name)

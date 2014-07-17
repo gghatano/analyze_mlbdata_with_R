@@ -1,7 +1,9 @@
 library(data.table)
+library(magrittr)
+library(dplyr)
 
 
-dat = fread("../../../data/all2013.csv")
+dat = fread("../../../data/all2007.csv")
 name = fread("../../batting_data/names.csv", header = FALSE) %>% unlist
 dat %>% setnames(name)
 
