@@ -41,7 +41,7 @@ for(year in years){
     merge(dat_win, by = "GAME_ID") %>%
     group_by(INN_CT, BAT_HOME_ID, OUTS_CT, RUNNERS, HOME_AWAY) %>%
     dplyr::summarise(HOME_WINS = sum(HOME_WIN==1), GAMES = n(), 
-                     HOME_LOSES= sum(HOME_LOSES==0)) %>%
+                     HOME_LOSES= sum(HOME_WIN==0)) %>%
     mutate(year = year)
   
   ## 実験::ホームゲームアドバンテージ
