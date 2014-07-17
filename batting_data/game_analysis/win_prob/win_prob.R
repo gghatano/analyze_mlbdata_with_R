@@ -17,7 +17,7 @@ for(year in years){
   dat_win = 
     dat %>% 
     group_by(GAME_ID) %>%
-    dplyr::summarise(HOME_SCORE = tail(HOME_SCORE_CT,1) + tail(RBI,1), 
+    dplyr::summarise(HOME_SCORE = tail(HOME_SCORE_CT,1) + tail(RBI_CT,1), 
                      AWAY_SCORE = tail(AWAY_SCORE_CT,1)) %>% 
     mutate(HOME_WIN = ifelse(HOME_SCORE>AWAY_SCORE, 1, 0) )%>% 
     select(GAME_ID, HOME_WIN)
