@@ -32,7 +32,8 @@ sed 's/[<>]/;/g' |
       awk -F";" '{print $3}' |
       numchar | 
       sed 's/[^;]//g' | 
-      xargs echo -n | wc -m)
+      xargs echo -n | wc -m | 
+      sed 's/[^0-9]//g')
 
 # チーム名とスコア
 teamScore=$(cat tmp.html | 
