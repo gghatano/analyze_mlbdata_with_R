@@ -26,15 +26,21 @@ baseSituation="$first$second${third}塁"
 [ "$baseSituation" = "塁" ] && baseSituation="ランナー無し"
 
 # アウトカウント
+cat tmp.html | grep -A1 'class="o"' | xargs echo 
 out=$(cat tmp.html | grep -A1 'class="o"' | tail -n 1 | 
-      sed 's/<[^>]*>//g' | numchar | 
+      sed 's/[<>]/;/g' | 
+      awk -F";" '{print $3}' | 
+      numchar | 
       sed 's/[^;]//g' | 
-      xargs echo -n | wc -m | 
-      sed 's/[^0-9]//g') 
+      xargs echo -n )
+echo $out
+exit 1
 
 # チーム名とスコア
-teamScore=$(cat tmp.html | grep -A4 'class="score"' | tail -n 2 |
-        sed 's/<[^>]*>//g') 
+teamScore=$(cat tmp.html | 
+            grep -A4 'class="score"' | 
+            tail -n 2 |
+            sed 's/<[^>]*>//g') 
 
 team=$(echo $teamScore | sed 's/[0-9]/ /g'| cat - )
 # 先攻チーム
