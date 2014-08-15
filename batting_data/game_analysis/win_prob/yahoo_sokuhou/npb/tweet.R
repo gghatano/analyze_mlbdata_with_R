@@ -19,8 +19,8 @@ twit.oauth <- OAuthFactory$new(
 
 registerTwitterOAuth(twit.oauth)
 message = "
-3回裏 0アウト ランナー 1塁 
-大桐蔭 3-4 開星
+5回表 0アウト ランナー 1塁 
+阪神 2-0 ＤｅＮＡ
 "
 time = Sys.time()
 updateStatus(message)
