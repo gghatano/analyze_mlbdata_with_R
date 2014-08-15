@@ -1,8 +1,10 @@
 #!/bin/bash
+dir=$(dirname $0)
+
 ## URLを生成
 ## 試合速報サイトは, 
-## 日付 + 6 + 試合番号(1から4)
-## というルールらしい
+## 日付 + 6 + 試合番号(1から4)というルールらしい
+
 gameId=$(date +%Y%m%d)6
 for game in `seq 1 4` 
 do
@@ -34,8 +36,10 @@ sed 's/[<>]/;/g' |
       xargs echo -n | wc -m | 
       sed 's/[^0-9]//g')
 
+## ここを直す
+
 # チーム名とスコア
-teamScore=$(cat tmp.html | 
+teamScore=$(cat $dir/tmp.html | 
             grep -A4 'class="score"' | 
             tail -n 2 |
             sed 's/<[^>]*>//g') 
