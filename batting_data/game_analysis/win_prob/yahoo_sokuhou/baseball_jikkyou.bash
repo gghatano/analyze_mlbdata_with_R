@@ -23,7 +23,7 @@ third=$(cat tmp.html | grep "3塁")
 [ "$third" = "" ] || third=3
 
 baseSituation="$first$second${third}塁"
-[ "$baseSituation" = "塁" ] && baseSituation="ランナー無し"
+[ "$baseSituation" = "塁" ] && baseSituation="無し"
 
 # アウトカウント
 cat tmp.html | grep -A1 'class="o"' | xargs echo 
