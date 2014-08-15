@@ -28,13 +28,11 @@ baseSituation="$first$second${third}塁"
 # アウトカウント
 cat tmp.html | grep -A1 'class="o"' | xargs echo 
 out=$(cat tmp.html | grep -A1 'class="o"' | tail -n 1 | 
-      sed 's/[<>]/;/g' | 
-      awk -F";" '{print $3}' | 
+sed 's/[<>]/;/g' |
+      awk -F";" '{print $3}' |
       numchar | 
       sed 's/[^;]//g' | 
-      xargs echo -n )
-echo $out
-exit 1
+      xargs echo -n | wc -m)
 
 # チーム名とスコア
 teamScore=$(cat tmp.html | 
