@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ## URLを生成
 ## 試合速報サイトは, 
 ## 日付 + 6 + 試合番号(1から4)
@@ -46,6 +45,8 @@ team=$(echo $teamScore | sed 's/[0-9]/ /g'| cat - )
 team1=$(echo $team | awk '{print $1}')
 # 後攻チーム
 team2=$(echo $team | awk '{print $2}')
+[ "$team1" = "" ] && exit 1
+[ "$team2" = "" ] && exit 1
 
 # スコア
 score=$(echo $teamScore | sed 's/[^0-9]/ /g'| cat - )
@@ -53,6 +54,8 @@ score=$(echo $teamScore | sed 's/[^0-9]/ /g'| cat - )
 score1=$(echo $score | awk '{print $1}')
 # 後攻のスコア
 score2=$(echo $score | awk '{print $2}')
+[ "$score1" = "" ] && exit 1
+[ "$score2" = "" ] && exit 1
 
 ## イニング
 # 後攻のスコア
