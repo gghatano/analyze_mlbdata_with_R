@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>階層ベイズで野球データ解析</title>
+  <meta charset="utf-8">
+  <meta name="description" content="階層ベイズで野球データ解析">
+  <meta name="author" content="gg_hatano">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/monokai.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="libraries/widgets/quiz/css/demo.css"></link>
+<link rel=stylesheet href="libraries/widgets/bootstrap/css/bootstrap.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>階層ベイズで野球データ解析</h1>
+    <h2>打率を推定したい</h2>
+    <p>gg_hatano<br/>Mathematical Informatics, M2</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.002.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.003.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.004.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.005.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Outline</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>1. 問題設定: シーズン打率を推定したい</h3>
+
+<p><br></p>
+
+<h3>2. 最尤推定で打率推定</h3>
+
+<p><br></p>
+
+<h3>3. 階層ベイズモデルで打率推定</h3>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>問題設定</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>2013年メジャーリーグ, 4月20日までのデータ</h3>
+
+<!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
+
+<!-- Sat Jul 12 10:11:22 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ATBAT </TH> <TH> HITS </TH> <TH> AVG </TH> <TH> AVG_SEASON </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right">  52 </TD> <TD align="right">   6 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> Elvis Andrus </TD> <TD align="right">  59 </TD> <TD align="right">  13 </TD> <TD align="right"> 0.22 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> Norichika Aoki </TD> <TD align="right">  61 </TD> <TD align="right">  18 </TD> <TD align="right"> 0.29 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> Erick Aybar </TD> <TD align="right">  28 </TD> <TD align="right">   9 </TD> <TD align="right"> 0.32 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> Darwin Barney </TD> <TD align="right">  11 </TD> <TD align="right">   1 </TD> <TD align="right"> 0.09 </TD> <TD align="right"> 0.21 </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> Adrian Beltre </TD> <TD align="right">  55 </TD> <TD align="right">  14 </TD> <TD align="right"> 0.26 </TD> <TD align="right"> 0.32 </TD> </TR>
+  <TR> <TD align="right"> 7 </TD> <TD> Carlos Beltran </TD> <TD align="right">  51 </TD> <TD align="right">  13 </TD> <TD align="right"> 0.26 </TD> <TD align="right"> 0.30 </TD> </TR>
+  <TR> <TD align="right"> 8 </TD> <TD> Michael Bourn </TD> <TD align="right">  45 </TD> <TD align="right">  15 </TD> <TD align="right"> 0.33 </TD> <TD align="right"> 0.26 </TD> </TR>
+  <TR> <TD align="right"> 9 </TD> <TD> Michael Brantley </TD> <TD align="right">  50 </TD> <TD align="right">  12 </TD> <TD align="right"> 0.24 </TD> <TD align="right"> 0.28 </TD> </TR>
+  <TR> <TD align="right"> 10 </TD> <TD> Jay Bruce </TD> <TD align="right">  71 </TD> <TD align="right">  21 </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.26 </TD> </TR>
+   </TABLE>
+
+<p>Data : Major League Baseball Games (2013) ... Open Data</p>
+
+<p><a href="http://www.retrosheet.org/boxesetc/2013/Y_2013.htm">http://www.retrosheet.org/boxesetc/2013/Y_2013.htm</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>用語</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>ATBAT : 試行回数</h3>
+
+<h3>HIT :  成功数</h3>
+
+<h3>AVG : 打率</h3>
+
+<h3>batter: 89人 (500打席以上)</h3>
+
+<p><br></p>
+
+<!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
+
+<!-- Sat Jul 12 10:11:22 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> ATBAT </TH> <TH> HITS </TH> <TH> AVG </TH> <TH> AVG_SEASON </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right">  52 </TD> <TD align="right">   6 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> Elvis Andrus </TD> <TD align="right">  59 </TD> <TD align="right">  13 </TD> <TD align="right"> 0.22 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> Norichika Aoki </TD> <TD align="right">  61 </TD> <TD align="right">  18 </TD> <TD align="right"> 0.29 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> Erick Aybar </TD> <TD align="right">  28 </TD> <TD align="right">   9 </TD> <TD align="right"> 0.32 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> Darwin Barney </TD> <TD align="right">  11 </TD> <TD align="right">   1 </TD> <TD align="right"> 0.09 </TD> <TD align="right"> 0.21 </TD> </TR>
+   </TABLE>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>目次</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>1. 問題設定: シーズン打率を推定したい</h3>
+
+<p><br></p>
+
+<h3>2. 最尤推定で打率推定</h3>
+
+<p><br></p>
+
+<h3>3. 階層ベイズモデルで打率推定</h3>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>打席結果にランダム性を仮定</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><br></p>
+
+<p>Ex. イチローの打席結果 (April,2013)</p>
+
+<p>HIT, OUT, OUT, HIT, OUT, HIT, OUT, OUT , OUT, ... </p>
+
+<p><br></p>
+
+<p>\(n\) 安打数 / \(N\) 打席数 \(\to\) 尤度 \(\mathrm{L}(q)\): </p>
+
+<p>\[\begin{align*}
+ \mathrm{L}(q) &= \binom{N}{n}q^n (1-q)^{N-n}.
+\end{align*}\]</p>
+
+<p>where \(q\) : 真の打率</p>
+
+<p>\(\to\) 真の打率を予測したい</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>最尤推定</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p>尤度: \(\mathrm{L}(q)\):
+\[\begin{align*}
+ \mathrm{L}(q) = \binom{N}{n}q^n (1-q)^{N-n}.
+\end{align*}\]</p>
+
+<p><br></p>
+
+<p>最尤推定量 \(\hat{q}\):</p>
+
+<p>\[\begin{align*}
+ \hat{q} = \mathrm{argmax} ~ \mathrm{L}(q)
+\end{align*}\]</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="figure/unnamed-chunk-3.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>打率を最尤推定</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p>尤度 \(\mathrm{L}(q)\):
+\[\begin{align*}
+ \mathrm{L}(q) = \binom{N}{n}q^n (1-q)^{N-n}.
+\end{align*}\]</p>
+
+<p><br></p>
+
+<p>尤度を最大化するパラメータ...
+\[\begin{align*}
+\frac{\partial}{\partial q_i} \log \mathrm{L}(q_i) &= 0, \\
+  \frac{n_i}{q_i} - \frac{N_i-n_i}{1-q_i} &= 0, \\ 
+  \hat{q_i} &= \frac{n_i}{N_i}. 
+\end{align*}\]</p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
+
+<!-- Sat Jul 12 10:11:22 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> AVG </TH> <TH> MLE </TH> <TH> AVG_SEASON </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> Elvis Andrus </TD> <TD align="right"> 0.22 </TD> <TD align="right"> 0.22 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> Norichika Aoki </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> Erick Aybar </TD> <TD align="right"> 0.32 </TD> <TD align="right"> 0.32 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> Darwin Barney </TD> <TD align="right"> 0.09 </TD> <TD align="right"> 0.09 </TD> <TD align="right"> 0.21 </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> Adrian Beltre </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.32 </TD> </TR>
+  <TR> <TD align="right"> 7 </TD> <TD> Carlos Beltran </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.30 </TD> </TR>
+  <TR> <TD align="right"> 8 </TD> <TD> Michael Bourn </TD> <TD align="right"> 0.33 </TD> <TD align="right"> 0.33 </TD> <TD align="right"> 0.26 </TD> </TR>
+  <TR> <TD align="right"> 9 </TD> <TD> Michael Brantley </TD> <TD align="right"> 0.24 </TD> <TD align="right"> 0.24 </TD> <TD align="right"> 0.28 </TD> </TR>
+  <TR> <TD align="right"> 10 </TD> <TD> Jay Bruce </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.26 </TD> </TR>
+   </TABLE>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>打率を最尤推定</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="figure/unnamed-chunk-5.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
+
+<!-- Sat Jul 12 10:11:22 2014 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> FULLNAME </TH> <TH> AVG </TH> <TH> MLE </TH> <TH> AVG_SEASON </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> Pedro Alvarez </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.12 </TD> <TD align="right"> 0.23 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> Elvis Andrus </TD> <TD align="right"> 0.22 </TD> <TD align="right"> 0.22 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> Norichika Aoki </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.29 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> Erick Aybar </TD> <TD align="right"> 0.32 </TD> <TD align="right"> 0.32 </TD> <TD align="right"> 0.27 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> Darwin Barney </TD> <TD align="right"> 0.09 </TD> <TD align="right"> 0.09 </TD> <TD align="right"> 0.21 </TD> </TR>
+  <TR> <TD align="right"> 6 </TD> <TD> Adrian Beltre </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.32 </TD> </TR>
+  <TR> <TD align="right"> 7 </TD> <TD> Carlos Beltran </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.25 </TD> <TD align="right"> 0.30 </TD> </TR>
+  <TR> <TD align="right"> 8 </TD> <TD> Michael Bourn </TD> <TD align="right"> 0.33 </TD> <TD align="right"> 0.33 </TD> <TD align="right"> 0.26 </TD> </TR>
+  <TR> <TD align="right"> 9 </TD> <TD> Michael Brantley </TD> <TD align="right"> 0.24 </TD> <TD align="right"> 0.24 </TD> <TD align="right"> 0.28 </TD> </TR>
+  <TR> <TD align="right"> 10 </TD> <TD> Jay Bruce </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.30 </TD> <TD align="right"> 0.26 </TD> </TR>
+   </TABLE>
+
+<h3>... 推定量の散らばりを抑えたい</h3>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.015.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.016.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.017.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.018.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.019.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.020.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.021.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.022.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/Bugs_Stan.023.png' />
+</div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>目次</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>1. 問題設定: シーズン打率を推定したい</h3>
+
+<p><br></p>
+
+<h3>2. 最尤推定で打率推定</h3>
+
+<p><br></p>
+
+<h3>3. 階層ベイズモデルで打率推定</h3>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>ベイズ推定</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>事前分布, 事後分布...</p>
+
+<ul>
+<li>\(P(D)\) : 打席結果$D$が得られる確率</li>
+<li>\(P(q_i)\) : $q_i$の事前分布.</li>
+<li>\(P(q_i | D)\) : $q_i$の事後分布.</li>
+</ul></li>
+</ul>
+
+<p><br></p>
+
+<h3>ベイズの公式</h3>
+
+<p>\[\begin{align*}
+ \mathrm{P}(q_i ~ | ~ D) &= \frac{\mathrm{P}(D~|~q_i) \mathrm{P}(q_i)}{\mathrm{P}(D)} \\
+ & \propto \mathrm{P}(D~|~q_i) \mathrm{P}(q_i).
+\end{align*}\]</p>
+
+<p><br></p>
+
+<p>\(\mathrm{P}(q_i)\)  ... <strong>&quot;平均周りに縮小&quot;</strong> させるような事前分布にしたい.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>ベイズ推定</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>\(q_i\) 事後分布: 
+\[\begin{align*}
+\mathrm{P}(q_i | D) \propto \mathrm{P}(D|q_i)\mathrm{P}(q_i).\\
+\end{align*}\]</p>
+
+<p>打率 \(q_i\) \(\to\) 打者スキル \(r_i\) </p>
+
+<p>\[ q_i = \frac{1}{1 + \mathrm{e}^{-r_i}}.\]</p>
+
+<p>\(r_i\) ... 打者スキル. 正規分布に従うと仮定. </p>
+
+<p>\[ r_i \sim \mathcal{N}(a,b).\]</p>
+
+<p>\(a\), \(b\): 事前分布のパラメータ... どうやって決める?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <article data-timings="">
+    <div style='text-align: center;'>
+    <img width='850', src='Bugs_Stan/logit.png' />
+</div>
+
+<p>図は[久保, 2009]より</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>ベイズ推定</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>$r_i$の事後分布: 
+\[\begin{align*}
+\mathrm{P}(r_i | D) &\propto \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b), \\
+r_i &\sim \mathcal{N}(a,b).
+\end{align*}\]</p>
+
+<p>事前分布のパラメータ\(a\), \(b\) ... どうやって決める?</p>
+
+<p><br></p>
+
+<p><strong>2012</strong> 年のデータを使う?  .. \(a = ~~~\), \(b = ~~~\)  ?</p>
+
+<p><br></p>
+
+<p><strong>2013</strong> 年のデータだけで何とかしたい</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>階層ベイズモデル</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>$r_i$の事後分布: \(P(D|r_i)\)
+\[\begin{align*}
+\mathrm{P}(q_i | D) \propto \mathrm{P}(D|q_i)\mathrm{P}(q_i).\\
+\end{align*}\]</p>
+
+<p>パラメータの変換</p>
+
+<p>\[ q_i = \frac{1}{1 + \mathrm{e}^{-r_i}}.\]</p>
+
+<p>\(r_i\) : 打者スキル \(\sim\) 正規分布</p>
+
+<p>\[ r_i \sim \mathcal{N}(a,b).\]</p>
+
+<h3>無情報事前分布</h3>
+
+<p>\[\begin{align*}
+a &\sim \mathcal{N}(0, 100^2), \\
+b &\sim \mathcal{U}(0, 100).
+\end{align*}\]</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>階層ベイズモデル</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>モデル まとめ</h3>
+
+<p>$q_i$の事後分布: 
+\[\begin{align*}
+\mathrm{P}(q_i | D) &\propto \mathrm{P}(D|q_i)\mathrm{P}(q_i)\\
+                    &= \mathrm{P}(D|r_i)\mathrm{P}(r_i)\\
+                    &= \int \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b)\mathrm{P}(a)\mathrm{P}(b) ~ \mathrm{d}a\mathrm{d}b.
+\end{align*}\]</p>
+
+<p>where</p>
+
+<p>\[\begin{align*}
+& n_i \sim \mathcal{Binom}(N_i, q_i),\\
+& q_i = \frac{1}{1 + \mathrm{e}^{-r_i}}, ~ r_i \sim \mathcal{N} (a,b),\\
+& a \sim \mathcal{N}(0,100^2), ~ b \sim \mathcal{U}(0,100).
+\end{align*}\]</p>
+
+<p>~</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>階層ベイズモデル</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>モデル まとめ</h3>
+
+<p>$q_i$の事後分布: 
+\[\begin{align*}
+\mathrm{P}(q_i | D) &\propto \mathrm{P}(D|q_i)\mathrm{P}(q_i)\\
+                    &= \mathrm{P}(D|r_i)\mathrm{P}(r_i)\\
+                    &= \int \mathrm{P}(D|r_i)\mathrm{P}(r_i;a,b)\mathrm{P}(a)\mathrm{P}(b) ~ \mathrm{d}a\mathrm{d}b.
+\end{align*}\]</p>
+
+<p>where</p>
+
+<p>\[\begin{align*}
+& n_i \sim \mathcal{Binom}(N_i, q_i),\\
+& q_i = \frac{1}{1 + \mathrm{e}^{-r_i}}, ~ r_i \sim \mathcal{N} (a,b),\\
+& a \sim \mathcal{N}(0,100^2), ~ b \sim \mathcal{U}(0,100).
+\end{align*}\]</p>
+
+<p class='..'>\(\mathrm{P}(q_i|D)\) : 分布を解析的に計算するのは難しい ... \(\to\) <strong>StanでMCMCサンプリング</strong></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>結果</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>サンプリング \(\sim \mathrm{P}(q_1 | D) \propto \int \mathrm{P}(D|r_1)\mathrm{P}(r_1|a,b)\mathrm{P}(a)\mathrm{P}(b) \mathrm{d}a\mathrm{d}b.\)</p>
+
+<p><img src="figure/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>結果</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>サンプリング \(\sim \mathrm{P}(q_1 | D) \propto \int \mathrm{P}(D|r_1)\mathrm{P}(r_1|a,b)\mathrm{P}(a)\mathrm{P}(b) \mathrm{d}a\mathrm{d}b.\)</p>
+
+<p><img src="figure/unnamed-chunk-8.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="\textwidth" style="display: block; margin: auto;" />
+--- &amp;twocol</p>
+
+<h2>結果</h2>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-32" style="background:;">
+  <hgroup>
+    <h2>結果</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="figure/unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="figure/unnamed-chunk-12.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-33" style="background:;">
+  <hgroup>
+    <h2>結果</h2>
+  </hgroup>
+  <article data-timings="">
+    <!-- ```{r echo=FALSE, results='asis', out.width='\\textwidth', fig.align='center'} -->
+
+<p><img src="figure/unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="550" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-34" style="background:;">
+  <hgroup>
+    <h2>結果</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>\[\text{Mean Absolute Error} = \frac{1}{N}\sum\limits \left| q_i - q_{\text{season}}\right|\]</p>
+
+<div style='float:left;width:48%;' class='centered'>
+  <p><img src="figure/unnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="figure/unnamed-chunk-15.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-35" style="background:;">
+  <hgroup>
+    <h2>応用</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li><p>代打起用問題</p>
+
+<ul>
+<li>打者 A : 2安打 / 7打数</li>
+<li>打者 B : 20安打 / 70打数</li>
+</ul></li>
+</ul>
+
+<p><br></p>
+
+<p>\[\begin{align*}
+\text{Exploitation} \leftrightarrow \text{Exploration}
+\end{align*}\]</p>
+
+<p><br></p>
+
+<ul>
+<li>多腕バンディット問題に?
+
+<ul>
+<li> <strong>Upper-Confidence-Bound</strong> </li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="figure/unnamed-chunk-16.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-36" style="background:;">
+  <hgroup>
+    <h2>応用</h2>
+  </hgroup>
+  <article data-timings="">
+    
+<div style='float:left;width:48%;' class='centered'>
+  <ul>
+<li><p>代打起用問題</p>
+
+<ul>
+<li>打者 A : 2安打/ 7打数</li>
+<li>打者 B : 20安打 / 70打数</li>
+</ul></li>
+</ul>
+
+<p><br></p>
+
+<p>\[\begin{align*}
+\text{Exploitation} \leftrightarrow \text{Exploration}
+\end{align*}\]</p>
+
+<p><br></p>
+
+<ul>
+<li>多腕バンディット問題
+
+<ul>
+<li><strong>Upper-Credible-Bound??</strong> </li>
+</ul></li>
+</ul>
+
+</div>
+<div style='float:right;width:48%;'>
+  <p><img src="figure/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="\textwidth" style="display: block; margin: auto;" /></p>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-37" style="background:;">
+  <hgroup>
+    <h2>まとめ</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>~</p>
+
+<ul>
+<li><p>階層ベイズモデルで打率の推定をしました</p>
+
+<ul>
+<li>平均絶対誤差で精度を測ると, 最尤推定よりも良い</li>
+<li>平均周りに縮小しすぎに見える</li>
+<li>モデルの改善がしたい</li>
+</ul></li>
+<li><p>改善のために... </p>
+
+<ul>
+<li>打者スキルの正規性という仮定は, そんなに悪くなさそう</li>
+<li>打席結果を二項分布とする仮定も, そんなに悪くなさそう</li>
+<li>ハイパーパラメータの事前分布? </li>
+<li>助けて</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-38" style="background:;">
+  <hgroup>
+    <h2>参考文献</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Data
+
+<ul>
+<li>The information used here was obtained free of charge from and is copyrighted by Retrosheet.  Interested parties may contact Retrosheet at 20 Sunset Rd., Newark, DE 19711.</li>
+</ul></li>
+<li>Hierarchical Bayesian Model
+
+<ul>
+<li>最近のベイズモデルの進展と応用 (久保, 2009)</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-39" style="background:;">
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title=''>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title=''>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title=''>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title=''>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Outline'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='問題設定'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='用語'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='目次'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='打席結果にランダム性を仮定'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='最尤推定'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='打率を最尤推定'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='打率を最尤推定'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title=''>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title=''>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title=''>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title=''>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title=''>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title=''>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title=''>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title=''>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title=''>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='目次'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='ベイズ推定'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='ベイズ推定'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title=''>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='ベイズ推定'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='階層ベイズモデル'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='階層ベイズモデル'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='階層ベイズモデル'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='結果'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='結果'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='結果'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='結果'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='結果'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='応用'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='応用'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='まとめ'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='参考文献'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title=''>
+         39
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  <script src="libraries/widgets/quiz/js/jquery.quiz.js"></script>
+<script src="libraries/widgets/quiz/js/mustache.min.js"></script>
+<script src="libraries/widgets/quiz/js/quiz-app.js"></script>
+<script src="libraries/widgets/bootstrap/js/bootstrap.min.js"></script>
+<script src="libraries/widgets/bootstrap/js/bootbox.min.js"></script>
+
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<script>  
+  $(function (){ 
+    $("#example").popover(); 
+    $("[rel='tooltip']").tooltip(); 
+  });  
+  </script>  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

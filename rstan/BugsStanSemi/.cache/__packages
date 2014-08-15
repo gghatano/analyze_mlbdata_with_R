@@ -1,0 +1,13 @@
+base
+data.table
+dplyr
+ggplot2
+inline
+knitr
+knitrBootstrap
+magrittr
+Rcpp
+reshape2
+rstan
+slidify
+xtable

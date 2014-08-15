@@ -1,0 +1,38 @@
+階層ベイズモデルの基礎
+========================================================
+
+久保先生の
+http://eprints.lib.hokudai.ac.jp/dspace/bitstream/2115/39717/2/kubo2009IEICE.pdf
+の追試をします. 
+
+** データ読み込みと内容確認.
+コードとデータはGitHubにアップロードしてあります.
+https://github.com/gghatano/analyze_mlbdata_with_R/blob/master/rstan/
+```{r}
+library(data.table)
+library(dplyr)
+library(rstan)
+dat = fread("kubo_data.csv")
+dat
+dat
+```
+シーズン序盤の成績と, 最終的な打率が入っています. 10試合分くらいですかね? 
+20人分の打数(ATBAT), 安打数(HIT), 打率(AVG)と, 最終的なシーズンの打率(AVG_SEASON)です. 
+シーズン序盤の成績から, 最終的な打率を精度よく推定する問題を考えます. 
+というのも, 10試合分だと, 成績のばらつきが激しくて使い物になりません. 
+プロットしてみます. 
+```{r}
+library(ggplot2)
+dat_for_plot = dat %>% mutate(AVG_SEASON = round(AVG_SEASON,3))
+dat_for_plot %>% 
+  ggplot(aes(y=AVG_SEASON, x=AVG)) + 
+  geom_point(fill="white", size = 10) + 
+  stat_function(fun = function(x) x, colour = "black", linetype="dashed", size=2) + 
+  xlim(0.1,0.4) + 
+  xlab("ESTIMATED AVG") +
+  theme(axis.text.x=element_text(size=20)) +
+  theme(axis.text.y=element_text(size=20)) +
+  theme(axis.title.x=element_text(size=24, face="bold")) +
+  theme(axis.title.y=element_text(size=24, face="bold")) 
+```
+

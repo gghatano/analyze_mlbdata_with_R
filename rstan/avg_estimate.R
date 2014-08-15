@@ -1,16 +1,15 @@
 # input dat_hoge and run the stan code to estimate AVG with MCMC
 library(rstan)
 library(data.table)
-library(dplry)
-library(magrittr)
+library(dplyr)
 library(ggplot2)
 library(reshape2)
 
 # dat_A20: batting result of first 20 games
-data = fread("dat_before_A20.csv")
-sample_size = data$FULLNAME %>% length() 
-hit = data$HITS
-atbat = data$ATBAT
+dat = fread("dat_before_A20.csv")
+sample_size = dat$FULLNAME %>% length() 
+hit = dat$HITS
+atbat = dat$ATBAT
 
 # make list for argument 
 data_list = list(N = sample_size, 
@@ -35,7 +34,7 @@ transformed parameters{
   }
 }
 model{
-  sigma ~ uniform(0.1, 10) ; // 無情報事前分布
+  sigma ~ uniform(0.0, 10) ; // 無情報事前分布
   a ~ normal(0, 10000); // 無情報事前分布
   b ~ normal(0, sigma); // bの事前分布
   for(n in 1:N){
@@ -90,8 +89,9 @@ stan_res_param_high5 = stan_res_param %>% apply(2, function(x) quantile(x, 0.95)
 stan_res_df = data.frame(median = stan_res_param_median, 
                          low5 = stan_res_param_low5, 
                          high5 = stan_res_param_low5, 
-                         true = data$SEASON_AVG)
+                         true = dat$AVG_SEASON)
 
+stan_res_df
 ## make plot: median vs true value
 ggplot(data = stan_res_df, aes(x=true)) + 
   geom_point(aes(y=median)) + 
@@ -99,32 +99,48 @@ ggplot(data = stan_res_df, aes(x=true)) +
 
 
 ## join the original dataframe with result of stan 
-data_stan = cbind(data, stan_res_param_median)
-setnames(data_stan, c("BAT_ID", "SEASON_AVG", "ATBAT", "HITS", "MLE", "FULLNAME", "MCMC"))
+data_stan = cbind(dat, stan_res_param_median)
+setnames(data_stan, c("BAT_ID", "AVG_SEASON", "ATBAT", "HITS", "MLE", "FULLNAME", "MCMC"))
 write.csv(data_stan, "avg_stan.csv", row.names=FALSE, quote=FALSE)
 
 ## make plot of the result of estimation by MLE
-ggplot(data = data_stan , aes(x=SEASON_AVG, y=MLE)) + 
+ggplot(data = data_stan , aes(x=AVG_SEASON, y=MLE)) + 
   geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed") + 
-  ggtitle("ESTIMATE SEASON_AVG with MLE") +
+  ggtitle("ESTIMATE AVG_SEASON with MLE") +
   ggsave("MLE.pdf")
 
 ## make plot of the result of estimation by MCMC
-ggplot(data = data_stan , aes(x=SEASON_AVG, y=MCMC)) + 
+ggplot(data = data_stan , aes(x=AVG_SEASON, y=MCMC)) + 
   geom_point(size = 4) + stat_function(fun = function(x) x, linetype="dashed") + 
-  ggtitle("ESTIMATE SEASON_AVG with MCMC") + 
+  ggtitle("ESTIMATE AVG_SEASON with MCMC") + 
   ggsave("BHM.pdf")
 
 
 ## compare MCMC vs MLE 
 data_stan %>% 
-  dplyr::select(FULLNAME, MLE, SEASON_AVG, MCMC) %>% 
-  reshape2::melt(id.var=c("FULLNAME", "SEASON_AVG")) %>% 
-  ggplot(aes(x=SEASON_AVG, y=value, colour=variable)) + geom_point(size=4, alpha=0.8) +
+  dplyr::select(FULLNAME, MLE, AVG_SEASON, MCMC) %>% 
+  reshape2::melt(id.var=c("FULLNAME", "AVG_SEASON")) %>% 
+  ggplot(aes(x=AVG_SEASON, y=value, colour=variable)) + geom_point(size=4, alpha=0.8) +
   stat_function(fun=function(x) x, linetype="dashed") +
   ylab("AVG") + 
-  ggtitle("Estimate SEASON_AVG with BHM") +
+  ggtitle("Estimate AVG_SEASON with BHM") +
   ggsave("BHMvsMLE.pdf")
 
 # check the result
 data_stan
+
+
+## SKILLの正規性の検定
+dat= 
+  data_stan %>% 
+  select(AVG_SEASON) %>% 
+  mutate(SKILL = log(AVG_SEASON/(1-AVG_SEASON))) 
+
+skill = 
+  data_stan_skill %>% 
+  select(SKILL) %>% 
+  unlist
+mean(skill)
+var(skill)
+skill %>% shapiro.test
+s
