@@ -1,41 +1,39 @@
 #!/bin/bash
 
-### URLを生成
-### 日付 + 6 + 試合番号(1から4)というルールらしい
-#gameId=$(date +%Y%m%d)6
-### とりあえず全部チェック
-#for game in `seq 1 4` 
-#do
-#  url="http://baseball.yahoo.co.jp/hsb_summer/game/"$gameId$game"/score/"
-#  html=$(curl $url)
-#  ## 速報中かどうかチェック
-#  sokuhouFlag=$(echo $html | grep "速報中")
-#  [ "$sokuhouFlag" = "" ] && break
-#  htmlFile=$html 
-#done
-#
-#echo $htmlFile
-#
-#exit 1
-#
+## URLを生成
+## 試合速報サイトは, 
+## 日付 + 6 + 試合番号(1から4)
+## というルールらしい
+gameId=$(date +%Y%m%d)6
+for game in `seq 1 4` 
+do
+  url="http://live.baseball.yahoo.co.jp/hsb_summer/game/"$gameId$game"/score/"
+  curl $url > tmp.html
+  ## 速報中かどうかチェック
+  sokuhouFlag=$(cat tmp.html | grep "速報中")
+  [ "$sokuhouFlag" = "" ] || break
+done
+
 ## ランナー状況取得
-first=$(cat $1 | grep "1塁")
-second=$(cat $1 | grep "2塁")
-third=$(cat $1 | grep "3塁")
+first=$(cat tmp.html | grep "1塁")
+second=$(cat tmp.html | grep "2塁")
+third=$(cat tmp.html | grep "3塁")
 [ "$first" = "" ] || first=1
 [ "$second" = "" ] || second=2
 [ "$third" = "" ] || third=3
 
 baseSituation="$first$second${third}塁"
+[ "$baseSituation" = "塁" ] && baseSituation="ランナー無し"
 
 # アウトカウント
-out=$(cat $1 | grep -A1 'class="o"' | tail -n 1 | 
+out=$(cat tmp.html | grep -A1 'class="o"' | tail -n 1 | 
       sed 's/<[^>]*>//g' | numchar | 
       sed 's/[^;]//g' | 
-      xargs echo -n | wc -m) 
+      xargs echo -n | wc -m | 
+      sed 's/[^0-9]//g') 
 
-# チーム名がほしい
-teamScore=$(cat $1 | grep -A4 'class="score"' | tail -n 2 |
+# チーム名とスコア
+teamScore=$(cat tmp.html | grep -A4 'class="score"' | tail -n 2 |
         sed 's/<[^>]*>//g') 
 
 team=$(echo $teamScore | sed 's/[0-9]/ /g'| cat - )
@@ -45,8 +43,7 @@ team1=$(echo $team | awk '{print $1}')
 team2=$(echo $team | awk '{print $2}')
 
 # スコア
-score=$(echo $teamScore |
-sed 's/[^0-9]/ /g'| cat - )
+score=$(echo $teamScore | sed 's/[^0-9]/ /g'| cat - )
 # 先攻のスコア
 score1=$(echo $score | awk '{print $1}')
 # 後攻のスコア
@@ -54,7 +51,7 @@ score2=$(echo $score | awk '{print $2}')
 
 ## イニング
 # 後攻のスコア
-ining=$(cat $1 | 
+ining=$(cat tmp.html | 
         grep -A1 'class="live"' | 
         tail -n 1 | 
         sed 's/<[^>]*>//g')
@@ -62,4 +59,10 @@ ining=$(cat $1 |
 echo $ining $out"アウト" "ランナー "$baseSituation
 echo "$team1 $score1-$score2 $team2"
 
+cat << FIN > out.txt
+$ining ${out}アウト ランナー $baseSituation 
+$team1 $score1-$score2 $team2
+FIN
+
+rm tmp.html
 
