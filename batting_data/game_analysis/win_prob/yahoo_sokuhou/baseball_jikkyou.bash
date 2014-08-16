@@ -18,6 +18,13 @@ done
 ## 速報中の試合がなければexit
 [ "$sokuhouFlag" = "" ] && exit 1
 
+## 塁状況の変化途中かどうかを確認
+## ヒットなどの結果が出ている場合, 試合状況がうまく取れないから
+resultData=$(cat $dir/tmp.html | 
+             grep -A5 'id="result"' | 
+             grep "class='red'")
+[ "$resultData" = "" ] || exit 1
+
 ## ランナー状況取得
 fieldSituation=$(cat $dir/tmp.html | 
                   grep -A15 "<!--field-->" )
