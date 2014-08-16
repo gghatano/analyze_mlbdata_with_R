@@ -49,7 +49,6 @@ sed 's/[<>]/;/g' |
       sed 's/[^0-9]//g')
 
 ## ここを直す
-
 # チーム名とスコア
 teamScore=$(cat $dir/tmp.html | 
             grep -A4 'class="score"' | 

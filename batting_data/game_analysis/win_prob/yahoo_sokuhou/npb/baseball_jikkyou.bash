@@ -5,20 +5,30 @@
 dir=$(dirname $0)
 wget "http://baseball.yahoo.co.jp/npb/schedule/"
 
+## 1日の試合情報から, 巨人戦を探す
 giants_url=$(cat $dir/index.html | 
 grep -A4 -B4 'title="巨人"><div class' | 
 grep "npb/game/" | 
 sed 's;.*npb/game/\([0-9]*\).*;\1;')
 
-url="http://live.baseball.yahoo.co.jp/npb/game/$giants_url/score"
+[ "giants_url" = "" ] && exit 1
+
 rm $dir/index.html
 
 ## 一球速報.htmlをダウンロード
+url="http://live.baseball.yahoo.co.jp/npb/game/$giants_url/score"
 curl $url > $dir/tmp.html
 
 ## 速報中かどうかチェック
 sokuhouFlag=$(cat $dir/tmp.html | grep "<p>速報中</p>")
 [ "$sokuhouFlag" = "" ] && exit 1
+
+## 塁状況の変化途中かどうかを確認
+## ヒットなどの結果が出ている場合, 試合状況がうまく取れないから
+resultData=$(cat $dir/tmp.html | 
+             grep -A5 'id="result"' | 
+             grep "class='red'")
+[ "$resultData" = "" ] || exit 1
 
 ## ランナー状況取得
 first=$(cat tmp.html | grep "1塁")
@@ -85,4 +95,4 @@ $ining ${out}アウト ランナー $baseSituation
 $team1 $score1-$score2 $team2
 FIN
 
-rm $dir/tmp.html
+#rm $dir/tmp.html
