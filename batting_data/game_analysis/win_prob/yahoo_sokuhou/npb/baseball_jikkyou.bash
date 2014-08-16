@@ -13,7 +13,7 @@ sed 's;.*npb/game/\([0-9]*\).*;\1;')
 url="http://live.baseball.yahoo.co.jp/npb/game/$giants_url/score"
 rm $dir/index.html
 
-## 一球速報をダウンロード
+## 一球速報.htmlをダウンロード
 curl $url > $dir/tmp.html
 
 ## 速報中かどうかチェック
@@ -39,7 +39,8 @@ sed 's/[<>]/;/g' |
       sed 's/[^;]//g' | 
       xargs echo -n | wc -m | 
       sed 's/[^0-9]//g')
-## 3アウトかノーアウトかは, こうしないと分からん
+
+## 3アウトか0アウトかは, 現状ではこうしないと分からん
 threeOutFlag=$(cat $dir/tmp.html | grep "3アウト")
 if [ "$out" = "3" ]
 then 

@@ -1,6 +1,6 @@
 #!/bin/bash
-
+dir=$(dirname $0)
 set -e
-./baseball_jikkyou.bash
-filehame -lLABEL ~/Dropbox/tweet.R out.txt > ./tweet.R
-R -f tweet.R
+$dir/baseball_jikkyou.bash
+filehame -lLABEL ~/Dropbox/tweet.R $dir/out.txt > $dir/tweet.R
+/usr/bin/R -f $dir/tweet.R
