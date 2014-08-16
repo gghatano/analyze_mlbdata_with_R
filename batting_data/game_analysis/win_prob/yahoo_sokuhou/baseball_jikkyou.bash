@@ -19,9 +19,11 @@ done
 [ "$sokuhouFlag" = "" ] && exit 1
 
 ## ランナー状況取得
-first=$(cat $dir/tmp.html | grep "1塁")
-second=$(cat $dir/tmp.html | grep "2塁")
-third=$(cat $dir/tmp.html | grep "3塁")
+fieldSituation=$(cat $dir/tmp.html | 
+                  grep -A15 "<!--field-->" )
+                  first=$(echo $fieldSituation | grep "1塁")
+                  second=$(echo $fieldSituation | grep "2塁")
+                  third=$(echo $fieldSituation | grep "3塁")
 [ "$first" = "" ] || first=1
 [ "$second" = "" ] || second=2
 [ "$third" = "" ] || third=3
