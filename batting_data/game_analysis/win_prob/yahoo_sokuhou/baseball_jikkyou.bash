@@ -15,6 +15,9 @@ do
   [ "$sokuhouFlag" = "" ] || break
 done
 
+## 速報中の試合がなければexit
+[ "$sokuhouFlag" = "" ] && exit 1
+
 ## ランナー状況取得
 first=$(cat $dir/tmp.html | grep "1塁")
 second=$(cat $dir/tmp.html | grep "2塁")
@@ -76,5 +79,5 @@ $ining ${out}アウト ランナー $baseSituation
 $team1 $score1-$score2 $team2
 FIN
 
-rm tmp.html
+rm $dir/tmp.html
 
