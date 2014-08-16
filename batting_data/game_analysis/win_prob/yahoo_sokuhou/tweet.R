@@ -5,7 +5,7 @@
 library("twitteR")
 library("ROAuth")
 
-# 各種keyの登録 アカウント名: 甲子園野球速報bot
+# 各種keyの登録 アカウント名: suuri3lab
 twit.oauth <- OAuthFactory$new(
   handshakeComplete = TRUE,
   signMethod="HMAC",
@@ -19,8 +19,8 @@ twit.oauth <- OAuthFactory$new(
 
 registerTwitterOAuth(twit.oauth)
 message = "
- 0アウト ランナー 無し 
-八頭 0-0 角館
+3回表 1アウト ランナー 1塁 
+東望洋 1-1 城北
 "
 time = Sys.time()
 updateStatus(message)
