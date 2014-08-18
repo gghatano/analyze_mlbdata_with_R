@@ -2,7 +2,7 @@
 dir=$(dirname $0)
 
 ## 1つでもエラーが出たら終了
-#set -e
+set -e
 echo $(date +%Y%m%d%H%M%S)
 ## 実況
 $dir/baseball_jikkyou.bash
@@ -30,6 +30,8 @@ winProb=$(cat $dir/win_prob.csv | grep -E "^$situation,$scoreDiff,")
 echo $winProb
 winProb1=$(echo $winProb|awk -F "," '{print $10}')
 winProb2=$(echo $winProb|awk -F "," '{print $9}')
+[ "$winProb1" = "" ] && exit 1
+[ "$winProb2" = "" ] && exit 1
 
 ## チーム名の取得
 team1=$(cat $dir/out.txt | tail -n 1 | awk '{print $1}') 
