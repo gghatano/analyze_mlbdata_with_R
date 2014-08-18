@@ -79,11 +79,12 @@ ining=$(cat $dir/tmp.html |
         tail -n 1 | 
         sed 's/<[^>]*>//g')
 ## 試合状況 内容
-echo $ining $out"アウト" "ランナー "$baseSituation
+echo $ining $out"アウト" "ランナー"$baseSituation
 echo "$team1 $score1-$score2 $team2"
 
+
 cat << FIN > $dir/out.txt
-$ining ${out}アウト ランナー $baseSituation 
+$ining ${out}アウト ランナー$baseSituation 
 $team1 $score1-$score2 $team2
 FIN
 
