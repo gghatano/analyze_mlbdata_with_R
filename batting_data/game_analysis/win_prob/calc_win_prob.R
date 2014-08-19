@@ -24,7 +24,7 @@ base_mutate(0)
 dat %>% 
   mutate(RUNNERS = base_mutate(RUNNERS)) %>% 
   mutate(HOME_WIN_PROB = round(HOME_WINS/GAMES, 3)*100) %>% 
-  mutate(AWAY_WIN_PROB = round((100 - HOME_WIN_PROB, 1))) %>% 
+  mutate(AWAY_WIN_PROB = round(100 - HOME_WIN_PROB , 2)) %>% 
   write.csv("./yahoo_sokuhou/win_prob.csv", quote=FALSE, row.names=FALSE)
   
 

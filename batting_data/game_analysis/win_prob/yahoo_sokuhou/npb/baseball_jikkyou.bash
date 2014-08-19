@@ -18,9 +18,13 @@ sed 's;.*npb/game/\([0-9]*\).*;\1;')
 ## 巨人の試合がなければ終わり
 [ "$giants_url" = "" ] && exit 1
 
+echo giants_game_ok
+
 ## 一球速報.htmlをダウンロード
 url="http://live.baseball.yahoo.co.jp/npb/game/$giants_url/score"
 curl $url > $dir/tmp.html
+
+echo download_html
 
 ## 速報中かどうかチェック
 ## ここはもうちょっと頑張るべき
@@ -96,7 +100,7 @@ echo "$team1 $score1-$score2 $team2"
 
 ## 出力
 cat << FIN > $dir/out.txt
-$ining ${out}アウト ランナー $baseSituation 
+$ining ${out}アウト ランナー$baseSituation 
 $team1 $score1-$score2 $team2
 FIN
 
