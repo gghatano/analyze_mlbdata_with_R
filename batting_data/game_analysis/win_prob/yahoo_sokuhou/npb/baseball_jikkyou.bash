@@ -39,15 +39,24 @@ resultData=$(cat $dir/tmp.html |
 [ "$resultData" = "" ] || exit 1
 
 ## ランナー状況取得
-first=$(cat tmp.html | grep "1塁")
-second=$(cat tmp.html | grep "2塁")
-third=$(cat tmp.html | grep "3塁")
+fieldSituation=$(cat $dir/tmp.html | 
+                  grep -A15 "<!--field-->" )
+                  first=$(echo $fieldSituation | grep "1塁")
+                  second=$(echo $fieldSituation | grep "2塁")
+                  third=$(echo $fieldSituation | grep "3塁")
 [ "$first" = "" ] || first=1
 [ "$second" = "" ] || second=2
 [ "$third" = "" ] || third=3
 
 baseSituation="$first$second${third}塁"
 [ "$baseSituation" = "塁" ] && baseSituation="無し"
+
+echo $first
+echo $second
+echo $third
+
+echo $baseSituation
+exit 1
 
 # アウトカウント
 out=$(cat $dir/tmp.html | grep -A1 'class="o"' | tail -n 1 | 

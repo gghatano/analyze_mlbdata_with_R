@@ -35,6 +35,8 @@ fieldSituation=$(cat $dir/tmp.html |
 [ "$second" = "" ] || second=2
 [ "$third" = "" ] || third=3
 
+
+
 baseSituation="$first$second${third}塁"
 [ "$baseSituation" = "塁" ] && baseSituation="無し"
 
