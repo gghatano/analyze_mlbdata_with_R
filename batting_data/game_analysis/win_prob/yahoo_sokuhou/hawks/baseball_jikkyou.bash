@@ -4,24 +4,24 @@
 dir=$(dirname $0)
 
 ## URLを生成
-## 巨人の試合の一球速報サイトのURLを探します
+## ソフトバンクの試合の一球速報サイトのURLを探します
 ## まずは, スケジュールのダウンロード
 scheduleOfToday=$(date +%Y%m%d)".html"
 [ -f "schedule/$scheduleOfToday" ] || curl "http://baseball.yahoo.co.jp/npb/schedule/" > ${dir}/schedule/$scheduleOfToday
 
-## 1日の試合スケジュール.htmlから, 巨人戦URLを探す
-giants_url=$(cat $dir/schedule/$scheduleOfToday | 
-grep -A4 -B4 'title="巨人"><div class' | 
+## 1日の試合スケジュール.htmlから, ソフトバンク戦URLを探す
+team_url=$(cat $dir/schedule/$scheduleOfToday | 
+grep -A4 -B4 'title="ソフトバンク"><div class' | 
 grep "npb/game/" | 
 sed 's;.*npb/game/\([0-9]*\).*;\1;')
 
-## 巨人の試合がなければ終わり
-[ "$giants_url" = "" ] && exit 1
+## ソフトバンクの試合がなければ終わり
+[ "$team_url" = "" ] && exit 1
 
-echo giants_game_ok
+echo "team_url is OK"
 
 ## 一球速報.htmlをダウンロード
-url="http://live.baseball.yahoo.co.jp/npb/game/$giants_url/score"
+url="http://live.baseball.yahoo.co.jp/npb/game/$team_url/score"
 curl $url > $dir/tmp.html
 
 echo download_html
