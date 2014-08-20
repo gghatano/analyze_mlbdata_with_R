@@ -25,6 +25,7 @@ situation=$(echo $situation | awk -F";" '{print $1, $2, $3, $4}'| sed 's/ /,/g')
 winProb=$(cat $dir/win_prob.csv | grep -E "^$situation,$scoreDiff,")
 winProb1=$(echo $winProb|awk -F "," '{print $10}')
 winProb2=$(echo $winProb|awk -F "," '{print $9}')
+echo "$situation"
 [ "$winProb1" = "" ] && exit 1
 [ "$winProb2" = "" ] && exit 1
 
@@ -40,14 +41,16 @@ echo "" >> $dir/tweet.txt
 echo ${team1}の勝率: $winProb1"%" >> $dir/tweet.txt
 echo ${team2}の勝率: $winProb2"%" >> $dir/tweet.txt
 
-
+echo "text_ok"
 ## ツイートしてくれるRスクリプトを生成
 $(which filehame) -lLABEL $HOME/kousien_jikkyou_template.R $dir/tweet.txt > ~/kousien_jikkyou.R
 
 echo "filehame OK" >> $HOME/Dropbox/cron.log.txt
+echo "filehame OK"
 
-label=$(cat ~/kousien_jikkyou.R | grep  "LABEL")
-[ "$label" = "" ] || exit 1
+#label=$(cat ~/kousien_jikkyou.R | grep  "LABEL")
+#echo $label
+# [ "$label" = "" ] || exit 1
 
 ## ツイートします
 $(which R) -q --slave --vanilla -f ~/kousien_jikkyou.R
