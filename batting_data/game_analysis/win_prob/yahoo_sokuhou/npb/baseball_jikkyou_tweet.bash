@@ -44,11 +44,12 @@ echo ${team2}の勝率: $winProb2"%" >> $dir/tweet.txt
 
 
 ## ツイートしてくれるRスクリプトを生成
-$(which filehame) -lLABEL $HOME/giants_sokuhou_template.R $dir/tweet.txt 
+$(which filehame) -lLABEL $HOME/giants_sokuhou_template.R $dir/tweet.txt >  ~/giants_sokuhou.R
 echo "filehame OK" >> $HOME/Dropbox/cron.log.txt
 
-#label=$(cat ~/giants_sokuhou.R | grep  "LABEL")
-#[ "$label" = "" ] || exit 1
+set +e
+label=$(cat ~/giants_sokuhou.R | grep  "LABEL")
+[ "$label" = "" ] || exit 1
 
 ## ツイートします
 $(which R) -q --slave --vanilla -f ~/giants_sokuhou.R

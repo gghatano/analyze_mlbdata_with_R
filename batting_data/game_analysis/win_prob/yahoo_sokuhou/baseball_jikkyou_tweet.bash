@@ -6,7 +6,7 @@ set -e
 echo $(date +%Y%m%d%H%M%S)
 ## 実況
 $dir/baseball_jikkyou.bash
-echo "jikkyou OK" >> $HOME/Dropbox/cron.log.txt
+echo "jikkyou OK" >> $HOME//cron.log.txt
 echo "jikkyou OK" 
 
 ## 勝率計算
@@ -45,14 +45,12 @@ echo "text_ok"
 ## ツイートしてくれるRスクリプトを生成
 $(which filehame) -lLABEL $HOME/kousien_jikkyou_template.R $dir/tweet.txt > ~/kousien_jikkyou.R
 
-echo "filehame OK" >> $HOME/Dropbox/cron.log.txt
 echo "filehame OK"
-
-#label=$(cat ~/kousien_jikkyou.R | grep  "LABEL")
-#echo $label
-# [ "$label" = "" ] || exit 1
+set +e
+label=$(cat ~/kousien_jikkyou.R | grep  "LABEL")
+[ "$label" = "" ] || exit 1
 
 ## ツイートします
 $(which R) -q --slave --vanilla -f ~/kousien_jikkyou.R
 
-echo "tweet OK" >> $HOME/Dropbox/cron.log.txt
+echo "tweet OK" >> $HOME//cron.log.txt
