@@ -46,6 +46,9 @@ $(which filehame) -lLABEL $HOME/kousien_jikkyou_template.R $dir/tweet.txt > ~/ko
 
 echo "filehame OK" >> $HOME/Dropbox/cron.log.txt
 
+label=$(cat ~/kousien_jikkyou.R | grep  "LABEL")
+[ "$label" = "" ] || exit 1
+
 ## ツイートします
 $(which R) -q --slave --vanilla -f ~/kousien_jikkyou.R
 
