@@ -21,7 +21,7 @@ sed 's;.*npb/game/\([0-9]*\).*;\1;')
 echo "team_url is OK"
 
 ## 一球速報.htmlをダウンロード
-url="http://live.baseball.yahoo.co.jp/npb/game/$team_url/score"
+url="http://live.baseball.yahoo.co.jp/npb/game/0$team_url/score"
 curl $url > $dir/tmp.html
 
 echo download_html
