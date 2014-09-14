@@ -15,6 +15,7 @@ grep -A4 -B4 'title="巨人"><div class' |
 grep "npb/game/" | 
 sed 's;.*npb/game/\([0-9]*\).*;\1;')
 
+
 ## 巨人の試合がなければ終わり
 [ "$giants_url" = "" ] && exit 1
 

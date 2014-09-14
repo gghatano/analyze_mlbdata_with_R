@@ -1,0 +1,1001 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja" xmlns:og="http://ogp.me/ns#" xmlns:mixi="http://mixi-platform.com/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+<!---京--->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>プロ野球 - 日程・結果 - スポーツナビ</title>
+<meta name="description" content="週単位の日程スケジュール一覧。一球速報や結果はもちろん、セ・リーグ、パ・リーグの順位、個人成績、プロ野球に関連した最新ニュース、写真ニュースなどの情報が満載な、 プロ野球サイトの日程一覧ページです。">
+<meta name="keywords" content="日程,スケジュール,プロ野球,野球,オールスター,日本シリーズ,公式戦,交流戦,クライマックスシリーズ">
+<link rel="stylesheet" href="http://i.yimg.jp/images/sports/baseball/npb/live/css/master-npb-live-common.css" type="text/css" media="all">
+<link rel="stylesheet" href="http://i.yimg.jp/images/sports/baseball/npb/css/master-npb-common.css" type="text/css" media="all">
+<link rel="shortcut icon" href="http://i.yimg.jp/images/sports/common/favicon/favicon.ico">
+<link rel="stylesheet" charset="utf-8" href="http://i.yimg.jp/images/sports/all_device/pc/css/unity_common.min.css" type="text/css" media="all" />
+<!--[if lt IE 9]>
+<script src="http://i.yimg.jp/images/sports/all_device/pc/js/html5shiv_min.js"></script>
+<![endif]-->
+
+
+<meta property="og:title"       content="プロ野球 - 日程・結果 - スポーツナビ" />
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="http://baseball.yahoo.co.jp/npb/schedule/" /> 
+<meta property="og:image"       content="http://i.yimg.jp/images/sports/promo/pc/facebook/baseball.png" />
+<meta property="og:site_name"   content="スポーツナビ" />
+<meta property="og:description" content="" />
+<meta property="og:locale"      content="ja_JP" />
+<meta property="fb:app_id"      content="215456371901325" />
+<link rel="apple-touch-icon" href="http://i.yimg.jp/images/ipn/wcb/top/sports57.png">
+<script type="text/javascript" src="http://i.yimg.jp/images/sports/js/jquery-1.3.2.min.js"></script><script type="text/javascript" src="http://i.yimg.jp/images/sports/v1/js/sports.global-1.1.1.js"></script>
+</head>
+<body class="yj950-2">
+
+<div id="wrapper">
+          <!-- #contentHeader -->
+          <header class="clearfix">
+            <div id="contentHeader">
+            <div class="floatL clearfix">
+              <h1 class="title"><a href="http://sports.yahoo.co.jp">sportsnavi</a></h1>
+              <p class="logIn"><a href="https://login.yahoo.co.jp/config/login?.src=spt_navi&lg=jp&.intl=jp&.done=http%3A%2F%2Fbaseball.yahoo.co.jp%2Fnpb%2Fschedule%2F">ログイン</a> IDでもっと便利に［<a href="https://account.edit.yahoo.co.jp/registration?.src=spt_navi&.done=http%3A%2F%2Fbaseball.yahoo.co.jp%2Fnpb%2Fschedule%2F">新規取得</a>］</p>
+            </div>
+            <div class="floatR">
+              <form action="http://sports.yahoo.co.jp/search/text">
+                <p class="searchArea">
+                  <input class="searchBox" type="text" name="query" maxlength="100" placeholder="キーワードで検索">
+                  <button class="btnSubmit">検索</button>
+                </p>
+              </form>
+              <p class="serviceLogo"><a href="http://www.yahoo.co.jp/" class="linkYahoo">Yahoo!</a></p>
+            </div>
+            </div>
+          </header><!-- /#contentHeader -->
+
+
+<!-- SpaceID=0 robot -->
+<!-- SpaceID=0 robot -->
+<!-- SpaceID=0 robot -->
+
+    <!-- #globalNav -->
+  <nav>
+    <div id="globalNav" class="clearfix">
+      <ul class="clearfix">
+        <li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/top/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC8-">トップ</a>｜</li>
+<li class="active"><span>プロ野球</span>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/mlb/RV=1/RU=aHR0cDovL2Jhc2ViYWxsLnlhaG9vLmNvLmpwL21sYi8-">MLB</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/hsb/RV=1/RU=aHR0cDovL2Jhc2ViYWxsLnlhaG9vLmNvLmpwL2hzYl9zdW1tZXIv">高校野球</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/jleague/RV=1/RU=aHR0cDovL3NvY2Nlci55YWhvby5jby5qcC9qbGVhZ3VlLw--">Jリーグ</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/ws/RV=1/RU=aHR0cDovL3NvY2Nlci55YWhvby5jby5qcC93cy8-">海外サッカー</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/jpn/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL3NvY2Nlci9qYXBhbi8-">サッカー代表</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/keiba/RV=1/RU=aHR0cDovL2tlaWJhLnlhaG9vLmNvLmpwLw--">競馬</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/localkeiba/RV=1/RE=1411876858/RH=cmRzaWcueWFob28uY28uanA-/RB=/RU=aHR0cDovL2FjLmViaXMubmUuanAvdHJfc2V0LnBocD9hcmd1bWVudD1CRXducHlXZiZhaT1MaW5rX1BDXzE-/RS=^ADAlloeAs36cKt135O0Jw4kM.aLIT0-" target="new">地方競馬</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/golf/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9nb2xmLw--">ゴルフ</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/figure/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL2ZpZ3VyZXNrYXRlLw--">フィギュア</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/f1/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9mMS8-">F1</a></li>
+      </ul>
+      <ul class="clearfix floatL">
+        <li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/tennis/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL3Rlbm5pcy8-">テニス</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/fight/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL2ZpZ2h0Lw--">格闘技</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/sumo/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9zdW1vLw--">大相撲</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/volley/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL3ZvbGxleS8-">バレー</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/rugby/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9ydWdieS8-">ラグビー</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/athletic/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL2F0aGxldGljLw--">陸上</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/basket/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9uYmEv">バスケ</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/nfl/RV=1/RE=1411876858/RH=cmRzaWcueWFob28uY28uanA-/RB=/RU=aHR0cDovL3d3dy5uZmxqYXBhbi5jb20v/RS=^ADA5zfZzY7FkbDgfLwMJXBdgwOor.E-" target="new">NFL</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/boatrace/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9ib2F0cmFjZS8-">ボート</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/keirin/RV=1/RE=1411876858/RH=cmRzaWcueWFob28uY28uanA-/RB=/RU=aHR0cDovL3d3dy5vZGRzcGFyay5jb20va2VpcmluLz95YWhvbyFfcGNfa2VpcmluXzAwMA--/RS=^ADAzU58AyvXj0ezkhWiS3ejD_xZ1CQ-">競輪</a>｜</li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/other/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL290aGVyLw--">他競技</a></li>
+      </ul>
+      <ul class="floatR">
+        <li class="navOther01"><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/fantasy/RV=1/RU=aHR0cDovL2ZhbnRhc3kuc3BvcnRzLnlhaG9vLmNvLmpwLw--">ファンタジー</a>｜</li>
+<li class="navOther02"><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/toto/RV=1/RU=aHR0cDovL3RvdG8ueWFob28uY28uanAv" target="new">toto</a>｜</li>
+<li class="navOther03"><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/plus/RV=1/RE=1411876858/RH=cmRzaWcueWFob28uY28uanA-/RB=/RU=aHR0cDovL3d3dy5wbHVzLWJsb2cuc3BvcnRzbmF2aS5jb20v/RS=^ADAMVcnuyoasCkWwq.43MoVPU42Fz8-">スポナビ＋</a>｜</li>
+<li class="navOther04"><a href="http://rdsig.yahoo.co.jp/media/sports/g_navi/pc/do/RV=1/RU=aHR0cDovL2Rvc3BvcnRzLnlhaG9vLmNvLmpwLw--">Doスポ</a></li>
+      </ul>
+    </div>
+    <ul class="subNav clearfix"><li><a href="/npb/">プロ野球トップ</a>｜</li>
+<li><a href="/npb/schedule/"><span>日程・結果</span></a>｜</li>
+<li><a href="/npb/standings/">順位</a>｜</li>
+<li><a href="/npb/stats/">個人成績</a>｜</li>
+<li><a href="/npb/teams/">チーム</a>｜</li>
+<li><a href="/npb/headlines/">ニュース</a>｜</li>
+<li><a href="http://sports.yahoo.co.jp/column/list?category=/baseball&id=/npb">コラム</a>｜</li>
+<li><a href="/npb/video/">動画</a>｜</li>
+<li><a href="http://sportsnavi.yahoo.co.jp/special/baseball/npb/2014/obtalk">OBトーク</a>｜</li>
+<li><a href="/npbopen/">オープン戦</a>｜</li>
+<li><a href="/npb/point/rank">データ採点</a>｜</li>
+<li><a href="http://fantabe.jp/">ファンタベ</a>｜</li>
+<li><a href="/japan/">侍ジャパン</a></li></ul>
+  </nav><!-- /#globalNav -->
+<div id="contents">
+
+<!-- SpaceID=0 robot -->
+
+<div id="contents-body" class="yjSNpb">
+<!--main start-->
+<div id="main">
+
+<!--/シーズンオフ-->
+<!--シーズンオフ/-->
+
+<!-- /スコアボード -->
+<div id="NpbBoxTeam">
+<div class="NpbScore clearFix">
+<!--/link-->
+<div class="NpbTitle NpbDate">
+<div class="Link">
+<div class="LinkLeft"><a href="/npb/schedule/?date=20140913">&lt;&lt;前の日</a></div>
+<div class="LinkRight"><a href="/npb/schedule/?date=20140915">次の日&gt;&gt;</a></div>
+<div class="LinkCenter">
+9月14日（日）の試合</div>
+</div>
+</div>
+<!--link/-->
+<!--/CENTRAL-->
+<div class="NpbCl yjMSt">セ･リーグ</div>
+<div class="NpbScoreBg clearFix">
+
+<div class="NpbScorePd4 clearFix"></div>
+<table border="0" cellspacing="0" cellpadding="0" class="teams">
+<tr><th class="bt bb bl"><a href="/npb/teams/3/" title="ＤｅＮＡ"><div class="pn DB"></div></a></th><td class="yjMS bt bb"><span><a href="/npb/teams/3/">ＤｅＮＡ</a></span></td>
+<td rowspan="2">
+<table border="0" cellspacing="0" cellpadding="0" class="score">
+<tr><td class="score_r">-</td><td class="yjSt bl"><a href="/npb/game/2014091401/top">予告先発</a>
+</td>
+</tr><tr><td colspan="2" class="standby yjMSt bt bb"><a href="/npb/game/2014091401/">試合前</a></td></tr>
+<tr><td class="score_r">-</td><td class="yjSt bl"><em>14:00</em></td></tr>
+</table>
+</td></tr>
+<tr><th class="bt bb bl"><a href="/npb/teams/1/" title="巨人"><div class="pn G"></div></a></th><td class="yjMS bb"><span><a href="/npb/teams/1/">巨人</a></span></td></tr>
+</table>
+<div class="NpbScorePd4 clearFix"></div>
+<table border="0" cellspacing="0" cellpadding="0" class="teams">
+<tr><th class="bt bb bl"><a href="/npb/teams/2/" title="ヤクルト"><div class="pn S"></div></a></th><td class="yjMS bt bb"><span><a href="/npb/teams/2/">ヤクルト</a></span></td>
+<td rowspan="2">
+<table border="0" cellspacing="0" cellpadding="0" class="score">
+<tr><td class="score_r">-</td><td class="yjSt bl"><a href="/npb/game/2014091402/top">予告先発</a>
+</td>
+</tr><tr><td colspan="2" class="standby yjMSt bt bb"><a href="/npb/game/2014091402/">試合前</a></td></tr>
+<tr><td class="score_r">-</td><td class="yjSt bl"><em>14:00</em></td></tr>
+</table>
+</td></tr>
+<tr><th class="bt bb bl"><a href="/npb/teams/4/" title="中日"><div class="pn D"></div></a></th><td class="yjMS bb"><span><a href="/npb/teams/4/">中日</a></span></td></tr>
+</table>
+<div class="NpbScorePd4 clearFix"></div>
+<table border="0" cellspacing="0" cellpadding="0" class="teams">
+<tr><th class="bt bb bl"><a href="/npb/teams/6/" title="広島"><div class="pn C"></div></a></th><td class="yjMS bt bb"><span><a href="/npb/teams/6/">広島</a></span></td>
+<td rowspan="2">
+<table border="0" cellspacing="0" cellpadding="0" class="score">
+<tr><td class="score_r">-</td><td class="yjSt bl"><a href="/npb/game/2014091403/top">予告先発</a>
+</td>
+</tr><tr><td colspan="2" class="standby yjMSt bt bb"><a href="/npb/game/2014091403/">試合前</a></td></tr>
+<tr><td class="score_r">-</td><td class="yjSt bl"><em>14:00</em></td></tr>
+</table>
+</td></tr>
+<tr><th class="bt bb bl"><a href="/npb/teams/5/" title="阪神"><div class="pn T"></div></a></th><td class="yjMS bb"><span><a href="/npb/teams/5/">阪神</a></span></td></tr>
+</table>
+</div>
+<!--CENTRAL/--> 
+<!--/CENTRAL-->
+<div class="NpbPl yjMSt">パ･リーグ</div>
+<div class="NpbScoreBg clearFix">
+
+<div class="NpbScorePd4 clearFix"></div>
+<table border="0" cellspacing="0" cellpadding="0" class="teams">
+<tr><th class="bt bb bl"><a href="/npb/teams/376/" title="楽天"><div class="pn E"></div></a></th><td class="yjMS bt bb"><span><a href="/npb/teams/376/">楽天</a></span></td>
+<td rowspan="2">
+<table border="0" cellspacing="0" cellpadding="0" class="score">
+<tr><td class="score_r">0</td><td class="yjSt bl"></td>
+</tr><tr><td colspan="2" class="active yjMSt bt bb"><a href="/npb/game/2014091405/">1回表</a></td></tr>
+<tr><td class="score_r">0</td><td class="yjSt bl"><em>13:00</em></td></tr>
+</table>
+</td></tr>
+<tr><th class="bt bb bl"><a href="/npb/teams/7/" title="西武"><div class="pn L"></div></a></th><td class="yjMS bb"><span><a href="/npb/teams/7/">西武</a></span></td></tr>
+</table>
+<div class="NpbScorePd4 clearFix"></div>
+<table border="0" cellspacing="0" cellpadding="0" class="teams">
+<tr><th class="bt bb bl"><a href="/npb/teams/9/" title="ロッテ"><div class="pn M"></div></a></th><td class="yjMS bt bb"><span><a href="/npb/teams/9/">ロッテ</a></span></td>
+<td rowspan="2">
+<table border="0" cellspacing="0" cellpadding="0" class="score">
+<tr><td class="score_r">0</td><td class="yjSt bl"></td>
+</tr><tr><td colspan="2" class="active yjMSt bt bb"><a href="/npb/game/2014091406/">1回表</a></td></tr>
+<tr><td class="score_r">0</td><td class="yjSt bl"><em>13:00</em></td></tr>
+</table>
+</td></tr>
+<tr><th class="bt bb bl"><a href="/npb/teams/12/" title="ソフトバンク"><div class="pn H"></div></a></th><td class="yjMS bb"><span><a href="/npb/teams/12/">ソフトバンク</a></span></td></tr>
+</table>
+<div class="NpbScorePd4 clearFix"></div>
+<table border="0" cellspacing="0" cellpadding="0" class="teams">
+<tr><th class="bt bb bl"><a href="/npb/teams/11/" title="オリックス"><div class="pn Bs"></div></a></th><td class="yjMS bt bb"><span><a href="/npb/teams/11/">オリックス</a></span></td>
+<td rowspan="2">
+<table border="0" cellspacing="0" cellpadding="0" class="score">
+<tr><td class="score_r">-</td><td class="yjSt bl"><a href="/npb/game/2014091404/top">予告先発</a>
+</td>
+</tr><tr><td colspan="2" class="standby yjMSt bt bb"><a href="/npb/game/2014091404/">試合前</a></td></tr>
+<tr><td class="score_r">-</td><td class="yjSt bl"><em>14:00</em></td></tr>
+</table>
+</td></tr>
+<tr><th class="bt bb bl"><a href="/npb/teams/8/" title="日本ハム"><div class="pn F"></div></a></th><td class="yjMS bb"><span><a href="/npb/teams/8/">日本ハム</a></span></td></tr>
+</table>
+</div>
+<!--CENTRAL/--> 
+</div></div><!-- スコアボード/ -->
+
+</div><!--main end/-->
+
+<!--sub start-->
+<div id="sub">
+<!-- SpaceID=0 robot -->
+</div><!--/#sub-->
+<!--sub end-->
+</div>
+<!--/#main--><div class="lh13">
+
+
+<div class="NpbFr">
+<table class="NpbPlySt yjMS" width="300">
+<tr><th colspan="7" class="lh13">
+<div class="NpbFl"><strong><a href="/npb/schedule/?&date=20140801">&lt;&lt;</a>
+</strong></div>
+<div class="NpbFr"><strong><a href="/npb/schedule/?&date=20141001">&gt;&gt;</a>
+</strong></div>
+<div class="ct"><strong>2014年9月</strong></div>
+</th>
+</tr>
+<tr class="ct nm yjMs">
+<td>月</td><td>火</td><td>水</td><td>木</td><td>金</td><td><span class="sat">土</span></td><td><span class="sun">日</span></td>
+</tr>
+<tr class="ct">
+<td class=""><a href="/npb/schedule/?&date=20140901">1</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140902">2</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140903">3</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140904">4</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140905">5</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140906">6</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140907">7</a></td>
+</tr><tr class="ct"><td class="nowweak"><a href="/npb/schedule/?&date=20140908">8</a></td>
+<td class="nowweak"><a href="/npb/schedule/?&date=20140909">9</a></td>
+<td class="nowweak"><a href="/npb/schedule/?&date=20140910">10</a></td>
+<td class="nowweak"><a href="/npb/schedule/?&date=20140911">11</a></td>
+<td class="nowweak"><a href="/npb/schedule/?&date=20140912">12</a></td>
+<td class="nowweak"><a href="/npb/schedule/?&date=20140913">13</a></td>
+<td class="now"><a href="/npb/schedule/?&date=20140914"><strong>14</strong></a></td>
+</tr><tr class="ct"><td class=""><a href="/npb/schedule/?&date=20140915">15</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140916">16</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140917">17</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140918">18</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140919">19</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140920">20</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140921">21</a></td>
+</tr><tr class="ct"><td class=""><a href="/npb/schedule/?&date=20140922">22</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140923">23</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140924">24</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140925">25</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140926">26</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140927">27</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140928">28</a></td>
+</tr><tr class="ct"><td class=""><a href="/npb/schedule/?&date=20140929">29</a></td>
+<td class=""><a href="/npb/schedule/?&date=20140930">30</a></td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+</div>
+
+<!--切り替え-->
+<div class="yjMS NpbScore">
+<strong>日程・結果 ： </strong>
+<strong>すべて</strong>
+<span class="pipe">|</span><a href="/npb/schedule/?series=1&series=2&">公式戦</a><span class="pipe">|</span><a href="/npb/schedule/?series=26&">交流戦</a><span class="pipe">|</span><a href="/npb/schedule/?series=4&">オールスター</a><span class="pipe">|</span><a href="/npb/schedule/?series=35&series=36&series=37&series=38&">クライマックスシリーズ</a><span class="pipe">|</span><a href="/npb/schedule/?series=3&">日本シリーズ</a></div>
+
+
+<div class="yjMS"><strong>チーム別日程</strong></div>
+<div class="NpbCal NpbLogoSS yjMS clearFix">
+<div class="mb10">
+<span><a href="/npb/teams/1/schedule" class="pnS G" title="巨人">巨人</a></span>
+<span><a href="/npb/teams/5/schedule" class="pnS T" title="阪神">阪神</a></span>
+<span><a href="/npb/teams/6/schedule" class="pnS C" title="広島">広島</a></span>
+<span><a href="/npb/teams/4/schedule" class="pnS D" title="中日">中日</a></span>
+<span><a href="/npb/teams/3/schedule" class="pnS DB" title="ＤｅＮＡ">ＤｅＮＡ</a></span>
+<span><a href="/npb/teams/2/schedule" class="pnS S" title="ヤクルト">ヤクルト</a></span>
+</div>
+<div class="mb10">
+<span><a href="/npb/teams/376/schedule" class="pnS E" title="楽天">楽天</a></span>
+<span><a href="/npb/teams/7/schedule" class="pnS L" title="西武">西武</a></span>
+<span><a href="/npb/teams/9/schedule" class="pnS M" title="ロッテ">ロッテ</a></span>
+<span><a href="/npb/teams/12/schedule" class="pnS H" title="ソフトバンク">ソフトバンク</a></span>
+<span><a href="/npb/teams/11/schedule" class="pnS Bs" title="オリックス">オリックス</a></span>
+<span><a href="/npb/teams/8/schedule" class="pnS F" title="日本ハム">日本ハム</a></span>
+</div>
+</div>
+
+<!--切り替え-->
+<div class="clearFix"></div>
+<!--日程切り替えタブ-->
+<div class="NpbPlySt mb0">
+<div class="NpbSubTitleB ct p5 yjMS"><strong>2014年</strong>　
+<a href="/npb/schedule/?&date=20140301">3月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140401">4月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140501">5月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140601">6月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140701">7月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140801">8月</a>
+<span class="pipe">|</span><strong>9月</strong><span class="pipe">|</span><a href="/npb/schedule/?&date=20141001">10月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20141101">11月</a>
+</div>
+
+</div>
+
+<!--/link-->
+<div class="NpbTitle NpbDate" style="border-top:none !important;">
+<div class="Link">
+<div class="LinkLeft"><a href="/npb/schedule/?&date=20140901">&lt;&lt;前の週</a></div>
+<div class="LinkRight"><a href="/npb/schedule/?&date=20140915">次の週&gt;&gt;</a></div>
+<div class="LinkCenter yjM">9月8日（月）～9月14日（日）</div>
+</div></div>
+<!--link/-->
+
+
+
+
+
+<div class="NpbSchedule lh15">
+<table class="yjMS mb5">
+<tr>
+<th class="cellB ct" width="100" rowspan="2"><strong>9月8日<br /><span class="">（月）</span></strong></th>
+<td class="cellB pl7"><a href="/npb/teams/376/">楽天</a></td>
+<td class="cellB ct"><strong>5</strong> - 4</td>
+<td class="cellB pl7"><a href="/npb/teams/11/">オリックス</a></td>
+<td class="cellB ct"><a href="/npb/game/2014090801/">結果</a></td>
+<td class="cellB pl7"><em>18:00 コボスタ宮城</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1000121/">福山</a>（<a href="/npb/teams/376/">楽</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/600066/">平野佳</a>（<a href="/npb/teams/11/">オ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellB pl7"><a href="/npb/teams/9/">ロッテ</a></td>
+<td class="cellB ct">0 - <strong>7</strong></td>
+<td class="cellB pl7"><a href="/npb/teams/7/">西武</a></td>
+<td class="cellB ct"><a href="/npb/game/2014090802/">結果</a></td>
+<td class="cellB pl7"><em>18:15 ＱＶＣマリン</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/700065/">岸</a>（<a href="/npb/teams/7/">西</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1100101/">藤岡</a>（<a href="/npb/teams/9/">ロ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr>
+<th class="cellA ct" width="100" rowspan="6"><strong>9月9日<br /><span class="">（火）</span></strong></th>
+<td class="cellA pl7"><a href="/npb/teams/3/">ＤｅＮＡ</a></td>
+<td class="cellA ct"><strong>3</strong> - 0</td>
+<td class="cellA pl7"><a href="/npb/teams/2/">ヤクルト</a></td>
+<td class="cellA ct"><a href="/npb/game/2014090901/">結果</a></td>
+<td class="cellA pl7"><em>18:00 横浜</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/500079/">久保</a>（<a href="/npb/teams/3/">Ｄ</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/400280/">ナーブソン</a>（<a href="/npb/teams/2/">ヤ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/5/">阪神</a></td>
+<td class="cellA ct">2 - <strong>8</strong></td>
+<td class="cellA pl7"><a href="/npb/teams/1/">巨人</a></td>
+<td class="cellA ct"><a href="/npb/game/2014090902/">結果</a></td>
+<td class="cellA pl7"><em>18:00 甲子園</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/12107/">杉内</a>（<a href="/npb/teams/1/">巨</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/500502/">メッセンジャー</a>（<a href="/npb/teams/5/">神</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/6/">広島</a></td>
+<td class="cellA ct"><strong>2</strong> - 1</td>
+<td class="cellA pl7"><a href="/npb/teams/4/">中日</a></td>
+<td class="cellA ct"><a href="/npb/game/2014090903/">結果</a></td>
+<td class="cellA pl7"><em>18:00 マツダスタジアム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1000116/">中崎</a>（<a href="/npb/teams/6/">広</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1200055/">福谷</a>（<a href="/npb/teams/4/">中</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/376/">楽天</a></td>
+<td class="cellA ct"><strong>8</strong> - 7</td>
+<td class="cellA pl7"><a href="/npb/teams/11/">オリックス</a></td>
+<td class="cellA ct"><a href="/npb/game/2014090905/">結果</a></td>
+<td class="cellA pl7"><em>18:00 コボスタ宮城</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/400356/">ファルケンボーグ</a>（<a href="/npb/teams/376/">楽</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/600066/">平野佳</a>（<a href="/npb/teams/11/">オ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/9/">ロッテ</a></td>
+<td class="cellA ct"><strong>3</strong> - 2</td>
+<td class="cellA pl7"><a href="/npb/teams/7/">西武</a></td>
+<td class="cellA ct"><a href="/npb/game/2014090906/">結果</a></td>
+<td class="cellA pl7"><em>18:15 ＱＶＣマリン</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1100104/">益田</a>（<a href="/npb/teams/9/">ロ</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1200082/">増田</a>（<a href="/npb/teams/7/">西</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/8/">日本ハム</a></td>
+<td class="cellA ct"><strong>10</strong> - 2</td>
+<td class="cellA pl7"><a href="/npb/teams/12/">ソフトバンク</a></td>
+<td class="cellA ct"><a href="/npb/game/2014090904/">結果</a></td>
+<td class="cellA pl7"><em>18:30 東京ドーム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1000024/">中村</a>（<a href="/npb/teams/8/">日</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/300363/">スタンリッジ</a>（<a href="/npb/teams/12/">ソ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr>
+<th class="cellB ct" width="100" rowspan="6"><strong>9月10日<br /><span class="">（水）</span></strong></th>
+<td class="cellB pl7"><a href="/npb/teams/3/">ＤｅＮＡ</a></td>
+<td class="cellB ct"><strong>2</strong> - 0</td>
+<td class="cellB pl7"><a href="/npb/teams/2/">ヤクルト</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091001/">結果</a></td>
+<td class="cellB pl7"><em>18:00 横浜</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/600008/">山口</a>（<a href="/npb/teams/3/">Ｄ</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1300094/">杉浦</a>（<a href="/npb/teams/2/">ヤ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellB pl7"><a href="/npb/teams/5/">阪神</a></td>
+<td class="cellB ct">1 - <strong>3</strong></td>
+<td class="cellB pl7"><a href="/npb/teams/1/">巨人</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091002/">結果</a></td>
+<td class="cellB pl7"><em>18:00 甲子園</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1200041/">菅野</a>（<a href="/npb/teams/1/">巨</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/1200005/">マシソン</a>（<a href="/npb/teams/1/">巨</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/11806/">福原</a>（<a href="/npb/teams/5/">神</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellB pl7"><a href="/npb/teams/6/">広島</a></td>
+<td class="cellB ct"><strong>4</strong> - 3</td>
+<td class="cellB pl7"><a href="/npb/teams/4/">中日</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091003/">結果</a></td>
+<td class="cellB pl7"><em>18:00 マツダスタジアム</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1100081/">野村</a>（<a href="/npb/teams/6/">広</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/1200008/">ミコライオ</a>（<a href="/npb/teams/6/">広</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/1200061/">若松</a>（<a href="/npb/teams/4/">中</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellB pl7"><a href="/npb/teams/376/">楽天</a></td>
+<td class="cellB ct">0 - <strong>6</strong></td>
+<td class="cellB pl7"><a href="/npb/teams/11/">オリックス</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091005/">結果</a></td>
+<td class="cellB pl7"><em>18:00 コボスタ宮城</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/500027/">金子千尋</a>（<a href="/npb/teams/11/">オ</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1300089/">横山</a>（<a href="/npb/teams/376/">楽</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellB pl7"><a href="/npb/teams/9/">ロッテ</a></td>
+<td class="cellB ct"><strong>4</strong> - 3</td>
+<td class="cellB pl7"><a href="/npb/teams/7/">西武</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091006/">結果</a></td>
+<td class="cellB pl7"><em>18:15 ＱＶＣマリン</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1300050/">石川</a>（<a href="/npb/teams/9/">ロ</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/1100104/">益田</a>（<a href="/npb/teams/9/">ロ</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/1000023/">岡本洋</a>（<a href="/npb/teams/7/">西</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellB pl7"><a href="/npb/teams/8/">日本ハム</a></td>
+<td class="cellB ct">1 - <strong>2</strong></td>
+<td class="cellB pl7"><a href="/npb/teams/12/">ソフトバンク</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091004/">結果</a></td>
+<td class="cellB pl7"><em>18:30 東京ドーム</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/900096/">攝津</a>（<a href="/npb/teams/12/">ソ</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/400228/">サファテ</a>（<a href="/npb/teams/12/">ソ</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/20118/">木佐貫</a>（<a href="/npb/teams/8/">日</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr>
+<th class="cellA ct" width="100" rowspan="6"><strong>9月11日<br /><span class="">（木）</span></strong></th>
+<td class="cellA pl7"><a href="/npb/teams/3/">ＤｅＮＡ</a></td>
+<td class="cellA ct">2 - <strong>3</strong></td>
+<td class="cellA pl7"><a href="/npb/teams/2/">ヤクルト</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091101/">結果</a></td>
+<td class="cellA pl7"><em>18:00 横浜</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1300096/">秋吉</a>（<a href="/npb/teams/2/">ヤ</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/1000044/">バーネット</a>（<a href="/npb/teams/2/">ヤ</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/1300037/">三上</a>（<a href="/npb/teams/3/">Ｄ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/5/">阪神</a></td>
+<td class="cellA ct">2 - <strong>6</strong></td>
+<td class="cellA pl7"><a href="/npb/teams/1/">巨人</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091102/">結果</a></td>
+<td class="cellA pl7"><em>18:00 甲子園</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1000083/">澤村</a>（<a href="/npb/teams/1/">巨</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/500038/">能見</a>（<a href="/npb/teams/5/">神</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/6/">広島</a></td>
+<td class="cellA ct">1 - <strong>2</strong></td>
+<td class="cellA pl7"><a href="/npb/teams/4/">中日</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091103/">結果</a></td>
+<td class="cellA pl7"><em>18:00 マツダスタジアム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1000138/">大野</a>（<a href="/npb/teams/4/">中</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/1200055/">福谷</a>（<a href="/npb/teams/4/">中</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/20167/">永川勝</a>（<a href="/npb/teams/6/">広</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/376/">楽天</a></td>
+<td class="cellA ct">-</td>
+<td class="cellA pl7"><a href="/npb/teams/11/">オリックス</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091105/">中止</a></td>
+<td class="cellA pl7"><em>18:00 コボスタ宮城</em></td>
+<td class="cellA" width="455">
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/9/">ロッテ</a></td>
+<td class="cellA ct">-</td>
+<td class="cellA pl7"><a href="/npb/teams/7/">西武</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091106/">中止</a></td>
+<td class="cellA pl7"><em>18:15 ＱＶＣマリン</em></td>
+<td class="cellA" width="455">
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/8/">日本ハム</a></td>
+<td class="cellA ct"><strong>7</strong> - 2</td>
+<td class="cellA pl7"><a href="/npb/teams/12/">ソフトバンク</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091104/">結果</a></td>
+<td class="cellA pl7"><em>18:30 東京ドーム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/500118/">メンドーサ</a>（<a href="/npb/teams/8/">日</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1100115/">武田</a>（<a href="/npb/teams/12/">ソ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr>
+<th class="cellB ct" width="100" rowspan="3"><strong>9月12日<br /><span class="">（金）</span></strong></th>
+<td class="cellB pl7"><a href="/npb/teams/1/">巨人</a></td>
+<td class="cellB ct"><strong>4</strong> - 0</td>
+<td class="cellB pl7"><a href="/npb/teams/3/">ＤｅＮＡ</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091201/">結果</a></td>
+<td class="cellB pl7"><em>18:00 東京ドーム</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/400010/">内海</a>（<a href="/npb/teams/1/">巨</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/11034/">三浦</a>（<a href="/npb/teams/3/">Ｄ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellB pl7"><a href="/npb/teams/4/">中日</a></td>
+<td class="cellB ct"><strong>3</strong> - 1</td>
+<td class="cellB pl7"><a href="/npb/teams/2/">ヤクルト</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091202/">結果</a></td>
+<td class="cellB pl7"><em>18:00 ナゴヤドーム</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/12191/">山井</a>（<a href="/npb/teams/4/">中</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/1200055/">福谷</a>（<a href="/npb/teams/4/">中</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/1000133/">七條</a>（<a href="/npb/teams/2/">ヤ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellB pl7"><a href="/npb/teams/5/">阪神</a></td>
+<td class="cellB ct"><strong>8</strong> - 2</td>
+<td class="cellB pl7"><a href="/npb/teams/6/">広島</a></td>
+<td class="cellB ct"><a href="/npb/game/2014091203/">結果</a></td>
+<td class="cellB pl7"><em>18:00 甲子園</em></td>
+<td class="cellB" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1200062/">藤浪</a>（<a href="/npb/teams/5/">神</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1000096/">福井</a>（<a href="/npb/teams/6/">広</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr>
+<th class="cellA ct" width="100" rowspan="6"><strong>9月13日<br /><span class="sat">（土）</span></strong></th>
+<td class="cellA pl7"><a href="/npb/teams/7/">西武</a></td>
+<td class="cellA ct">3 - <strong>8</strong></td>
+<td class="cellA pl7"><a href="/npb/teams/376/">楽天</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091305/">結果</a></td>
+<td class="cellA pl7"><em>13:00 西武ドーム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1200117/">則本</a>（<a href="/npb/teams/376/">楽</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1300010/">誠</a>（<a href="/npb/teams/7/">西</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/12/">ソフトバンク</a></td>
+<td class="cellA ct"><strong>3</strong> - 2</td>
+<td class="cellA pl7"><a href="/npb/teams/9/">ロッテ</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091306/">結果</a></td>
+<td class="cellA pl7"><em>13:00 ヤフオクドーム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/500040/">中田</a>（<a href="/npb/teams/12/">ソ</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/400228/">サファテ</a>（<a href="/npb/teams/12/">ソ</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/400048/">成瀬</a>（<a href="/npb/teams/9/">ロ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/1/">巨人</a></td>
+<td class="cellA ct"><strong>2</strong> - 0</td>
+<td class="cellA pl7"><a href="/npb/teams/3/">ＤｅＮＡ</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091301/">結果</a></td>
+<td class="cellA pl7"><em>14:00 東京ドーム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/400011/">西村</a>（<a href="/npb/teams/1/">巨</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/1200005/">マシソン</a>（<a href="/npb/teams/1/">巨</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/900262/">モスコーソ</a>（<a href="/npb/teams/3/">Ｄ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/5/">阪神</a></td>
+<td class="cellA ct">5 - <strong>17</strong></td>
+<td class="cellA pl7"><a href="/npb/teams/6/">広島</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091303/">結果</a></td>
+<td class="cellA pl7"><em>14:00 甲子園</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1300057/">大瀬良</a>（<a href="/npb/teams/6/">広</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1300070/">岩貞</a>（<a href="/npb/teams/5/">神</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/8/">日本ハム</a></td>
+<td class="cellA ct"><strong>1</strong> - 0</td>
+<td class="cellA pl7"><a href="/npb/teams/11/">オリックス</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091304/">結果</a></td>
+<td class="cellA pl7"><em>14:00 札幌ドーム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/1200087/">大谷</a>（<a href="/npb/teams/8/">日</a>）</td>
+<td class="s"><!--NULL--></td>
+<td class="l">敗&nbsp;<a href="/npb/player/1300108/">東明</a>（<a href="/npb/teams/11/">オ</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr><td class="cellA pl7"><a href="/npb/teams/4/">中日</a></td>
+<td class="cellA ct">1 - <strong>2</strong></td>
+<td class="cellA pl7"><a href="/npb/teams/2/">ヤクルト</a></td>
+<td class="cellA ct"><a href="/npb/game/2014091302/">結果</a></td>
+<td class="cellA pl7"><em>15:00 ナゴヤドーム</em></td>
+<td class="cellA" width="455">
+<table width="100%">
+<tr>
+<td class="w">勝&nbsp;<a href="/npb/player/500086/">松岡</a>（<a href="/npb/teams/2/">ヤ</a>）</td>
+<td class="s">S&nbsp;<a href="/npb/player/1000044/">バーネット</a>（<a href="/npb/teams/2/">ヤ</a>）</td>
+<td class="l">敗&nbsp;<a href="/npb/player/1300066/">祖父江</a>（<a href="/npb/teams/4/">中</a>）</td>
+</tr>
+</table>
+</td>
+</tr><tr>
+<th class="today ct" width="100" rowspan="6"><strong>9月14日<br /><span class="sun">（日）</span></strong></th>
+<td class="today pl7"><a href="/npb/teams/7/">西武</a></td>
+<td class="today ct">0 - 0</td>
+<td class="today pl7"><a href="/npb/teams/376/">楽天</a></td>
+<td class="today ct"><a href="/npb/game/2014091405/">1回表</a></td>
+<td class="today pl7"><em>13:00 西武ドーム</em></td>
+<td class="today" width="455">
+</td>
+</tr><tr><td class="today pl7"><a href="/npb/teams/12/">ソフトバンク</a></td>
+<td class="today ct">0 - 0</td>
+<td class="today pl7"><a href="/npb/teams/9/">ロッテ</a></td>
+<td class="today ct"><a href="/npb/game/2014091406/">1回表</a></td>
+<td class="today pl7"><em>13:00 ヤフオクドーム</em></td>
+<td class="today" width="455">
+</td>
+</tr><tr><td class="today pl7"><a href="/npb/teams/1/">巨人</a></td>
+<td class="today ct">-</td>
+<td class="today pl7"><a href="/npb/teams/3/">ＤｅＮＡ</a></td>
+<td class="today ct"><a href="/npb/game/2014091401/">試合前</a></td>
+<td class="today pl7"><em>14:00 東京ドーム</em></td>
+<td class="today" width="455">
+<table width="100%">
+
+<tr>
+<td class="s">(予)&nbsp;<a href="/npb/player/1100042/">江柄子　裕樹</a></td>
+<td class="w">(予)&nbsp;<a href="/npb/player/1200050/">井納　翔一</a></td>
+
+<td class="l"><span class="pipe">|</span><a href="http://tv.yahoo.co.jp/search/?q=&t=3&g=0101&oa=1&d=20120828">テレビ放送</a></td>
+
+
+</tr>
+</table>
+</td>
+</tr><tr><td class="today pl7"><a href="/npb/teams/4/">中日</a></td>
+<td class="today ct">-</td>
+<td class="today pl7"><a href="/npb/teams/2/">ヤクルト</a></td>
+<td class="today ct"><a href="/npb/game/2014091402/">試合前</a></td>
+<td class="today pl7"><em>14:00 ナゴヤドーム</em></td>
+<td class="today" width="455">
+<table width="100%">
+
+<tr>
+<td class="s">(予)&nbsp;<a href="/npb/player/10175/">山本昌</a></td>
+<td class="w">(予)&nbsp;<a href="/npb/player/1200076/">小川　泰弘</a></td>
+
+<td class="l"><span class="pipe">|</span><a href="http://tv.yahoo.co.jp/search/?q=&t=3&g=0101&oa=1&d=20120828">テレビ放送</a></td>
+
+
+</tr>
+</table>
+</td>
+</tr><tr><td class="today pl7"><a href="/npb/teams/5/">阪神</a></td>
+<td class="today ct">-</td>
+<td class="today pl7"><a href="/npb/teams/6/">広島</a></td>
+<td class="today ct"><a href="/npb/game/2014091403/">試合前</a></td>
+<td class="today pl7"><em>14:00 甲子園</em></td>
+<td class="today" width="455">
+<table width="100%">
+
+<tr>
+<td class="s">(予)&nbsp;<a href="/npb/player/500502/">メッセンジャー</a></td>
+<td class="w">(予)&nbsp;<a href="/npb/player/1300058/">九里　亜蓮</a></td>
+
+<td class="l"><span class="pipe">|</span><a href="http://tv.yahoo.co.jp/search/?q=&t=3&g=0101&oa=1&d=20120828">テレビ放送</a></td>
+
+
+</tr>
+</table>
+</td>
+</tr><tr><td class="today pl7"><a href="/npb/teams/8/">日本ハム</a></td>
+<td class="today ct">-</td>
+<td class="today pl7"><a href="/npb/teams/11/">オリックス</a></td>
+<td class="today ct"><a href="/npb/game/2014091404/">試合前</a></td>
+<td class="today pl7"><em>14:00 札幌ドーム</em></td>
+<td class="today" width="455">
+<table width="100%">
+
+<tr>
+<td class="s">(予)&nbsp;<a href="/npb/player/1300043/">浦野　博司</a></td>
+<td class="w">(予)&nbsp;<a href="/npb/player/1200137/">ディクソン</a></td>
+
+<td class="l"><span class="pipe">|</span><a href="http://tv.yahoo.co.jp/search/?q=&t=3&g=0101&oa=1&d=20120828">テレビ放送</a></td>
+
+
+</tr>
+</table>
+</td>
+</tr></table>
+
+</div>
+
+
+
+
+
+<!--/link-->
+<div class="NpbTitleMb0 NpbDate" style="margin-bottom:0 !important; border-bottom:none !important;">
+<div class="Link">
+<div class="LinkLeft"><a href="/npb/schedule/?&date=20140901">&lt;&lt;前の週</a></div>
+<div class="LinkRight"><a href="/npb/schedule/?&date=20140915">次の週&gt;&gt;</a></div>
+<div class="LinkCenter yjM">9月8日（月）～9月14日（日）</div>
+</div></div>
+<!--link/-->
+
+<!--日程切り替えタブ-->
+<div class="NpbPlySt mb10">
+<div class="NpbSubTitleB ct p5 yjMS"><strong>2014年</strong>　
+<a href="/npb/schedule/?&date=20140301">3月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140401">4月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140501">5月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140601">6月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140701">7月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20140801">8月</a>
+<span class="pipe">|</span><strong>9月</strong><span class="pipe">|</span><a href="/npb/schedule/?&date=20141001">10月</a>
+<span class="pipe">|</span><a href="/npb/schedule/?&date=20141101">11月</a>
+</div>
+
+</div>
+<div class="NpbFl yjMS clearFix">※テレビ放送のリンクはYahoo!テレビへ移動します</div><br />
+<div class="NpbFl yjMS clearFix">※（予）は予告先発</div><br />
+<div class="NpbFl yjMS clearFix">※（先）は先発</div>
+
+</div>
+<script type="text/javascript" language="JavaScript">
+<!--
+yads_ad_ds = '76136_17223';
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" src="http://yads.c.yimg.jp/js/yads.js"></script>
+ <!--IMの出力部分-->
+
+<div id="contents-footer">
+<span class="yj-guid"><img src="http://i.yimg.jp/images/clear.gif" width="1" height="1" alt="本文はここまでです"></span>
+<span class="yj-skip">
+<a href="#pagetop"><img src="http://i.yimg.jp/images/clear.gif" alt="このページの先頭へ" width="1" height="1"></a></span>
+</div>
+
+</div>
+
+<hr class="separation">
+
+<div id="footer">
+<!-- SpaceID=0 robot -->
+<!-- SpaceID=0 robot -->
+  <!-- #contentFooter -->
+  <footer>
+    <div id="contentFooter">
+    <div class="footerLink clearfix">
+      <p class="title"><a href="http://sports.yahoo.co.jp">sportsnavi</a></p>
+      <div class="footerSns">
+        <a href="https://www.facebook.com/sportsnavi">
+          <dl>
+            <dt class="snsFacebook"><span>FacebookIcon</span></dt>
+            <dd>
+              <p class="snsTitle">Facebook</p>
+              <p class="snsExplanation">スポーツナビ<br>公式ページ</p>
+            </dd>
+          </dl>
+        </a>
+        <a href="https://twitter.com/sportsnavi">
+          <dl>
+            <dt class="snsTwitter"><span>TwitterIcon</span></dt>
+            <dd>
+              <p class="snsTitle">twitter</p>
+              <p class="snsExplanation">最新のスポーツ情報を配信中</p>
+            </dd>
+          </dl>
+        </a>
+      </div>
+              <div class="footerNav">
+          <ul class="clearfix">
+            <li><span>野球</span>
+              <ul>
+                <li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/npb/RV=1/RU=aHR0cDovL2Jhc2ViYWxsLnlhaG9vLmNvLmpwL25wYi8-">プロ野球</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/mlb/RV=1/RU=aHR0cDovL2Jhc2ViYWxsLnlhaG9vLmNvLmpwL21sYi8-">MLB</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/hsb/RV=1/RU=aHR0cDovL2Jhc2ViYWxsLnlhaG9vLmNvLmpwL2hzYl9zdW1tZXIv">高校野球</a></li>
+              </ul>
+            </li>
+            <li><span>サッカー</span>
+              <ul>
+                <li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/jleague/RV=1/RU=aHR0cDovL3NvY2Nlci55YWhvby5jby5qcC9qbGVhZ3VlLw--">Jリーグ</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/ws/RV=1/RU=aHR0cDovL3NvY2Nlci55YWhvby5jby5qcC93cy8-">海外サッカー</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/jpn/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL3NvY2Nlci9qYXBhbi8-">サッカー代表</a></li>
+              </ul>
+            </li>
+            <li><span>競馬</span>
+              <ul>
+                <li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/keiba/RV=1/RU=aHR0cDovL2tlaWJhLnlhaG9vLmNvLmpwLw--">競馬</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/localkeiba/RV=1/RE=1411876858/RH=cmRzaWcueWFob28uY28uanA-/RB=/RU=aHR0cDovL2FjLmViaXMubmUuanAvdHJfc2V0LnBocD9hcmd1bWVudD1CRXducHlXZiZhaT1MaW5rX1BDXzE-/RS=^ADA2543SmhWgeaRzt2oQ9TaPk6ZFNc-" target="new">地方競馬</a></li>
+              </ul>
+            </li>
+            <li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/golf/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9nb2xmLw--">ゴルフ</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/figure/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL2ZpZ3VyZXNrYXRlLw--">フィギュア</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/f1/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9mMS8-">F1</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/tennis/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL3Rlbm5pcy8-">テニス</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/fight/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL2ZpZ2h0Lw--">格闘技</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/sumo/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9zdW1vLw--">大相撲</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/volley/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL3ZvbGxleS8-">バレー</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/rugby/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9ydWdieS8-">ラグビー</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/athletic/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL2F0aGxldGljLw--">陸上</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/basket/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9uYmEv">バスケ</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/nfl/RV=1/RE=1411876858/RH=cmRzaWcueWFob28uY28uanA-/RB=/RU=aHR0cDovL3d3dy5uZmxqYXBhbi5jb20v/RS=^ADAc51tZT342MuIGPhWyEoM.OV5eUQ-" target="new">NFL</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/boatrace/RV=1/RU=aHR0cDovL3Nwb3J0cy55YWhvby5jby5qcC9ib2F0cmFjZS8-">ボート</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/keirin/RV=1/RE=1411876858/RH=cmRzaWcueWFob28uY28uanA-/RB=/RU=aHR0cDovL3d3dy5vZGRzcGFyay5jb20va2VpcmluLz95YWhvbyFfcGNfa2VpcmluXzAwMA--/RS=^ADA1E1KEIbdXLk2pOucL7T4QMpOBVE-">競輪</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/other/RV=1/RU=aHR0cDovL3Nwb3J0c25hdmkueWFob28uY28uanAvc3BvcnRzL290aGVyLw--">他競技</a></li>
+          </ul>
+          <ul class="clearfix footerNavOther">
+            <li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/fantasy/RV=1/RU=aHR0cDovL2ZhbnRhc3kuc3BvcnRzLnlhaG9vLmNvLmpwLw--">ファンタジー</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/toto/RV=1/RU=aHR0cDovL3RvdG8ueWFob28uY28uanAv" target="new">toto</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/plus/RV=1/RE=1411876858/RH=cmRzaWcueWFob28uY28uanA-/RB=/RU=aHR0cDovL3d3dy5wbHVzLWJsb2cuc3BvcnRzbmF2aS5jb20v/RS=^ADAHLc1T4545ua2nnwPeySLjxpN3Ww-">スポナビ＋</a></li>
+<li><a href="http://rdsig.yahoo.co.jp/media/sports/g_footer/pc/do/RV=1/RU=aHR0cDovL2Rvc3BvcnRzLnlhaG9vLmNvLmpwLw--">Doスポ</a></li>
+          </ul>
+        </div>
+
+
+      <p class="topPage" style="position:relative;"><a href="#contentHeader">ページトップへ</a></p>
+    </div>
+    <div class="footerBottom">
+      <ul>
+        <li><a href="http://sports.yahoo.co.jp">スポーツナビ</a>｜</li>
+<li><a href="http://www.yahoo-help.jp/app/home/p/603/">ヘルプ</a>｜</li>
+<li><a href="http://docs.yahoo.co.jp/docs/info/terms/">利用規約</a>｜</li>
+<li><a href="http://docs.yahoo.co.jp/docs/info/terms/chapter1.html#cf2nd">プライバシーポリシー</a>｜</li>
+<li><a href="http://www.yahoo-help.jp/app/answers/detail/p/603/a_id/43525">免責事項</a>｜</li>
+<li><a href="http://www.plus-blog.sportsnavi.com/sportsnavi_help/article/1">スタッフ募集</a>｜</li>
+<li><a href="https://notice.ms.yahoo.co.jp/?p_url=https%3A%2F%2Fwww.yahoo-help.jp%2Fapp%2Fask%2Fp%2F2428%2Fform%2Fyadv-info&from_a_id=&from_pid=&app_name=">ご意見・ご要望</a></li>
+      </ul>
+      <p><small>Copyright (C) 2014 DataStadiumInc. All Rights Reserved.</small></p>
+<p><small>Copyright (C) 2014 Y's Sports Inc. All Rights Reserved.</small></p>
+<p><small>Copyright (C) 2014 Yahoo Japan Corporation. All Rights Reserved.</small></p>
+    </div>
+    </div>
+  </footer>
+  <!-- /#contentFooter -->
+  <script type="text/javascript">
+<!--
+$(function() {
+  var topPageBtn = $(".topPage");
+
+  topPageBtn.css('bottom', -20 );
+
+  topPageBtn.click(function(){
+    $('body,html').animate({
+      scrollTop: 0
+    });
+    return false;
+  });
+});
+//--> 
+  </script>
+</div>
+</div>
+
+
+</body>
+</html>

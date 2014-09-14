@@ -5,6 +5,7 @@
 
 yahoo!の甲子園一球速報.htmlをなんやかんやして, 試合状況をツイートします. 
 
+
 ## 説明
 
 ### baseball_jikkyou_tweet.bash
