@@ -1,0 +1,24 @@
+プロ野球選手の誕生日
+===
+
+```{r}
+library(data.table)
+library(dplyr)
+
+```
+```{r}
+dat = fread("player.txt", sep=",") %>% 
+  setnames(c("YEAR", "TEAM", "NAME", "BIRTH", "CAREER", "SALARY")) %>% 
+  mutate(YEAR = ifelse(YEAR ==9, "09", YEAR)) %>% 
+  mutate(YEAR = paste("20", YEAR, sep=""))
+dat = dat %>% 
+  mutate(BIRTH = as.Date(BIRTH))
+  
+dat
+dat %>% 
+  group_by(YEAR, TEAM) %>% 
+  summarise(SALARY = sum(SALARY)) %>% 
+  arrange(desc(SALARY))
+
+```
+
