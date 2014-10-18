@@ -1,0 +1,12 @@
+baystars.txt
+buffaloes.txt
+carp.txt
+dragons.txt
+eagles.txt
+fighters.txt
+giants.txt
+hawks.txt
+lions.txt
+marines.txt
+swallows.txt
+tigers.txt

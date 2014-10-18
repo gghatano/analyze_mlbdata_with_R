@@ -1,0 +1,53 @@
+誕生日と活躍の可視化
+===
+
+
+誕生日と活躍の分布変化を捉えたいな
+
+[ここからダウンロード.](http://seanlahman.com/files/database/lahman-csv_2014-02-14.zip)
+
+```{r}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(openair)
+```
+
+## データ読み込み
+
+```{r}
+dat = fread("Master.csv")
+
+dat_career_birthday = 
+  dat %>% 
+  select(nameFirst, nameLast, birthMonth, birthDay, debut, finalGame) %>% 
+  mutate(name = paste(nameFirst, nameLast)) %>% 
+  mutate(career = as.numeric(substr(finalGame, 1,4)) - as.numeric(substr(debut, 1,4))) %>% 
+  mutate(birthday = paste(birthMonth, birthDay, sep="/")) %>% 
+  mutate(birthday = as.Date(birthday, format="%m/%d")) %>%
+  select(name, birthday, career)
+
+dat_calender = 
+  dat_career_birthday %>% 
+  filter(career > 10) %>% 
+  group_by(birthday) %>% 
+  summarise(rate = n()) %>% 
+  mutate(date = birthday) %>% 
+  tail(-1)
+```
+
+```{r}
+# calendarPlot(dat_calender, pollutant = "rate")
+
+dat_calender %>% 
+  mutate(month = substr(birthday, 6,7)) %>% 
+  group_by(month) %>%
+  summarise(rate = sum(rate)) %>% 
+  ggplot() + 
+  geom_bar(aes(x = month, y=rate), stat="identity") + 
+  ylab("Number") + xlab("Month") + 
+  ggtitle("MLB player (career > 10 year)")
+  
+```
+
+
