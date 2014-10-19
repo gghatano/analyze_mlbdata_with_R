@@ -32,21 +32,21 @@ do
     awk -v teamYear="$teamYear" '(NF==3){print teamYear, $0}' > "$team"-salary-"$year2".txt
   done
 
-#  for html in `cat $listFile | tail +3`
-#  do
-#    curl "$html" > test.txt
-#    fileName=$(echo $html | 
-#    cut -d"/" -f 6 | 
-#    xargs -J % basename % .html)
-#
-#    teamYear=$(echo $fileName | 
-#    awk -F "-" '{print $1, $3}') 
-#
-#    cat test.txt | 
-#    iconv -t UTF8 |
-#    grep "12288" | 
-#    sed 's/<[^>]*>/ /g' | 
-#    sed 's/&......./ /g' | 
-#    awk -v teamYear="$teamYear" '(NF==3){print teamYear, $0}' > "$fileName".txt
-#  done
+  for html in `cat $listFile | tail +3`
+  do
+    curl "$html" > test.txt
+    fileName=$(echo $html | 
+    cut -d"/" -f 6 | 
+    xargs -J % basename % .html)
+
+    teamYear=$(echo $fileName | 
+    awk -F "-" '{print $1, $3}') 
+
+    cat test.txt | 
+    iconv -t UTF8 |
+    grep "12288" | 
+    sed 's/<[^>]*>/ /g' | 
+    sed 's/&......./ /g' | 
+    awk -v teamYear="$teamYear" '(NF==3){print teamYear, $0}' > "$fileName".txt
+  done
 done
