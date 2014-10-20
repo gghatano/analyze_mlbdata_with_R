@@ -1,0 +1,45 @@
+年俸データ確認
+===
+
+[マネスポ](http://www.monespo.com)さんが, プロ野球選手の推定年俸をまとめていました. 
+
+内容を取得してみました. 
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(data.table)
+```
+
+ランキング作ります. 
+```{r, warning=FALSE, message=FALSE}
+dat = fread("salary.txt")
+dat %>% setnames(c("TEAM", "YEAR", "NUMBER", "NAME", "SALARY"))
+dat = dat %>% mutate(SALARY = as.integer(SALARY))
+head(dat)
+```
+
+## 個人年俸ランキング
+```{r}
+dat %>% arrange(desc(SALARY)) %>% head(10)
+```
+
+
+## 生涯年俸ランキング
+```{r}
+dat %>% 
+  group_by(NAME) %>% 
+  dplyr::summarise(SALARY = sum(SALARY)) %>% 
+  arrange(desc(SALARY)) %>% head(20)
+```
+
+## チーム年俸総額ランキング
+```{r}
+dat %>%
+  group_by(TEAM, YEAR) %>%
+  dplyr::summarise(SALARY = sum(SALARY)) %>% 
+  group_by(add=FALSE) %>% 
+  arrange(desc(SALARY)) %>% head(20)
+```
+
+## 感想
+巨人やべえ
+
