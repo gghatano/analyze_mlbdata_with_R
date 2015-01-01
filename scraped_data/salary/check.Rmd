@@ -1,9 +1,7 @@
 年俸データ確認
 ===
 
-[マネスポ](http://www.monespo.com)さんが, プロ野球選手の推定年俸をまとめていました. 
-
-内容を取得してみました. 
+[年俸データ](https://github.com/gghatano/analyze_mlbdata_with_R/tree/master/scraped_data/salary/salary.txt)作ってみました. 
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(data.table)

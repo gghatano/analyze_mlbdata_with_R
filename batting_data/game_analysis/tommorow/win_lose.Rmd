@@ -1,0 +1,35 @@
+明日につながるヒット
+===
+
+## 序論
+負け試合で最終回にヒットを打つと, 解説のおじさんがよく言います. 
+
+"明日につながるヒット".
+
+そこで今回は, 明日につながるヒットの効果を確認します. 
+
+4点差以上で迎えた最終攻撃, ヒットを打った人を抽出. 
+
+次の日の試合成績を確認してみます. 
+
+## データ読み込み
+```{r, message=FALSE, warning=FALSE}
+library(data.table)
+library(pipeR)
+library(dplyr)
+```
+
+2013年の全データを利用. 
+```{r}
+dat = fread("~/all2013.csv") 
+name = fread("../names.csv", header=FALSE) %>% unlist
+dat %>% setnames(name)
+```
+
+```{r}
+dat %>% select(GAME_ID, AWAY_TEAM_ID, HOME_SCORE_CT, AWAY_SCORE_CT) %>% 
+  group_by(GAME_ID) %>% 
+  summarise_each(funs(function(x){tail(x,1)})
+
+```
+
