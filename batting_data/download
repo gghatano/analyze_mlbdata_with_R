@@ -1,5 +1,5 @@
-for year in `seq 1938 2013`
-  do
-    ./download_battingdata.sh $year
-  done
+for year in `seq 1938 2014`
+do
+  ./download_battingdata.sh $year
+done
 

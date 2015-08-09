@@ -1,0 +1,46 @@
+100安打の最速記録
+===
+
+```{r}
+library(data.table)
+library(dplyr)
+library(reshape2)
+```
+
+## 100安打までの記録
+```{r}
+dat = fread("../../all1938.csv")
+col_name = fread("../../names.csv", header=FALSE) %>% unlist
+dat %>% setnames(col_name)
+
+## まず、100安打達成者
+over100HitBatters = 
+  dat %>% 
+  mutate(HIT_FL = ifelse(H_FL > 0, 1, 0)) %>% 
+  group_by(BAT_ID) %>% 
+  summarise(HIT = sum(HIT_FL)) %>% 
+  filter(HIT >= 100) %>% 
+  select(BAT_ID) %>% unlist
+
+```
+
+試合日と開幕何試合目かを対応付けます。
+これが難しい。
+```{r}
+dat %>% 
+  select(GAME_ID, AWAY_TEAM_ID) %>% 
+  mutate(HOME_TEAM_ID = substr(GAME_ID, 1,3)) %>% 
+  distinct %>% 
+  melt(id.vars = "GAME_ID") 
+```
+
+```{r}
+summary(Indometh)
+Indometh %>% head
+wide <- reshape(Indometh, v.names = "conc", idvar = "Subject",
+                timevar = "time", direction = "wide")
+wide %>% 
+
+```
+
+

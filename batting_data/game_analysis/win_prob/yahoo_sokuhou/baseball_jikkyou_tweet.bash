@@ -52,6 +52,6 @@ set -e
 [ "$label" = "" ] || exit 1
 
 ## ツイートします
-$(which R) -q --slave --vanilla -f ~/kousien_jikkyou.R
+cat ~/kousien_jikkyou.R | R
 
 echo "tweet OK" >> $HOME//cron.log.txt
