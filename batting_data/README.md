@@ -19,7 +19,7 @@ tar -zxvf chadwick-0.6.3.tar.gz
 cd chadwick-0.6.3
 ./configure
 make
-make install 
+sudo make install 
 ```
 
 #### 2. Download the data of specified season 
@@ -69,7 +69,7 @@ the situation which I call "super chance" because the team can get score easily.
 --------------------------------------------------------------
 
 
-### ※Notes.
+### ※Notes
 
 Make sure that /usr/local/lib is in your LD_LIBRARY_PATH
 
