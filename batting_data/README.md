@@ -10,32 +10,33 @@ or untar chadwick-0.6.3.tar.gz in this directory.
 
 ### How to use
 
-1. Build the parsing software: cwevent.
+#### 1. Build the parsing software: cwevent.
 
 Execute the following commands.
-----------------------------------------
+
+```bash
 tar -zxvf chadwick-0.6.3.tar.gz
 cd chadwick-0.6.3
 ./configure
 make
 make install 
-----------------------------------------
+```
 
-
-2. Download the data of specified season 
+#### 2. Download the data of specified season 
 
 Execute the download_battingdata.sh with the year as the argument.
 
 Ex. If you want to get the 2010 data, execute the following command:
 
-----------------------------------------
+```bash
 # chmod u+x download_battingdata
 ./download_battingdata.sh 2010
-----------------------------------------
+``` 
+※ if the command does not work, please check the Notes 
 
 The output all2010.csv includes all the batting results of 2010 MLB season.
 
-3. Set the Colnames
+#### 3. Set the Colnames
 
 If you execute the command above, you can obtain all2010.csv, which include
 the data table about all the event in all the game in MLB 2010 season.
@@ -44,16 +45,16 @@ The meaning of the column is shown in names.csv.
 When you use the data, please combine names.csv and all2010.csv. 
 The following is the example code of R
 
------------------------------------------
+```r
 library(data.table)
 data = fread("all2010")
 names = fread("names.csv", header = FALSE)
 
 setnames(data, unlist(names))
------------------------------------------
+```
 
 
-4. How to Analyze
+#### 4. How to Analyze
 The explanation of the data-table is shown in the following web site:
 http://chadwick.sourceforge.net/doc/cwevent.html
 
@@ -68,7 +69,7 @@ the situation which I call "super chance" because the team can get score easily.
 --------------------------------------------------------------
 
 
-Notes.
+### ※Notes.
 
 Make sure that /usr/local/lib is in your LD_LIBRARY_PATH
 
@@ -76,12 +77,15 @@ Precisely how you do this depends on your shell,
 
 First, check whether the LD_LIBRARY_PATH is not set (it usually isn't these days):
 
+```bash
 echo $LD_LIBRARY_PATH
+```
 
 If it is unset and you're running bash then:
 
+```bash
 export LD_LIBRARY_PATH=/usr/local/lib
-
+```
 
 reference:
 http://sourceforge.net/p/chadwick/mailman/chadwick-users/
