@@ -32,9 +32,9 @@ Ex. If you want to get the 2010 data, execute the following command:
 # chmod u+x download_battingdata
 ./download_battingdata.sh 2010
 ``` 
-※ if the command does not work, please check the Notes 
+※ if the command does not work, please check the "Notes" section. 
 
-The output all2010.csv includes all the batting results of 2010 MLB season.
+The output "all2010.csv" includes all the batting results of 2010 MLB season.
 
 #### 3. Set the Colnames
 
@@ -43,11 +43,11 @@ the data table about all the event in all the game in MLB 2010 season.
 
 The meaning of the column is shown in names.csv. 
 When you use the data, please combine names.csv and all2010.csv. 
-The following is the example code of R
+The following is the example code of R.
 
 ```r
 library(data.table)
-data = fread("all2010")
+data = fread("all2010.csv")
 names = fread("names.csv", header = FALSE)
 
 setnames(data, unlist(names))
